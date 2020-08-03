@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "523935432057",
+    "firebase_url": "https://wewe-be1b4.firebaseio.com",
+    "project_id": "wewe-be1b4",
+    "storage_bucket": "wewe-be1b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523935432057:android:4fbe33d7432c32c5",
+        "android_client_info": {
+          "package_name": "chat.wewe.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "523935432057-4he45d5dtnfmsi511h9r163j80qesu08.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "chat.wewe.android",
+            "certificate_hash": "393092792a1510861242aa9428d370f162d9faa8"
+          }
+        },
+        {
+          "client_id": "523935432057-vgss87daab2cquoma2q9gu27ej16fahj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE44YVjkDJnIWq8bPDsrt16GpbBxCIoYY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "523935432057-vgss87daab2cquoma2q9gu27ej16fahj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

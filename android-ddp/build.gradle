@@ -1,0 +1,30 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 2
+        versionName "0.0.9"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+dependencies {
+    api project(':log-wrapper')
+    implementation extraDependencies.okHTTP
+    implementation extraDependencies.rxJava
+    implementation extraDependencies.rxKotlin
+    implementation extraDependencies.boltTask
+    implementation supportDependencies.annotation
+}

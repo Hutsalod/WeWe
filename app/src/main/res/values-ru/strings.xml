@@ -1,0 +1,393 @@
+<resources>
+    <string name="app_name">WeWe</string>
+    <string name="fragment_sidebar_main_favorite_title">Избранное</string>
+    <string name="fragment_sidebar_main_channels_title">Каналы</string>
+    <string name="fragment_sidebar_main_direct_messages_title">Личные сообщения</string>
+    <string name="fragment_sidebar_main_livechat_title">Чат</string>
+    <string name="user_status_online">Онлайн</string>
+    <string name="user_status_away">Отошел</string>
+    <string name="user_status_busy">Занят</string>
+    <string name="user_status_invisible">Невидимый</string>
+    <string name="fragment_sidebar_main_logout_title">Выход</string>
+    <string name="dialog_add_channel_name">Название</string>
+    <string name="dialog_add_channel_private">Закрытый</string>
+    <string name="dialog_add_channel_read_only">Только для чтения</string>
+
+
+    <string name="menu_1">Чаты</string>
+    <string name="menu_2">Звонки</string>
+    <string name="menu_3">Контакты</string>
+    <string name="menu_4">Настройки</string>
+    <string name="menu_5">Задачи</string>
+
+    <string name="fragment_room_list_pinned_message_title">Закрепленные сообщения (%s)</string>
+    <string name="fragment_room_list_favorite_message_title">Избранные сообщения (%s)</string>
+    <string name="fragment_room_list_file_list_title">Список файлов (%s)</string>
+    <string name="fragment_room_list_member_list_title">Список (%s)</string>
+    <string name="fragment_room_list_could_not_load_your_request">Не удалось обработать запрос.\n%s.</string>
+    <string name="fragment_room_list_no_pinned_message_to_show">Нет закрепленных сообщений</string>
+    <string name="fragment_room_list_no_favorite_message_to_show">Нет избранных сообщений</string>
+    <string name="fragment_room_list_no_file_list_to_show">Нет файлов для показа</string>
+    <string name="fragment_room_list_no_member_list_to_show">Нет участников для отображения</string>
+
+
+    <string name="users_of_room_title">Список участников</string>
+    <string name="start_of_conversation">Начало переписки</string>
+    <string name="sending">Отправить</string>
+    <string name="not_synced">Не синхронизировано</string>
+    <string name="failed_to_sync">Ошибка синхронизации</string>
+    <string name="failed_to_delete">Ошибка удаления</string>
+    <string name="failed_to_delete_message">Сообщение не может быть удалено в это время. Повторите попытку позже</string>
+    <string name="resend">Повторить</string>
+    <string name="discard">Удалить</string>
+    <string name="ok">ОК</string>
+    <plurals name="fmt_dialog_view_latest_message_title">
+        <item quantity="one">%d новое сообщение</item>
+        <item quantity="few">%d новых сообщения</item>
+        <item quantity="many">%d новых сообщений</item>
+    </plurals>
+    <string name="dialog_view_latest_message_action">посмотреть</string>
+
+    <string name="file_uploading_title">Загрузка...</string>
+
+    <string name="dialog_user_registration_email">Почта</string>
+    <string name="dialog_user_registration_username">Имя пользователя</string>
+    <string name="sub_username">\@%s</string>
+    <string name="username">\@%s</string>
+    <string name="dialog_user_registration_password">Пароль</string>
+    <string name="fragment_home_welcome_message">Добро пожаловать в Чат.\nВыберите канал из меню.</string>
+    <string name="fragment_input_hostname_hostname">Адрес сервера</string>
+    <string name="fragment_input_hostname_server_hint">open.WeWe.chat</string>
+    <string name="fragment_input_hostname_connect">Подключиться</string>
+    <string name="fragment_login_username_or_email">Имя пользователя или email</string>
+    <string name="fragment_login_password">Пароль</string>
+    <string name="fragment_login_sign_up">Зарегистрироваться</string>
+    <string name="fragment_login_sign_in">Войти</string>
+    <string name="fragment_retry_login_retry_title">Повторить</string>
+    <string name="fragment_retry_login_error_title">Ошибка соединения</string>
+    <string name="server_config_activity_authenticating">Вход...</string>
+    <string name="home_fragment_title">WeWe.Chat - Главная</string>
+    <string name="fragment_sidebar_main_unread_rooms_title">Непрочитанные каналы</string>
+
+    <string name="doc_upload_message_spec_title">Прикрепить файл</string>
+    <string name="image_upload_message_spec_title">Прикрепить изображения</string>
+    <string name="audio_upload_message_spec_title">Вложить аудио</string>
+    <string name="video_upload_message_spec_title">Прикрепить видео</string>
+
+    <string name="input_hostname_invalid_server_message">Сервер не найден</string>
+    <string name="make_sure_your_server_version_is_up_to_date">Убедитесь, что ваш сервер WeWe.Chat обновлен до последней версии</string>
+    <string name="connection_error_try_later">Ошибка соединения. Попробуйте позже.</string>
+
+    <string name="version_info_text">Версия: %s</string>
+    <string name="two_factor_authentication_title">Двухфакторная аутентификация</string>
+    <string name="open_your_authentication_app_and_enter_the_code">Откройте приложение для проверки подлинности и введите код</string>
+    <string name="two_factor_code">Код авторизации</string>
+    <string name="spotlight_search">Поиск</string>
+    <string name="spotlight_load_more_results">Еще...</string>
+    <string name="edit_message">Текст сообщения</string>
+    <string name="message_options_no_message_info">Ooops. Что-то не работает!</string>
+    <string name="message_options_no_permissions_info">У Вас не достаточно прав</string>
+    <string name="menu_pinned_messages">Закрепленные сообщения</string>
+    <string name="menu_favorite_messages">Избранные сообщения</string>
+    <string name="menu_file_list">Список файлов</string>
+    <string name="menu_member_list">Список коллег</string>
+    <string name="add_new_team">Добавить новую команду</string>
+
+
+
+
+    <string name="navigation_search_rooms">Поиск комнат</string>
+    <string name="search">Поиск</string>
+    <string name="forward_message">Переслать сообщение</string>
+    <string name="delet_message">Удалить сообщение</string>
+    <string name="copy_message">Копировать сообщение</string>
+    <string name="private_title">WeWe защищает вашу
+        конфиденциальность тщательнее, чем любой другой мессенджер.
+    Побробнее смотрите в Политике конфиденциальности</string>
+
+    <!-- Dangerous Permission -->
+    <!-- Title of a category of application permissioncds, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_microphone">Microphone</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_microphone">record audio</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_recordAudio">record audio</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_recordAudio">Allows the app to record audio with the
+      microphone.  This permission allows the app to record audio at any time
+without your confirmation.</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_camera">Camera</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_camera">take pictures and record video</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_camera">take pictures and videos</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_camera">Allows the app to take pictures and videos
+      with the camera.  This permission allows the app to use the camera at any
+      time without your confirmation.</string>
+
+    <string name="permissions_needed">Allows the app to record audio and use the camera</string>
+
+
+    <string name="str_login">Login</string>
+    <string name="str_numpad">NumPad</string>
+    <string name="str_video">Video</string>
+    <string name="str_message">Message</string>
+    <string name="str_setting">Setting</string>
+
+    <!-- login fragment -->
+    <string name="str_optional">Optional</string>
+    <string name="str_username">UserName</string>
+    <string name="str_displayname">DisplayName</string>
+    <string name="str_authName">AuthName</string>
+    <string name="str_password">Password</string>
+    <string name="str_userDomain">UserDomain</string>
+    <string name="str_requried">Required</string>
+    <string name="str_transport">Transport</string>
+    <string name="str_srtp">SRTP</string>
+
+    <string name="str_SIPServer">SIPServer</string>
+    <string name="str_SIPServerPort">SIPServerPort</string>
+    <string name="str_StunServer">StunServer</string>
+    <string name="str_StunServerPort">StunServerPort</string>
+    <string name="str_localSIPPort">LocalSIPPort</string>
+
+    <string name="outboundServer">outboundServer</string>
+
+    <string name="outboundServerPort">outboundServerPort</string>
+
+    <string name="register">Login</string>
+
+
+    <string name="unregister">Logout</string>
+    <string name="registed">available</string>
+    <string name="not_reg">sign out</string>
+    <string name="str_videocall">VideoCall</string>
+    <string name="str_acceptvideo">AcceptVideo</string>
+    <string name="str_conference">Conference</string>
+
+
+    <!--for NumPad  -->
+    <string name="str_dial">Dial</string>
+    <string name="str_vcall">Video Call</string>
+    <string name="str_acall">Audio Call</string>
+
+    <string name="str_del">Del</string>
+    <string name="str_hold">Hold</string>
+    <string name="str_unhold">UnHold</string>
+    <string name="str_reject">Reject</string>
+    <string name="str_att_transfer">Attend Transfer</string>
+    <string name="str_transfer">Transfer</string>
+    <string name="str_hangup">Hangup</string>
+    <string name="str_speakon">SpeakOn</string>
+    <string name="str_refer">Refer</string>
+
+    <string name="str_mute">Mute</string>
+    <string name="str_answer">Answer</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="unsubscribe">Unsubscribe</string>
+    <string name="publish">Publish</string>
+
+    <!-- message -->
+    <string name="unpublish">Unpublish</string>
+    <string name="str_sendmsg">Send</string>
+    <string name="str_sendsdp">SendSDP</string>
+    <string name="str_confrence">Conference</string>
+    <string name="str_setstatus">Set</string>
+    <string name="str_status">Status :</string>
+    <string name="str_clear">Clear</string>
+    <string name="str_update">Subscribe</string>
+    <string name="str_accept">Accept</string>
+    <string name="str_refuse">Refuse</string>
+    <string name="str_sendto">Send to:</string>
+
+    <string name="contact">Contact</string>
+    <string name="message">Message</string>
+
+    <string name="sipsample">SipSample</string>
+
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
+    <string name="website">website:http://www.portsip.com</string>
+
+    <string name="email">email:sales@portsip.com</string>
+    <string name="audio">Audio</string>
+
+    <string name="video">Video</string>
+    <string name="str_tips">..</string>
+
+
+    <string name="line">line-</string>
+    <string name="MEDIA_G722">MEDIA_G722</string>
+
+    <!--string name="str_status">Status :</string -->
+    <string name="MEDIA_G729">MEDIA_G729</string>
+
+    <string name="MEDIA_AMR">MEDIA_AMR</string>
+
+    <!--for setting  -->
+    <string name="MEDIA_AMRWB">MEDIA_AMRWB</string>
+    <string name="MEDIA_GSM">MEDIA_GSM</string>
+    <string name="MEDIA_PCMA">MEDIA_PCMA</string>
+    <string name="MEDIA_PCMU">MEDIA_PCMU</string>
+    <string name="MEDIA_SPEEX">MEDIA_SPEEX</string>
+    <string name="MEDIA_SPEEXWB">MEDIA_SPEEXWB</string>
+    <string name="MEDIA_ILBC">MEDIA_ILBC</string>
+    <string name="MEDIA_ISACWB">MEDIA_ISACWB</string>
+    <string name="MEDIA_ISACSWB">MEDIA_ISACSWB</string>
+    <string name="MEDIA_G7221">MEDIA_G7221</string>
+    <string name="MEDIA_OPUS">MEDIA_OPUS</string>
+    <string name="MEDIA_DTMF">MEDIA_DTMF</string>
+    <string name="string_audiofeature">Audio Feature</string>
+    <string name="MEDIA_VAD">MEDIA_VAD</string>
+    <string name="MEDIA_AEC">MEDIA_AEC</string>
+
+    <string name="MEDIA_ANS">MEDIA_ANS</string>
+    <string name="MEDIA_AGC">MEDIA_AGC</string>
+    <string name="MEDIA_CNG">MEDIA_CNG</string>
+    <string name="string_video">Video</string>
+    <string name="MEDIA_H264">MEDIA_H264</string>
+    <string name="MEDIA_VP8">MEDIA_VP8</string>
+
+
+    <string name="MEDIA_VP9">MEDIA_VP9</string>
+    <string name="str_resolution_title">Select a resolution</string>
+    <string name="str_resolution">Resolution</string>
+    <string name="str_resolution_default">CIF</string>
+
+
+    <string name="str_bitrate">Bitrate</string>
+    <string name="str_avpath">Audio and Vedio recording</string>
+    <string name="str_avpathtitle">Record file directory</string>
+    <string name="str_avpathkey">AVpath</string>
+
+    <string name="str_forward">Forward</string>
+
+    <string name="str_fwopentitle">Enable forward call</string>
+    <string name="str_fwopenkey">ForwardEnable</string>
+    <string name="str_fwtotitle">Forward call to:</string>
+
+    <string name="str_fwtokey">Forwardto</string>
+    <string name="str_fwbusytitle">Forward call when busy</string>
+    <string name="str_fwbusykey">ForwardBusy</string>
+    <string name="str_prack">PRACK</string>
+    <string name="str_pracktitle">Enable PRACK</string>
+    <string name="str_1"> Связаться с нами </string>
+    <string name="str_2">Отвязать пользователя от WeWe от Google</string>
+
+    <string name="str_3">Политика конфиденциальности</string>
+    <string name="str_4">Доступ с неколько устройств</string>
+
+    <string name="str_5">Защита</string>
+
+    <string name="str_6">Язык</string>
+
+    <string name="str_7">Назад</string>
+
+    <string name="str_8">Отмена</string>
+
+    <string name="str_9">Добавить PIN код</string>
+
+    <string name="str_10">Пригласить в WeWe</string>
+
+    <string name="str_11">Черный список</string>
+
+    <string name="str_12">Требуется перезагрузка WeWe</string>
+
+    <string name="str_13">допускается латиница и цифры</string>
+
+    <string name="str_14">Получать уведомления</string>
+
+    <string name="language_1">Deutsch</string>
+
+    <string name="language_2">English</string>
+
+    <string name="language_3">Руский</string>
+
+    <string name="language_4">Український</string>
+
+    <string name="erro_call">Not found user</string>
+
+    <string name="subscription_period_prompt">Выберите период подписки</string>
+
+    <string name="subscription_resignup_prompt">Чтобы снова активировать подписку, выберите период подписки.</string>
+
+    <string name="subscription_update_prompt">Чтобы изменить подписку, выберите новый период подписки.</string>
+
+    <string name="subscription_period_monthly">Месяць $3.99</string>
+
+    <string name="subscription_period_threemonth">3 Месяца $14.99</string>
+    <string name="subscription_period_sixmonth">6 Месяцов $28.99</string>
+    <string name="subscription_period_yearly">За год $59.99</string>
+    <string name="subscription_prompt_continue">Продолжить</string>
+    <string name="subscription_prompt_cancel">Отмена</string>
+    <string name="content_description_app_loading_image">Загрузка изображения приложения</string>
+    <string name="content_description_title_image">80\'s Video Game Style Car Logo</string>
+    <string name="content_desc_gas_gauge_indicator">Индикатор датчика газа</string>
+    <string name="content_desc_free_vs_premium_indicator">Бесплатный или премиум индикатор изображения</string>
+    <string-array name="transports">
+        <item>UDP</item>
+        <item>TLS</item>
+        <item>TCP</item>
+        <item>PERS_UDP</item>
+        <item>PERS_TCP</item>
+    </string-array>
+    <string-array name="lines">
+        <item>Line-0</item>
+        <item>Line-1</item>
+        <item>Line-2</item>
+        <item>Line-3</item>
+        <item>Line-4</item>
+        <item>Line-5</item>
+        <item>Line-6</item>
+        <item>Line-7</item>
+    </string-array>
+    <string-array name="srtp">
+        <item>None</item>
+        <item>Force</item>
+        <item>Prefer</item>
+    </string-array>
+    <string-array name="arr_resolution">
+        <item>QCIF</item>
+        <item>CIF</item>
+        <item>VGA</item>
+        <item>720P</item>
+        <item>1080P</item>
+    </string-array>
+    <string name="menu_0">Сообщения</string>
+    <string name="open_key">Открыть клавиатуру</string>
+    <string name="alter_server">Альтернативный сервер</string>
+    <string name="minim_video">Сжимать видео</string>
+    <string name="hard">Высокий</string>
+    <string name="normal">Обычный</string>
+    <string name="low">Низкий</string>
+    <string name="add_task">Добавить задачу</string>
+    <string name="back_task">Назад к задачам</string>
+    <string name="delete">Удалить</string>
+    <string name="closed">Закрыть</string>
+    <string name="task_and">Задача # </string>
+    <string name="postav">Постановщик: </string>
+    <string name="otvetstv">Ответственный</string>
+    <string name="prior">Приоритет: </string>
+    <string name="dad_line">Срок выполнения: </string>
+    <string name="day">Дни: </string>
+    <string name="time">Часы: </string>
+    <string name="sozdana">Создана: </string>
+    <string name="edit_text">Редактировать</string>
+    <string name="vse"> все</string>
+    <string name="chek_list">Чек-лист: </string>
+    <string name="add_it">Добавить</string>
+    <string name="message_text">Сообщения: </string>
+    <string name="name_task">Название задачи</string>
+    <string name="write_task">Описание задачи</string>
+
+    <string name="delete_message">Удалить личною переписку</string>
+
+        <string name = "fmt_dialog_view_latest_message_title"> Neue %d Nachrichten </string>
+        <string name = "fmt_room_user_count"> Всего: %d пользователей </string>
+        <string name = "dialog_add_channel_name_title"> НАЗВАНИЕ КАНАЛА </string>
+</resources>

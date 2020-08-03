@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#383547</color>
+    <color name="colorPrimaryDark">#2E2D38</color>
+    <color name="colorAccent">#FF2D91FA</color>
+    <color name="colorAccentLight">#FF6CB1FA</color>
+    <color name="colorAccentDark">#FF287DD7</color>
+    <color name="colorAccent_a40">#66777777</color>
+    <color name="textColorLink">#008ce3</color>
+    <color name="colorRed400">#FFEF5350</color>
+    <color name="text_wewe">#1D74F5</color>
+
+    <color name="colorPrimaryTextDark">#DE000000</color>
+    <color name="colorSecondaryTextDark">#8A000000</color>
+
+    <color name="colorDivider">#1F000000</color>
+    <color name="connection_crouton_background">#030000</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="whites">#F8F8F8</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="darkgray">#ffbbbbbb</color>
+    <color name="text_selected">#ffcf4c29</color>
+    <color name="text_over">#ffb9c4cb</color>
+    <color name="text_default">#000000</color>
+    <color name="text_disabled">#ffa6b3bf</color>
+    <color name="colorRed">#D81B60</color>
+    <color name="colorTool">#888888</color>
+</resources>

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal|center_vertical"
+    android:background="#383547"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="@dimen/margin_16"
+                android:gravity="left"
+                android:text="Пробный период"
+                android:textColor="#FFFFFF"
+                android:textSize="24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginTop="24dp"
+                android:layout_marginRight="@dimen/margin_16"
+                android:gravity="left"
+                android:text="Бесплатная версия"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="@dimen/margin_16"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    app:srcCompat="@drawable/ic_vector_one" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_32"
+                    app:srcCompat="@drawable/ic_vector_two" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_32"
+                    app:srcCompat="@drawable/ic_union" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <Button
+
+                    android:layout_width="50dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="@dimen/margin_16"
+                    android:background="@drawable/button_white"
+                    android:text="0 $"
+                    android:textColor="#383547"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="@dimen/margin_16"
+                android:gravity="left"
+                android:text="Защищенный чат, без аудио и видео звонков"
+                android:textColor="#FFFFFF"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginTop="28dp"
+                android:layout_marginRight="@dimen/margin_16"
+                android:gravity="left"
+                android:text="Бизнес версия"
+                android:textColor="#FFFFFF"
+                android:textSize="24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginRight="@dimen/margin_16"
+                android:gravity="left"
+                android:text="Первые 7 дней бесплатно"
+                android:textColor="#AAAAAA"
+                android:textSize="14dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="@dimen/margin_16"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    app:srcCompat="@drawable/ic_vector_one" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_32"
+                    app:srcCompat="@drawable/ic_vector_tree" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_32"
+                    app:srcCompat="@drawable/ic_union_for" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <Button
+
+                    android:layout_width="120dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="@dimen/margin_16"
+                    android:background="@drawable/button_white"
+                    android:text="3.99$/месяц"
+                    android:textColor="#383547"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="@dimen/margin_16"
+                android:text="Защищенный чат, высококачественные защищенные аудио и видеозвонки"
+                android:textColor="#FFFFFF"
+                android:textSize="18dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="@dimen/margin_16"
+
+                android:text="Счет на оплату выставляется на аккаунт Google pay пользователя при подтверждении покупки. Подписка на приложение автоматически продлевается, если не отключить авто продление раньше, чем за 24 часа до завершения текущего оплаченного периода. Деньги за следующий период использования списываются за 24 часа до конца текущего. Авто продление купленной подписки можно в любой момент отключить в параметрах учетной записи Google pay."
+                android:textColor="#A2A2A2"
+                android:textSize="12dp" />
+
+            <Button
+
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="@dimen/margin_16"
+                android:background="@drawable/button_white"
+                android:onClick="exit"
+                android:text="Бесплатная версия"
+                android:textColor="#0A84FF" />
+
+            <Button
+                android:id="@+id/startSubscribe"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="@dimen/margin_16"
+                android:background="@drawable/button_item_two"
+                android:onClick="onSubscribeButtonClicked"
+                android:text="Бизнес версия"
+                android:textColor="#FFFFFF" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="@dimen/margin_16"
+                android:layout_marginBottom="@dimen/margin_32"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Условия использования"
+                    android:textColor="#0A84FF" />
+
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Восстановить покупки"
+                    android:textColor="#0A84FF" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

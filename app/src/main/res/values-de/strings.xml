@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string name = "app_name"> WeWe </string>
+        <string name = "fragment_sidebar_main_favorite_title"> Zu Favoriten hinzufügen </string>
+        <string name = "fragment_sidebar_main_channels_title"> CHANNELS </string>
+        <string name = "fragment_sidebar_main_direct_messages_title"> DIRECT MESSAGES </string>
+        <string name = "user_status_online"> Online </string>
+        <string name = "user_status_away"> Weit </string>
+        <string name = "user_status_busy"> Beschäftigt </string>
+        <string name = "user_status_invisible"> Unsichtbar </string>
+        <string name = "fragment_sidebar_main_logout_title"> Abmelden </string>
+        <string name = "delete_message"> Persönliche Korrespondenz löschen </string>
+        <string name = "dialog_add_channel_name_title"> CHANNEL NAME </string>
+        <string name = "dialog_add_channel_name"> Kanalname </string>
+        <string name = "dialog_add_channel_private"> Öffentlicher Kanal </string>
+        <string name = "dialog_add_channel_read_only"> Nur-Lese-Kanal </string>
+        <string name = "menu_1"> Chats </string>
+        <string name = "menu_2"> Anrufe </string>
+        <string name = "menu_3"> Kontakte </string>
+        <string name = "menu_4"> Einstellungen </string>
+        <string name="menu_5">Aufgaben</string>
+
+
+        <string name = "start_of_conversation"> Starten Sie eine Unterhaltung </string>
+        <string name = "users_of_room_title"> Teilnehmerliste </string>
+        <string name = "fmt_room_user_count"> Gesamt: %,d Benutzer </string>
+        <string name = "sending"> Senden ... </string>
+        <string name = "failed_to_sync"> Fehler beim Senden! </string>
+        <string name = "resend"> Senden </string>
+        <string name = "discard"> Löschen </string>
+
+
+
+        <string name = "fmt_dialog_view_latest_message_title"> New %d messages</string>
+        <string name = "dialog_view_latest_message_action"> Ansicht </string>
+
+        <string name = "file_uploading_title"> Wird geladen ... </string>
+
+        <string name = "dialog_user_registration_email"> Passwort </string>
+        <string name = "dialog_user_registration_username"> Benutzername </string>
+        <string name = "dialog_user_registration_password"> Passwort </string>
+        <string name = "fragment_home_welcome_message"> </string>
+        <string name = "fragment_input_hostname_hostname"> Hostname </string>
+        <string name = "fragment_input_hostname_server_hint"> chat.weltwelle.com </string>
+        <string name = "fragment_login_username_or_email"> Benutzername </string>
+        <string name = "fragment_login_password"> Passwort </string>
+        <string name = "fragment_retry_login_retry_title"> RETRY </string>
+        <string name = "fragment_retry_login_error_title"> Verbindungsfehler </string>
+        <string name = "server_config_activity_authenticating"> Authentifizierung ... </string>
+        <string name = "home_fragment_title"> WeWe - Головна </string>
+        <string name = "fragment_sidebar_main_unread_rooms_title"> ZIMMER LESEN </string>
+
+        <string name = "doc_upload_message_spec_title"> Datei </string>
+        <string name = "image_upload_message_spec_title"> Bild </string>
+        <string name = "audio_upload_message_spec_title"> Audio </string>
+        <string name = "video_upload_message_spec_title"> Video </string>
+
+        <string name = "input_hostname_invalid_server_message"> Ungültige Serverversion </string>
+        <string name = "connection_error_try_later"> Es liegt ein Verbindungsfehler vor. Bitte versuchen Sie es später noch einmal. </string>
+
+        <string name = "version_info_text"> Version: %s</string>
+        <string name = "two_factor_authentication_title"> Zwei-Faktor-Authentifizierung </string>
+        <string name = "open_your_authentication_app_and_enter_the_code"> Öffnen Sie die Authentifizierungsanwendung und geben Sie den Code ein </string>
+        <string name = "two_factor_code"> Zwei-Faktor-Code </string>
+        <string name = "navigation_search_rooms"> Nach Räumen suchen </string>
+        <string name = "edit_message"> Beitrag bearbeiten </string>
+    <string name="forward_message">Переслать сообщение</string>
+        <string name = "delet_message"> Nachricht löschen </string>
+        <string name = "copy_message"> Nachricht kopieren </string>
+        <string name = "message_options_no_message_info"> Entschuldigung. Es ist etwas passiert! </string>
+        <string name = "message_options_no_permissions_info"> Sie haben keine Berechtigungen </string>
+        <string name = "private_title">WeWe schützen Ihre
+        Privatsphäre ist gründlicher als jeder andere Messenger.
+    Weitere Informationen finden Sie in unseren Datenschutzbestimmungen. </string>
+
+
+    <!-- Dangerous Permission -->
+    <!-- Title of a category of application permissioncds, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_microphone">Microphone</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_microphone">record audio</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_recordAudio">record audio</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_recordAudio">Allows the app to record audio with the
+      microphone.  This permission allows the app to record audio at any time
+without your confirmation.</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_camera">Camera</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_camera">take pictures and record video</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_camera">take pictures and videos</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_camera">Allows the app to take pictures and videos
+      with the camera.  This permission allows the app to use the camera at any
+      time without your confirmation.</string>
+
+    <string name = "permissions_needed"> Ermöglicht der App, Audio aufzunehmen und die Kamera zu verwenden. </string>
+
+
+        <string name = "str_login"> Anmelden </string>
+        <string name = "str_numpad"> NumPad </string>
+        <string name = "str_video"> Video </string>
+        <string name = "str_message"> Nachricht </string>
+        <string name = "str_setting"> Einstellung </string>
+
+
+        <string name = "str_optional"> Optional </string>
+        <string name = "str_username"> Benutzername </string>
+        <string name = "str_displayname"> Anzeigename </string>
+        <string name = "str_authName"> AuthName </string>
+        <string name = "str_password"> Passwort </string>
+        <string name = "str_userDomain"> UserDomain </string>
+        <string name = "str_requried"> Erforderlich </string>
+        <string name = "str_transport"> Transport </string>
+        <string name = "str_srtp"> SRTP </string>
+
+        <string name = "str_SIPServer"> SIPServer </string>
+        <string name = "str_SIPServerPort"> SIPServerPort </string>
+        <string name = "str_StunServer"> StunServer </string>
+        <string name = "str_StunServerPort"> StunServerPort </string>
+        <string name = "str_localSIPPort"> LocalSIPPort </string>
+
+        <string name = "outboundServer"> outboundServer </string>
+
+        <string name = "outboundServerPort"> outboundServerPort </string>
+
+        <string name = "register"> Anmelden </string>
+
+
+        <string name = "unregister"> Abmelden </string>
+        <string name = "registed"> verfügbar </string>
+        <string name = "not_reg"> Abmelden </string>
+        <string name = "str_videocall"> VideoCall </string>
+        <string name = "str_acceptvideo"> AcceptVideo </string>
+        <string name = "str_conference"> Konferenz </string>
+
+
+        <string name = "str_dial"> Wählen </string>
+        <string name = "str_vcall"> Videoanruf </string>
+        <string name = "str_acall"> Audioanruf </string>
+
+        <string name = "str_del"> Entf </string>
+        <string name = "str_hold"> Halten Sie </string>
+        <string name = "str_unhold"> Nicht halten </string>
+        <string name = "str_reject"> Ablehnen </string>
+        <string name = "str_att_transfer"> An Übertragung teilnehmen </string>
+        <string name = "str_transfer"> Übertragung </string>
+        <string name = "str_hangup"> Auflegen </string>
+        <string name = "str_speakon"> SpeakOn </string>
+        <string name = "str_refer"> Siehe </string>
+
+        <string name = "str_mute"> Stummschalten </string>
+        <string name = "str_answer"> Antwort </string>
+        <string name = "subscribe"> Abonnieren </string>
+        <string name = "unsubscribe"> Abbestellen </string>
+        <string name = "publish"> Veröffentlichen </string>
+
+
+        <string name = "unpublish"> Veröffentlichung aufheben </string>
+        <string name = "str_sendmsg"> Senden </string>
+        <string name = "str_sendsdp"> SendSDP </string>
+        <string name = "str_confrence"> Konferenz </string>
+        <string name = "str_setstatus"> Festlegen </string>
+        <string name = "str_status"> Status: </string>
+        <string name = "str_clear"> Löschen </string>
+        <string name = "str_update"> Abonnieren </string>
+        <string name = "str_accept"> Akzeptieren </string>
+        <string name = "str_refuse"> Ablehnen </string>
+        <string name = "str_sendto"> Senden an: </string>
+
+        <string name = "contact"> Kontakt </string>
+        <string name = "message"> Nachricht </string>
+
+        <string name = "sipsample"> SipSample </string>
+
+        <string name = "online"> Online </string>
+        <string name = "offline"> Offline </string>
+        <string name = "website"> Website: http: //www.portsip.com </string>
+
+        <string name = "email"> E-Mail: sales@portsip.com </string>
+        <string name = "audio"> Audio </string>
+
+        <string name = "video"> Video </string>
+        <string name = "str_tips"> .. </string>
+
+
+        <string name = "line"> line- </string>
+        <string name = "MEDIA_G722"> MEDIA_G722 </string>
+
+        <string name = "MEDIA_G729"> MEDIA_G729 </string>
+
+        <string name = "MEDIA_AMR"> MEDIA_AMR </string>
+
+        <string name = "MEDIA_AMRWB"> MEDIA_AMRWB </string>
+        <string name = "MEDIA_GSM"> MEDIA_GSM </string>
+        <string name = "MEDIA_PCMA"> MEDIA_PCMA </string>
+        <string name = "MEDIA_PCMU"> MEDIA_PCMU </string>
+        <string name = "MEDIA_SPEEX"> MEDIA_SPEEX </string>
+        <string name = "MEDIA_SPEEXWB"> MEDIA_SPEEXWB </string>
+        <string name = "MEDIA_ILBC"> MEDIA_ILBC </string>
+        <string name = "MEDIA_ISACWB"> MEDIA_ISACWB </string>
+        <string name = "MEDIA_ISACSWB"> MEDIA_ISACSWB </string>
+        <string name = "MEDIA_G7221"> MEDIA_G7221 </string>
+        <string name = "MEDIA_OPUS"> MEDIA_OPUS </string>
+        <string name = "MEDIA_DTMF"> MEDIA_DTMF </string>
+        <string name = "string_audiofeature"> Audiofunktion </string>
+        <string name = "MEDIA_VAD"> MEDIA_VAD </string>
+        <string name = "MEDIA_AEC"> MEDIA_AEC </string>
+
+        <string name = "MEDIA_ANS"> MEDIA_ANS </string>
+        <string name = "MEDIA_AGC"> MEDIA_AGC </string>
+        <string name = "MEDIA_CNG"> MEDIA_CNG </string>
+        <string name = "string_video"> Video </string>
+        <string name = "MEDIA_H264"> MEDIA_H264 </string>
+        <string name = "MEDIA_VP8"> MEDIA_VP8 </string>
+
+    <string name = "MEDIA_VP9"> MEDIA_VP9 </string>
+        <string name = "str_resolution_title"> Wählen Sie eine Auflösung aus </string>
+        <string name = "str_resolution"> Auflösung </string>
+        <string name = "str_resolution_default"> CIF </string>
+
+
+        <string name = "str_bitrate"> Bitrate </string>
+        <string name = "str_avpath"> Audio- und Vedio-Aufnahme </string>
+        <string name = "str_avpathtitle"> Dateiverzeichnis aufzeichnen </string>
+        <string name = "str_avpathkey"> AVpath </string>
+
+        <string name = "str_forward"> Weiterleiten </string>
+
+        <string name = "str_fwopentitle"> Rufumleitung aktivieren </string>
+        <string name = "str_fwopenkey"> ForwardEnable </string>
+        <string name = "str_fwtotitle"> Anruf weiterleiten an: </string>
+
+        <string name = "str_fwtokey"> Weiterleiten an </string>
+        <string name = "str_fwbusytitle"> Anruf weiterleiten, wenn besetzt </string>
+        <string name = "str_fwbusykey"> ForwardBusy </string>
+        <string name = "str_prack"> PRACK </string>
+        <string name = "str_pracktitle"> PRACK aktivieren </string>
+        <string name = "str_1"> Kontaktieren Sie uns </string>
+        <string name = "str_2"> Verknüpfung des Nutzers von WeWe mit Google aufheben </string>
+
+        <string name = "str_3"> Datenschutzbestimmungen </string>
+        <string name = "str_4"> Zugriff von mehreren Geräten </string>
+
+        <string name = "str_5"> Schutz </string>
+
+        <string name = "str_6"> Sprache </string>
+
+        <string name = "str_7"> Zurück </string>
+
+        <string name = "str_8"> Abbrechen </string>
+
+        <string name = "str_9"> PIN-Code hinzufügen </string>
+
+        <string name = "str_10"> Zu WeWe einladen </string>
+
+        <string name = "str_11"> Schwarze Liste </string>
+
+        <string name = "str_12"> Wir müssen neu starten </string>
+
+        <string name = "str_13"> Latein und Zahlen zulässig </string>
+
+        <string name = "str_14"> Benachrichtigungen erhalten </string>
+
+        <string name = "language_1"> Deutsch </string>
+
+        <string name = "language_2"> Englisch </string>
+
+    <string name="language_3">Руский</string>
+
+    <string name="language_4">Український</string>
+
+    <string name="erro_call">Nicht gefundener Benutzer</string>
+
+        <string name = "subscription_period_prompt"> Wählen Sie einen Abonnementzeitraum aus </string>
+
+        <string name = "subscription_resignup_prompt"> Um das Abonnement erneut zu aktivieren, wählen Sie den Abonnementzeitraum aus. </string>
+
+        <string name = "subscription_update_prompt"> Um Ihr Abonnement zu ändern, wählen Sie einen neuen Abonnementzeitraum aus. </string>
+
+        <string name = "subscription_period_monthly"> Monat 3,99 € </string>
+
+    <string name = "subscription_period_threemonth"> 3 Monate 14,99 US-Dollar </string>
+        <string name = "subscription_period_sixmonth"> 6 Monate 28,99 US-Dollar </string>
+        <string name = "subscription_period_yearly"> Für das Jahr 59,99 $ </string>
+        <string name = "subscription_prompt_continue"> Weiter </string>
+        <string name = "subscription_prompt_cancel"> Abbrechen </string>
+        <string name = "content_description_app_loading_image"> Anwendungsbild herunterladen </string>
+        <string name = "content_description_title_image"> 80er Jahre-Auto-Logo im Videospielstil </string>
+        <string name = "content_desc_gas_gauge_indicator"> Gassensoranzeige </string>
+        <string name = "content_desc_free_vs_premium_indicator"> Kostenlose oder Premium-Bildanzeige </string>
+        <string-array name = "transports">
+            <item> UDP </item>
+            <item> TLS </item>
+            <item> TCP </item>
+            <item> PERS_UDP </item>
+            <item> PERS_TCP </item>
+        </string-array>
+        <string-array name = "lines">
+            <item> Zeile 0 </item>
+            <item> Zeile 1 </item>
+            <item> Zeile-2 </item>
+            <item> Zeile 3 </item>
+            <item> Zeile 4 </item>
+            <item> Zeile 5 </item>
+            <item> Zeile 6 </item>
+            <item> Zeile 7 </item>
+        </string-array>
+        <string-array name = "srtp">
+            <item> Keine </item>
+            <item> Force </item>
+            <item> Bevorzugt </item>
+        </string-array>
+        <string-array name = "arr_resolution">
+            <item> QCIF </item>
+            <item> CIF </item>
+            <item> VGA </item>
+            <item> 720P </item>
+            <item> 1080P </item>
+        </string-array>
+    <string name="search">Suche</string>
+    <string name="menu_0">Meldungen</string>
+    <string name="open_key">Tastatur öffnen</string>
+    <string name="alter_server">Alternativer Server</string>
+    <string name="minim_video">Video komprimieren</string>
+    <string name="hard">Hoch</string>
+    <string name="normal">Normal</string>
+    <string name="low"> Niedrig</string>
+    <string name="add_task">Aufgabe hinzufügen</string>
+    <string name="back_task"> Zurück zu Aufgaben</string>
+    <string name="delete"> Löschen</string>
+    <string name="closed">Schließen</string>
+    <string name="task_and">Aufgabe # </string>
+    <string name="postav">Setter: </string>
+    <string name="otvetstv"> Verantwortlich: </string>
+    <string name="prior">Priorität: </string>
+    <string name="dad_line">Laufzeit: </string>
+    <string name="day">Tage: </string>
+    <string name="time">Stunden: </string>
+    <string name="sozdana">Erstellt: </string>
+    <string name="edit_text">Bearbeiten</string>
+    <string name="vse"> alle</string>
+    <string name="chek_list">Prüfliste: </string>
+    <string name="add_it">Hinzufügen</string>
+    <string name="message_text">Nachrichten: </string>
+    <string name="name_task"> Aufgabenname</string>
+    <string name="write_task"> Aufgabenbeschreibung</string>
+
+
+    <string name = "menu_pinned_messages"> Fixierte Nachrichten </string>
+        <string name = "menu_favorite_messages"> Lieblingsnachrichten </string>
+        <string name = "menu_file_list"> Dateiliste </string>
+        <string name = "menu_member_list"> Mitgliederliste </string>
+
+        <string name = "add_new_team"> Neues Team hinzufügen </string>
+        <string name = "spotlight_search"> Suche </string>
+        <string name = "spotlight_load_more_results"> Weitere Ergebnisse laden </string>
+
+        <string name = "make_sure_your_server_version_is_up_to_date"> Stellen Sie sicher, dass Ihre WeWe.Chat-Serverversion auf dem neuesten Stand ist </string>
+
+        <string name = "fragment_login_sign_up"> ANMELDEN </string>
+        <string name = "fragment_login_sign_in"> ANMELDEN </string>
+        <string name = "fragment_input_hostname_connect"> CONNECT </string>
+        <string name = "sub_username"> \ @% s </string>
+        <string name = "username"> \ @% s </string>
+        <string name = "ok"> OK </string>
+        <string name = "failed_to_delete"> Fehler beim Löschen von </string>
+        <string name = "failed_to_delete_message"> Die Nachricht konnte zu diesem Zeitpunkt nicht gelöscht werden. Bitte versuchen Sie es später noch einmal </string>
+        <string name = "not_synced"> Nicht synchronisiert </string>
+
+
+        <string name = "fragment_room_list_pinned_message_title"> Fixierte Nachrichten (%s) </string>
+        <string name = "fragment_room_list_favorite_message_title"> Lieblingsnachrichten (%s) </string>
+        <string name = "fragment_room_list_file_list_title"> Dateiliste (%s) </string>
+        <string name = "fragment_room_list_member_list_title"> Mitgliederliste (%s) </string>
+        <string name = "fragment_room_list_could_not_load_your_request"> Ihre Anfrage konnte nicht geladen werden. \n %s. </string>
+        <string name = "fragment_room_list_no_pinned_message_to_show"> Keine angehefteten Nachrichten zum Anzeigen </string>
+        <string name = "fragment_room_list_no_favorite_message_to_show"> Keine bevorzugten Nachrichten zum Anzeigen </string>
+        <string name = "fragment_room_list_no_file_list_to_show"> Keine Dateiliste zum Anzeigen </string>
+        <string name = "fragment_room_list_no_member_list_to_show"> Keine Mitgliederliste zum Anzeigen </string>
+
+        <string name = "fragment_sidebar_main_livechat_title"> LIVECHAT </string>
+
+    <plurals name="fmt_dialog_view_latest_message_title">
+                 <item quantity = "one">%d neue Nachricht </item>
+                 <item quantity = "few">%d neue Nachrichten </item>
+                 <item quantity = "many">%d neue Nachrichten </item>
+    </plurals>
+</resources>

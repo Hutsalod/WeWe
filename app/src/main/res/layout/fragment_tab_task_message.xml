@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerv_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/margin_16"/>
+
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view5"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#C8C7CB" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_8">
+
+        <EditText
+            android:id="@+id/textMessage"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:layout_marginRight="@dimen/margin_8"
+            android:layout_weight="1"
+            android:background="@drawable/edit_2"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textColor="#313131"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/button_send"
+            android:layout_width="@dimen/margin_32"
+            android:layout_height="@dimen/margin_32"
+            android:padding="@dimen/margin_8"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="@color/color_accent"
+            app:srcCompat="@drawable/ic_send_black_24dp" />
+    </LinearLayout>
+</LinearLayout>

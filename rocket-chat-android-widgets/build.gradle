@@ -1,0 +1,56 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 2
+        versionName "2"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        test.java.srcDirs += 'src/test/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+    }
+}
+
+ext {
+    frescoVersion = '1.4.0'
+}
+dependencies {
+    api project(':rocket-chat-core')
+    api extraDependencies.okHTTP
+    api extraDependencies.textDrawable
+    api supportDependencies.annotation
+    api supportDependencies.cardView
+    api supportDependencies.designSupportLibrary
+    api supportDependencies.constraintLayout
+    api supportDependencies.supportV13
+    api supportDependencies.customTabs
+    api rxbindingDependencies.rxBinding
+    api rxbindingDependencies.rxBindingSupport
+    api "org.jetbrains.kotlin:kotlin-stdlib-jre8:$rootProject.ext.kotlinVersion"
+    implementation 'org.nibor.autolink:autolink:0.6.0'
+    implementation 'com.github.yusukeiwaki.android-widget:widget-fontawesome:0.0.1'
+    implementation 'com.github.bumptech.glide:glide:3.8.0'
+    api "com.facebook.fresco:fresco:$frescoVersion"
+    api "com.facebook.fresco:imagepipeline-okhttp3:$frescoVersion"
+    implementation 'com.caverock:androidsvg:1.2.1'
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$rootProject.ext.kotlinVersion"
+    testImplementation "org.jetbrains.kotlin:kotlin-test:$rootProject.ext.kotlinVersion"
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:2.10.0"
+}

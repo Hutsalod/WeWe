@@ -1,0 +1,173 @@
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+//    maven { url 'https://github.com/uPhyca/stetho-realm/raw/master/maven-repo' }
+    maven { url 'https://github.com/WickeDev/stetho-realm/raw/master/maven-repo' }
+}
+
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.jakewharton.hugo'
+apply plugin: 'com.github.triplet.play'
+apply from: '../config/quality/quality.gradle'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId "chat.wewe.android"
+        minSdkVersion 16
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 113
+        versionName "2.0.6"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+    }
+
+    signingConfigs {
+        release {
+            storeFile project.rootProject.file('Rocket.jks').getCanonicalFile()
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias System.getenv("KEY_ALIAS")
+            keyPassword System.getenv("KEY_PASSWORD")
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            versionNameSuffix '-DEBUG'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+
+        release {
+            debuggable false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/rxjava.properties'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        //avoiding okio error: https://github.com/square/okhttp/issues/896
+        lintConfig file("lint.xml")
+    }
+
+    sourceSets {
+        debug {
+            manifest.srcFile 'src/debug/AndroidManifest.xml'
+        }
+
+        release {
+            manifest.srcFile 'src/release/AndroidManifest.xml'
+        }
+
+        test {
+            test.java.srcDirs += 'src/test/kotlin'
+            androidTest.java.srcDirs += 'src/androidTest/kotlin'
+        }
+    }
+
+    dexOptions {
+        if(System.getenv()["CIRCLECI"] as boolean) {
+            javaMaxHeapSize "1536M"
+            preDexLibraries false
+        }
+    }
+}
+
+play {
+    jsonFile = file('rocket-chat.json')
+    track = "${track}"
+}
+ext {
+    stethoVersion = '1.5.0'
+    stethoOkhttp3Version = '1.5.0'
+    stethoRealmVersion = '2.2.2'
+    rxbindingVersion = '2.0.0'
+    rxlifecycleVersion = '2.1.0'
+    icepickVersion = '3.2.0'
+    permissionsdispatcherVersion = '2.4.0'
+}
+
+dependencies {
+    api project(':android-ddp')
+    api project(':rocket-chat-android-widgets')
+    api project(':persistence-realm')
+    implementation extraDependencies.okHTTP
+    implementation extraDependencies.rxJava
+    implementation extraDependencies.rxKotlin
+    implementation extraDependencies.boltTask
+    implementation supportDependencies.multidex
+    implementation supportDependencies.designSupportLibrary
+    implementation supportDependencies.annotation
+    implementation rxbindingDependencies.rxBinding
+    implementation rxbindingDependencies.rxBindingSupport
+    implementation rxbindingDependencies.rxBindingAppcompact
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.github.pchmn:MaterialChipsInput:1.0.8'
+    api "org.jetbrains.kotlin:kotlin-stdlib-jre8:$rootProject.ext.kotlinVersion"
+    implementation "com.google.firebase:firebase-core:$rootProject.ext.playLibVersion"
+    implementation "com.google.firebase:firebase-crash:$rootProject.ext.playLibVersion"
+    implementation "com.google.firebase:firebase-messaging:$rootProject.ext.playLibVersion"
+    implementation "com.google.android.gms:play-services-gcm:$rootProject.ext.playLibVersion"
+    implementation 'com.android.support:appcompat-v7:25.1.1'
+    implementation "com.trello.rxlifecycle2:rxlifecycle:$rxlifecycleVersion"
+    implementation "com.trello.rxlifecycle2:rxlifecycle-android:$rxlifecycleVersion"
+    implementation "com.trello.rxlifecycle2:rxlifecycle-components:$rxlifecycleVersion"
+    implementation 'nl.littlerobots.rxlint:rxlint:1.2'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+
+    implementation "frankiesardo:icepick:$icepickVersion"
+    annotationProcessor "frankiesardo:icepick-processor:$icepickVersion"
+    implementation "com.github.hotchemi:permissionsdispatcher:$permissionsdispatcherVersion"
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcherVersion"
+    implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true;
+    }
+    implementation(extraDependencies.crouton) {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
+
+    implementation 'com.android.billingclient:billing:1.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.github.yusukeiwaki.android-widget:widget-fontawesome:0.0.1'
+    implementation extraDependencies.androidJob
+    implementation extraDependencies.jstate
+    debugImplementation "com.facebook.stetho:stetho:$stethoVersion"
+    debugCompile "com.facebook.stetho:stetho-okhttp3:$stethoOkhttp3Version"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
+    debugCompile "com.uphyca:stetho_realm:$stethoRealmVersion"
+    debugCompile "com.tspoon.traceur:traceur:1.0.1"
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.robolectric:robolectric:3.3'
+    testImplementation "org.jetbrains.kotlin:kotlin-test:$rootProject.ext.kotlinVersion"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$rootProject.ext.kotlinVersion"
+    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$rootProject.ext.kotlinVersion"
+    testImplementation "com.nhaarman:mockito-kotlin:1.5.0"
+    testImplementation 'org.amshove.kluent:kluent:1.14'
+    implementation files('libs/portsipvoipsdk.jar')
+}
+apply plugin: 'com.google.gms.google-services'
