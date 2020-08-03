@@ -514,7 +514,6 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
         }
     };
 
-
     @DebugLog
     public void onLogout() {
         presenter.prepareToLogout();
