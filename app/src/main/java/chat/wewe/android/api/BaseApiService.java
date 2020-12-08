@@ -47,6 +47,16 @@ public interface BaseApiService {
     @POST("rest/user/change_password/")
     Call<JsonObject>change_password(@Header("Authorization-Token") String Token, @Header("Content-Type") String Type, @Body Map<String, Object> params);
 
+    @POST("rest_api/auth/send_checkword.php")
+    Call<JsonObject>send_checkword( @Body Map<String, Object> params);
+
+    @GET("rest/user/email/")
+    Call<ResponseBody> getEmail(@Header("Authorization-Token") String authKeys);
+
+    @Headers({"Content-type: application/json"})
+    @POST("rest/user/email/")
+    Call<JsonObject> postEmail(@Header("Authorization-Token") String authKeys, @Body Map<String, Object> params);
+
     @Headers({"Content-type: application/json"})
     @POST("rest/user/voip_token/")
     public Call<ResponseBody> voip_token(@Header("Authorization-Token") String Token, @Body Map<String, Object> params);
@@ -57,20 +67,30 @@ public interface BaseApiService {
     @GET("rest/user/devices/")
     Call<ResponseBody> getDevices(@Header("Authorization-Token") String authKeys);
 
-    @FormUrlEncoded
+
     @GET("rest/user/access_device/")
     Call<ResponseBody>getDevice(@Header("Authorization-Token") String authKeys);
 
 
     @Headers({"Content-type: application/json"})
-    @POST("rest/user/push_token/")
-    Call<ResponseBody>postPush(@Header("Authorization-Token") String authKeys, @Body Map<String, Object> params);
+    @POST("rest/user/push_token")
+    Call<ResponseBody>postPush(@Header("Authorization-Token") String authKeys, @Body Map<String, Object> param);
 
-    @FormUrlEncoded
+    @Headers({"Content-type: application/json"})
+    @POST("rest/user/save_version")
+    Call<ResponseBody>postLog(@Header("Authorization-Token") String authKeys, @Body Map<String, Object> param);
+
+    @Headers({"Content-type: application/json"})
     @POST("rest/user/access_device/")
-    Call<ResponseBody>postDevice(@Header("Authorization-Token") String authKeys, @Field("UF_ACCESS_OTH_DEVICE") String DEVICE);
+    Call<JsonObject>postDevice(@Header("Authorization-Token") String Token, @Body Map<String, Object> DEVICE);
+
+    @Headers({"Content-type: application/json"})
+    @POST("rest/user/public_key")
+    Call<ResponseBody>setPublicKey(@Header("Authorization-Token") String authKeys, @Body Map<String, Object> param);
 
 
+    @GET("rest/user/public_key")
+    Call<ResponseBody>getPublicKey(@Header("Authorization-Token") String authKeys, @Query("login") String name );
 
     @POST("rest/user/subscription/")
     Call<JsonObject>subscription(@Header("Authorization-Token") String Token, @Header("Content-Type") String Type, @Body Map<String, Object> params);

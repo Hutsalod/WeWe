@@ -63,7 +63,7 @@ public class RoomToolbar extends Toolbar {
   private void initialize(Context context) {
     View.inflate(context, R.layout.toolbar, this);
     setNavigationIcon(context);
-
+    
     toolbarText = findViewById(R.id.text_toolbar);
     roomTypeImage = findViewById(R.id.image_room_type);
     userStatusImage = findViewById(R.id.image_user_status);
@@ -88,7 +88,7 @@ public class RoomToolbar extends Toolbar {
 
   private void setNavigationIcon(Context context) {
     drawerArrowDrawable = new DrawerArrowDrawable(context);
-    drawerArrowDrawable.setColor(ContextCompat.getColor(context, R.color.text_wewe));
+    drawerArrowDrawable.setColor(ContextCompat.getColor(context, R.color.color_icon_composer));
 
     super.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back_vector));
 

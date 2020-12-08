@@ -1,6 +1,7 @@
 package chat.wewe.android.layouthelper.chatroom.roomlist;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -100,19 +101,7 @@ public class RoomListItemViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
-  private Bitmap showAvatar(String... urls){
-    String imageURL = urls[0];
-    Bitmap bimage = null;
-    try {
-      InputStream in = new java.net.URL("https://chat.weltwelle.com/avatar/"+imageURL).openStream();
-      bimage = BitmapFactory.decodeStream(in);
-    } catch (Exception e) {
-      Log.e("Error Message", e.getMessage());
-      e.printStackTrace();
-    }
 
-    return bimage;
-  }
 
   /**
    * Only shows the room icon if it is a PRIVATE CHANNEL or PUBLIC CHANNEL, otherwise you should use {@link #showUserStatusIcon(String)} to show the icon.

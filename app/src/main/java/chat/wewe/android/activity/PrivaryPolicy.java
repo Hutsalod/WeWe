@@ -63,11 +63,12 @@ public class PrivaryPolicy extends AppCompatActivity {
 
         textView.setText(ss);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
+
+        requestPermissions (this);
     }
     @Override
     protected void onResume() {
         super.onResume();
-        requestPermissions (this);
     }
 
     public void privaryOK(View view) {

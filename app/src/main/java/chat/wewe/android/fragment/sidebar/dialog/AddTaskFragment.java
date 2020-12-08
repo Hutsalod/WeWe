@@ -42,6 +42,7 @@ import bolts.Task;
 import chat.wewe.android.R;
 import chat.wewe.android.adapter.RecyclerViewCheck;
 import chat.wewe.android.adapter.RecyclerViewTask;
+import chat.wewe.android.widget.RocketChatAvatar;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.GONE;
@@ -595,7 +596,7 @@ public class AddTaskFragment extends AbstractAddRoomDialogFragment implements Nu
       View row = inflater.inflate(R.layout.list_item, parent, false);
       TextView label = row.findViewById(R.id.text_view_cat_name);
       label.setText(myArray[position]);
-      ImageView iconImageView = (ImageView) row.findViewById(R.id.image_view_icon);
+      ImageView iconImageView = row.findViewById(R.id.image_view_icon);
         new DownloadImageFromInternet(iconImageView).execute("https://chat.weltwelle.com/avatar/"+myName[position]);
       return row;
     }

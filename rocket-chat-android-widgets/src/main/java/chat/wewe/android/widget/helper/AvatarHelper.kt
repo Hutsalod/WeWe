@@ -94,7 +94,7 @@ object AvatarHelper {
             (firstInitial + secondInitial).toUpperCase()
         } else {
             if (username.length > 1) {
-                username.substring(0, 2).toUpperCase()
+                username.substring(0, 1).toUpperCase()
             } else {
                 username.substring(0, 1).toUpperCase()
             }

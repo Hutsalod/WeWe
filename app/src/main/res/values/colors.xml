@@ -26,5 +26,5 @@
     <color name="text_default">#000000</color>
     <color name="text_disabled">#ffa6b3bf</color>
     <color name="colorRed">#D81B60</color>
-    <color name="colorTool">#888888</color>
+    <color name="colorTool">#bababa</color>
 </resources>

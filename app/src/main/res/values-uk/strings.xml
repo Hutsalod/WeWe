@@ -246,7 +246,7 @@ without your confirmation.</string>
         <string name = "str_3"> Політика конфіденційності </string>
         <string name = "str_4"> Доступ з неколько пристроїв </string>
 
-        <string name = "str_5"> Захист </string>
+        <string name = "str_5"> Пін-код </string>
 
         <string name = "str_6"> Мова </string>
 
@@ -363,7 +363,7 @@ without your confirmation.</string>
         <string name = "make_sure_your_server_version_is_up_to_date"> Переконайтесь, що версія Вашого сервера WeWe.Chat актуальна </string>
 
         <string name = "fragment_login_sign_up"> ПІДТРИМКА </string>
-        <string name = "fragment_login_sign_in"> ЗАПИСЬ </string>
+        <string name = "fragment_login_sign_in"> ВХІД </string>
         <string name = "fragment_input_hostname_connect"> ЗВ\'ЯЗКУ </string>
         <string name = "sub_username"> \ @% s </string>
         <string name = "username"> \ @% s </string>
@@ -390,4 +390,17 @@ without your confirmation.</string>
                  <item quantity = "few">%d нових повідомлення </item>
                  <item quantity = "many">%d нових повідомлень </item>
     </plurals>
+
+    <string name = "reg_ok">Реєстрація успішна, будь ласка, авторизуйтесь</string>
+    <string name="reg_error_5">Логин не может содержать Кириллицу</string>
+    <string name="reg_error_4">Ошибка регистрации на SIP</string>
+    <string name="reg_error_3">Ошибка регистрации на WeWe</string>
+    <string name="reg_error_2">Пользователь существует</string>
+    <string name="reg_error_1">Не верные входные параметры</string>
+    <string name="helps_password">Забыл пароль</string>
+    <string name="send_email">Успешно отправлено на почту!</string>
+    <string name="pass_six">Пароль повинен складатися з більш ніж 6 символів</string>
+    <string name="vers_name">Ваше приложенные устарело, для корректной работы нужно обновить приложения!</string>
+    <string name="privat_chat">Приватний чат</string>
+
 </resources>

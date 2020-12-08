@@ -183,9 +183,9 @@ public class DDPClientImpl {
                                     },
                                     err -> {
                                         if (err instanceof TimeoutException) {
-                                            task.trySetError(new Exception("Your connection seems off…"));
+                                        //   task.trySetError(new Exception("Your connection seems off…"));
                                         } else {
-                                            task.trySetError(new Exception("Ooops. Something's up!"));
+                                        //    task.trySetError(new Exception("Ooops. Something's up!"));
                                         }
                                     }
                             )
@@ -322,9 +322,9 @@ public class DDPClientImpl {
                                     },
                                     err -> {
                                         if (err instanceof TimeoutException) {
-                                            task.trySetError(new Exception("Your connection seems off…"));
+//                                            task.trySetError(new Exception("Your connection seems off…"));
                                         } else {
-                                            task.trySetError(new Exception("Ooops. Something's up!"));
+     //                                       task.trySetError(new Exception("Ooops. Something's up!"));
                                         }
                                     }
                             )

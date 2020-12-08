@@ -224,6 +224,8 @@ public class UserRegistrationDialogFragment extends DialogFragment {
 
     private void requestRegister(){
         waitingView.setVisibility(View.VISIBLE);
+        if(password.length()<6)
+            Toast.makeText(getActivity(), getString(R.string.pass_six), Toast.LENGTH_SHORT).show();
         mApiService.registerRequest(model,username,password).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -231,24 +233,26 @@ public class UserRegistrationDialogFragment extends DialogFragment {
                     try {
                         JSONObject jsonRESULTS = new JSONObject(response.body().string());
                         if (jsonRESULTS.getString("SUCCESS").equals("false")){
+
                          String   msg = jsonRESULTS.getString("ERROR_CODE");
+                            Log.d("debug", "onResponse: GA BERHASIL"+msg);
                             switch (msg) {
-                                case "1": msg = "Не верные входные параметры";
+                                case "1": msg = getString(R.string.reg_error_1);
                                     break;
-                                case "2": msg = "Пользователь существует";
+                                case "2": msg = getString(R.string.reg_error_2);
                                     break;
-                                case "3": msg = "Ошибка регистрации на WeWe";
+                                case "3": msg = getString(R.string.reg_error_3);
                                     break;
-                                case "4": msg = "Ошибка регистрации на SIP";
+                                case "4": msg = getString(R.string.reg_error_4);
                                     break;
-                                case "5": msg = "Логин не может содержать Кириллицу";
+                                case "5": msg = getString(R.string.reg_error_5);
                                     break;
                             }
                             Toast.makeText(getActivity(), ""+msg, Toast.LENGTH_SHORT).show();
                             waitingView.setVisibility(View.GONE);
                         }else{
                             dismiss();
-                            Toast.makeText(getActivity(), "Регистрация успешна, пожалуйста, авторизуйтесь", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), getString(R.string.reg_ok), Toast.LENGTH_SHORT).show();
                         }
 
                     } catch (JSONException e) {

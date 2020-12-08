@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="#FFFFFF"
     android:theme="@style/AppTheme">
 
     <include layout="@layout/day" />
@@ -18,7 +19,8 @@
             android:id="@+id/user_avatar"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_margin="8dp" />
+            android:layout_margin="8dp"
+            android:visibility="invisible" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,7 +35,8 @@
                 android:id="@+id/user_and_timestamp_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="invisible">
 
                 <TextView
                     android:id="@+id/username"
@@ -51,8 +54,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.RocketChat.Message.SubUsername"
-                    tools:text="\@John Doe"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    tools:text="\@John Doe" />
 
                 <Space
                     android:layout_width="@dimen/margin_8"
@@ -78,8 +81,8 @@
                     android:layout_gravity="end"
                     android:gravity="end"
                     android:tint="@color/colorRed400"
-                    app:srcCompat="@drawable/ic_error_black_24dp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_error_black_24dp" />
 
                 <TextView
                     android:id="@+id/textView5"

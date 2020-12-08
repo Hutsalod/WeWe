@@ -24,6 +24,14 @@ public class PairedMessage {
         .equals(DateTime.fromEpocMs(target.getTimestamp(), DateTime.Format.DATE));
   }
 
+  public String getString() {
+    return DateTime.fromEpocMs(nextSibling.getTimestamp(), DateTime.Format.DATE);
+  }
+
+  public String getStringTwo() {
+    return DateTime.fromEpocMs(target.getTimestamp(), DateTime.Format.DATE);
+  }
+
   /**
    * Returns true if target and nextSibling are sent by the same user.
    */

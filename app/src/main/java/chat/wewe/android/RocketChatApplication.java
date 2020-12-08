@@ -1,5 +1,6 @@
 package chat.wewe.android;
 
+import android.content.Context;
 import android.os.Build;
 import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
@@ -36,6 +37,8 @@ public class RocketChatApplication extends MultiDexApplication {
     public PortSipSdk mEngine;
     public boolean mUseFrontCamera= false;
 
+    private static Context context;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -67,11 +70,19 @@ public class RocketChatApplication extends MultiDexApplication {
             }
             Logger.INSTANCE.report(e);
         });
-
+        RocketChatApplication.context = getApplicationContext();
         instance = this;
     }
 
+    public static Context getAppContext() {
+        return RocketChatApplication.context;
+    }
+
     public static boolean isActivityVisible() {
+        return activityVisible;
+    }
+
+    public static boolean getPrivate() {
         return activityVisible;
     }
 

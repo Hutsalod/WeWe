@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import chat.wewe.persistence.encrypt.Cryptor;
 import chat.wewe.core.JsonConstants;
 import chat.wewe.core.SyncState;
 import chat.wewe.core.models.Attachment;
@@ -47,6 +48,7 @@ public class RealmMessage extends RealmObject {
   public static final String ATTACHMENTS = "attachments";
   public static final String URLS = "urls";
   public static final String EDITED_AT = "editedAt";
+  public static Cryptor cryptor = new Cryptor();
 
   @PrimaryKey private String _id;
   private String t; //type:
@@ -62,11 +64,12 @@ public class RealmMessage extends RealmObject {
   private String urls; //JSONArray.
   private long editedAt;
 
+
   public static JSONObject customizeJson(JSONObject messageJson) throws JSONException {
     long ts = messageJson.getJSONObject(TIMESTAMP).getLong(JsonConstants.DATE);
     messageJson.remove(TIMESTAMP);
     messageJson.put(TIMESTAMP, ts).put(SYNC_STATE, SyncState.SYNCED);
-    String s = "adf";
+    String s = "";
     if (messageJson.getJSONObject("u").isNull("_id")) {
       if (messageJson.getString("t").equals("call-info")) {
         String str = messageJson.getString("msg");
@@ -105,6 +108,15 @@ public class RealmMessage extends RealmObject {
         messageJson.remove("info");
         messageJson.remove("emoji");
       }
+//&& privatChat==true
+      if (messageJson.getString("msg").contains("\uD83D\uDD11 ") ) {
+        String str = messageJson.getString("msg");
+        str = str.replace("\uD83D\uDD11 ", "");
+        Log.d("TEST_CRYPT"," decryptRSAToString");
+        String msg = cryptor.decryptRSAToString(str,"MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEAnlTzILjZ0C1e2AtiURSVpsyVOZwK/AeVcUoRFscHKTUjlTVvq5ll5CWl4pNlDIqevgA/pQiZMwAprShlSdckUwIDAQABAkA3FiQ+2sGBgf+RGCjdP9WvYld64zUZKcRPVa8rZxSxO40luTpze/mOVFDB0D08iUPm8Dkkt66QvPCcdRR8M1RBAiEAzYX2IdvAzmd4mimbJz9ftRIC8KCY6gw3nPmzbtAX+MECIQDFN+FhN0jHyJi8DUxYREuS40yt6sF1/QpFPu0fu50uEwIhAMZ1OTtwrDmjiL20t3GqrIx4nAYnzgETUxBtvmqe3scBAiBAgCgsHWKmRIr/ZfIEJEH7Rm+7qb2gEyQaxZvT9w5PFQIgIms/KYDjFtpsubyE846ig5msctmf9J+pI9VpecIPqY4=");
+        messageJson.put("msg", ""+msg);
+      }
+
     }
 
 

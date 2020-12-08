@@ -1,18 +1,22 @@
 package chat.wewe.android.service.ddp.stream;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import chat.wewe.android.activity.MainActivity;
 import chat.wewe.android.helper.LogIfError;
 import chat.wewe.android.log.RCLog;
 import chat.wewe.android.service.ddp.AbstractDDPDocEventSubscriber;
 import chat.wewe.android_ddp.DDPSubscription;
 import chat.wewe.persistence.realm.RealmHelper;
 
-abstract class AbstractStreamNotifyEventSubscriber extends AbstractDDPDocEventSubscriber {
+import static chat.wewe.android.activity.MainActivity.pane;
+
+public abstract class AbstractStreamNotifyEventSubscriber extends AbstractDDPDocEventSubscriber {
   protected AbstractStreamNotifyEventSubscriber(Context context, String hostname,
                                                 RealmHelper realmHelper) {
     super(context, hostname, realmHelper);
@@ -64,6 +68,10 @@ abstract class AbstractStreamNotifyEventSubscriber extends AbstractDDPDocEventSu
     String msg = args.length() > 0 ? args.getString(0) : null;
     JSONObject target = args.getJSONObject(args.length() - 1);
     if ("removed".equals(msg)) {
+
+      pane.openPane();
+
+      Log.d("QQWEWE", "removed");
       realmHelper.executeTransaction(realm ->
           realm.where(getModelClass())
               .equalTo(getPrimaryKeyForModel(), target.getString(getPrimaryKeyForModel()))
@@ -75,4 +83,8 @@ abstract class AbstractStreamNotifyEventSubscriber extends AbstractDDPDocEventSu
       ).continueWith(new LogIfError());
     }
   }
+
+
 }
+
+

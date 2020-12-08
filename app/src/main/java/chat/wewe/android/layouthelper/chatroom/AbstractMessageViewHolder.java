@@ -1,6 +1,9 @@
 package chat.wewe.android.layouthelper.chatroom;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,6 +13,7 @@ import chat.wewe.android.helper.DateTime;
 import chat.wewe.android.helper.TextUtils;
 import chat.wewe.android.widget.AbsoluteUrl;
 import chat.wewe.android.widget.RocketChatAvatar;
+import chat.wewe.android.widget.message.MessageFormLayout;
 import chat.wewe.core.SyncState;
 
 public abstract class AbstractMessageViewHolder extends ModelViewHolder<PairedMessage> {
@@ -60,7 +64,7 @@ public abstract class AbstractMessageViewHolder extends ModelViewHolder<PairedMe
 
   private void renderNewDayAndSequential(PairedMessage pairedMessage) {
     //see Rocket.Chat:packages/rocketchat-livechat/app/client/views/message.coffee
-    if (!pairedMessage.hasSameDate()) {
+  if (!pairedMessage.hasSameDate()) {
       setNewDay(DateTime.fromEpocMs(pairedMessage.target.getTimestamp(), DateTime.Format.DATE));
       setSequential(false);
     } else if (!pairedMessage.target.isGroupable() || !pairedMessage.nextSibling.isGroupable()
@@ -85,6 +89,8 @@ public abstract class AbstractMessageViewHolder extends ModelViewHolder<PairedMe
       }
     }
 
+
+
     if (userAndTimeContainer != null) {
       if (sequential)
         userAndTimeContainer.setVisibility(View.GONE);
@@ -103,4 +109,6 @@ public abstract class AbstractMessageViewHolder extends ModelViewHolder<PairedMe
       }
     }
   }
+
+
 }

@@ -25,7 +25,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="4dp"
                 android:visibility="visible"
-                app:srcCompat="@drawable/s222" />
+                app:srcCompat="@drawable/s000" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -67,13 +67,13 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="#C8C7CB" />
+                android:layout_height="28dp"
+                android:background="#EFEFF4" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="28dp"
-                android:background="#EFEFF4" />
+                android:layout_height="0.5dp"
+                android:background="#C8C7CB" />
 
             <LinearLayout
                 android:id="@+id/user_info_container"
@@ -124,7 +124,7 @@
                         tools:text="John Doe" />
 
                     <TextView
-                        android:id="@+id/textView5"
+                        android:id="@+id/status_connetc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -195,69 +195,25 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#C8C7CB" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="28dp"
-        android:background="#EFEFF4" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#C8C7CB" />
 
-    <TextView
-        android:id="@+id/btn_language"
-        style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
-        android:drawablePadding="16dp"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/str_6"
-        android:textAppearance="?attr/textAppearanceListItemSmall"
-        android:textColor="#1B1B1B"
-        android:textSize="14sp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:background="#EFEFF4" />
 
-    <View
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#EFEFF4"
+                android:textColor="#777777"
+                android:textSize="14sp"
+                android:paddingLeft="32dp"
+                android:paddingBottom="@dimen/margin_8"
+                android:text="АКАУНТ WEWE" />
+
+            <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="#C8C7CB" />
-
-    <android.support.v7.widget.SwitchCompat
-        android:id="@+id/deviceprivat"
-        style="@style/sidebar_list_item"
-        android:drawablePadding="16dp"
-        android:layout_marginLeft="16dp"
-        android:checked="true"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/str_4"
-        android:textAppearance="?attr/textAppearanceListItemSmall"
-        android:textColor="#1B1B1B"
-        android:textSize="14sp"
-        android:theme="@style/MySwitch" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="#C8C7CB" />
-
-    <TextView
-        android:id="@+id/securityBtn"
-        style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
-        android:drawablePadding="16dp"
-        android:fontFamily="sans-serif-light"
-        android:textSize="14sp"
-        android:text="@string/str_5"
-        android:textAppearance="?attr/textAppearanceListItemSmall"
-        android:textColor="#1B1B1B" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:background="#C8C7CB" />
 
             <TextView
@@ -266,10 +222,10 @@
                 android:layout_marginLeft="16dp"
                 android:drawablePadding="16dp"
                 android:fontFamily="sans-serif-light"
-                android:textSize="14sp"
                 android:text="Сменить пароль"
                 android:textAppearance="?attr/textAppearanceListItemSmall"
-                android:textColor="#1B1B1B" />
+                android:textColor="#1B1B1B"
+                android:textSize="14sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -278,266 +234,387 @@
                 android:layout_marginRight="16dp"
                 android:background="#C8C7CB" />
 
-    <android.support.v7.widget.SwitchCompat
-        android:id="@+id/switch2"
-        style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
-        android:checked="false"
-        android:drawablePadding="16dp"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/alter_server"
-        android:textAppearance="?attr/textAppearanceListItemSmall"
-        android:textColor="#1B1B1B"
-        android:textSize="14sp"
-        android:theme="@style/MySwitch" />
+            <LinearLayout
+                android:id="@+id/deleye_mss"
+                style="@style/sidebar_list_item"
+                android:orientation="horizontal">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="#C8C7CB" />
+                <FrameLayout
+                    android:layout_width="48dp"
+                    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+                    <io.github.yusukeiwaki.android.widget.FontAwesomeTextView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="center"
+                        android:text="@string/fa_sign_out"
+                        android:textColor="#D85946"
+                        android:textSize="14dp" />
+                </FrameLayout>
 
-        <TextView
-            android:id="@+id/friends"
-            style="@style/sidebar_list_item"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_weight="1"
-            android:drawablePadding="16dp"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/str_10"
-            android:textAppearance="?attr/textAppearanceListItemSmall"
-            android:textColor="#1B1B1B"
-            android:textSize="14sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/delete_message"
+                    android:textAppearance="?attr/textAppearanceListItemSmall"
+                    android:textColor="#D85946"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="right|center_vertical"
-            android:layout_marginRight="16dp"
-            app:srcCompat="@drawable/ic_right_black" />
-    </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#C8C7CB" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="#C8C7CB" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+            <LinearLayout
+                android:id="@+id/btn_logout"
+                style="@style/sidebar_list_item"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/blaclist"
-            style="@style/sidebar_list_item"
-            android:layout_marginLeft="16dp"
-            android:drawablePadding="16dp"
-            android:fontFamily="sans-serif-light"
-            android:layout_weight="1"
-            android:text="@string/str_11"
-            android:textAppearance="?attr/textAppearanceListItemSmall"
-            android:textColor="#1B1B1B"
-            android:textSize="14sp" />
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="right|center_vertical"
-            android:layout_marginRight="16dp"
-            app:srcCompat="@drawable/ic_right_black" />
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="#C8C7CB" />
+                <FrameLayout
+                    android:layout_width="48dp"
+                    android:layout_height="match_parent">
 
-    <android.support.v7.widget.SwitchCompat
-        android:id="@+id/switch3"
-        style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
-        android:checked="true"
-        android:drawablePadding="16dp"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/minim_video"
-        android:textAppearance="?attr/textAppearanceListItemSmall"
-        android:textColor="#1B1B1B"
-        android:textSize="14sp"
-        android:theme="@style/MySwitch" />
+                    <io.github.yusukeiwaki.android.widget.FontAwesomeTextView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="center"
+                        android:text="@string/fa_sign_out"
+                        android:textColor="#D85946"
+                        android:textSize="14dp" />
+                </FrameLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#C8C7CB" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="28dp"
-        android:background="#EFEFF4" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#C8C7CB" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/fragment_sidebar_main_logout_title"
+                    android:textAppearance="?attr/textAppearanceListItemSmall"
+                    android:textColor="#D85946"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
-    <TextView
-        android:id="@+id/version_info"
-        style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
-        android:drawablePadding="16dp"
-        android:fontFamily="sans-serif-light"
-        android:text="Версия: 1.7.0 (1700)"
-        android:textAppearance="?attr/textAppearanceListItemSmall"
-        android:textColor="#1B1B1B"
-        android:textSize="14sp" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="#C8C7CB" />
-    <TextView
-        style="@style/sidebar_list_item"
-        android:text="Версия сервера:  2.3.0"
-        android:layout_marginLeft="16dp"
-        android:drawablePadding="16dp"
-        android:textSize="14sp"
-        android:fontFamily="sans-serif-light"
-        android:textAppearance="?attr/textAppearanceListItemSmall"
-        android:textColor="#1B1B1B" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="#C8C7CB" />
-    <TextView
-        android:id="@+id/policy_mss"
-        style="@style/sidebar_list_item"
-        android:text="@string/str_3"
-        android:layout_marginLeft="16dp"
-        android:drawablePadding="16dp"
-        android:textSize="14sp"
-        android:textAppearance="?attr/textAppearanceListItemSmall"
-        android:fontFamily="sans-serif-light"
-        android:textColor="#1B1B1B" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#C8C7CB" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="28dp"
-        android:background="#EFEFF4" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#C8C7CB" />
+            <View
+                android:id="@+id/view10"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#C8C7CB" />
 
-    <LinearLayout
-        android:id="@+id/deleye_mss"
-        style="@style/sidebar_list_item"
-        android:orientation="horizontal">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:background="#EFEFF4" />
 
-        <FrameLayout
-            android:layout_width="48dp"
-            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#EFEFF4"
+                android:textColor="#777777"
+                android:textSize="14sp"
+                android:paddingLeft="32dp"
+                android:paddingBottom="@dimen/margin_8"
+                android:text="НАСТРОЙКИ" />
 
-            <io.github.yusukeiwaki.android.widget.FontAwesomeTextView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textColor="#D85946"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#C8C7CB" />
+
+            <TextView
+                android:id="@+id/btn_language"
+                style="@style/sidebar_list_item"
+                android:layout_marginLeft="16dp"
+                android:drawablePadding="16dp"
                 android:fontFamily="sans-serif-light"
-                android:text="@string/fa_sign_out"
-                android:textSize="14dp" />
-        </FrameLayout>
+                android:text="@string/str_6"
+                android:textAppearance="?attr/textAppearanceListItemSmall"
+                android:textColor="#1B1B1B"
+                android:textSize="14sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/delete_message"
-            android:textSize="14sp"
-            android:textColor="#D85946"
-            android:fontFamily="sans-serif-light"
-            android:textAppearance="?attr/textAppearanceListItemSmall" />
-    </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#C8C7CB" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="#C8C7CB" />
-
-    <LinearLayout
-        android:id="@+id/btn_logout"
-        style="@style/sidebar_list_item"
-        android:orientation="horizontal">
-
-        <FrameLayout
-            android:layout_width="48dp"
-            android:layout_height="match_parent">
-
-            <io.github.yusukeiwaki.android.widget.FontAwesomeTextView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_gravity="center"
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switch3"
+                style="@style/sidebar_list_item"
+                android:layout_marginLeft="16dp"
+                android:checked="true"
+                android:drawablePadding="16dp"
                 android:fontFamily="sans-serif-light"
-                android:gravity="center"
-                android:text="@string/fa_sign_out"
-                android:textColor="#D85946"
-                android:textSize="14dp" />
-        </FrameLayout>
+                android:text="@string/minim_video"
+                android:textAppearance="?attr/textAppearanceListItemSmall"
+                android:textColor="#1B1B1B"
+                android:textSize="14sp"
+                android:theme="@style/MySwitch" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/fragment_sidebar_main_logout_title"
-            android:textAppearance="?attr/textAppearanceListItemSmall"
-            android:textColor="#D85946"
-            android:textSize="14sp" />
-    </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#C8C7CB" />
 
-    <View
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switch2"
+                style="@style/sidebar_list_item"
+                android:layout_marginLeft="16dp"
+                android:checked="false"
+                android:drawablePadding="16dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/alter_server"
+                android:textAppearance="?attr/textAppearanceListItemSmall"
+                android:textColor="#1B1B1B"
+                android:textSize="14sp"
+                android:theme="@style/MySwitch" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#C8C7CB" />
+
+            <TextView
+                android:id="@+id/edit_email"
+                style="@style/sidebar_list_item"
+                android:layout_marginLeft="16dp"
+                android:drawablePadding="16dp"
+                android:fontFamily="sans-serif-light"
+                android:text="Привязка аккаунта к почте"
+                android:textAppearance="?attr/textAppearanceListItemSmall"
+                android:textColor="#1B1B1B"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#C8C7CB" />
+
+            <TextView
+                android:id="@+id/exetGoogle"
+                style="@style/sidebar_list_item"
+                android:layout_marginLeft="16dp"
+                android:drawablePadding="16dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/str_2"
+                android:textAppearance="?attr/textAppearanceListItemSmall"
+                android:textColor="#1B1B1B"
+                android:textSize="14sp" />
+
+            <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#C8C7CB" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="28dp"
-        android:background="#EFEFF4" />
-    <View
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:background="#EFEFF4" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#EFEFF4"
+                android:textColor="#777777"
+                android:textSize="14sp"
+                android:paddingLeft="32dp"
+                android:paddingBottom="@dimen/margin_8"
+                android:text="БЕЗОПАСНОСТЬ" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#C8C7CB" />
+
+            <TextView
+                android:id="@+id/securityBtn"
+                style="@style/sidebar_list_item"
+                android:layout_marginLeft="16dp"
+                android:drawablePadding="16dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/str_5"
+                android:textAppearance="?attr/textAppearanceListItemSmall"
+                android:textColor="#1B1B1B"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#C8C7CB" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/deviceprivat"
+                style="@style/sidebar_list_item"
+                android:layout_marginLeft="16dp"
+                android:checked="true"
+                android:drawablePadding="16dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/str_4"
+                android:textAppearance="?attr/textAppearanceListItemSmall"
+                android:textColor="#1B1B1B"
+                android:textSize="14sp"
+                android:theme="@style/MySwitch" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#C8C7CB" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/blaclist"
+                    style="@style/sidebar_list_item"
+                    android:layout_marginLeft="16dp"
+                    android:layout_weight="1"
+                    android:drawablePadding="16dp"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/str_11"
+                    android:textAppearance="?attr/textAppearanceListItemSmall"
+                    android:textColor="#1B1B1B"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="16dp"
+                    app:srcCompat="@drawable/ic_right_black" />
+            </LinearLayout>
+
+            <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#C8C7CB" />
 
-    <TextView
-        android:id="@+id/exetGoogle"
-        style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
-        android:drawablePadding="16dp"
-        android:textSize="14sp"
-        android:text="@string/str_2"
-        android:textAppearance="?attr/textAppearanceListItemSmall"
-        android:fontFamily="sans-serif-light"
-        android:textColor="#1B1B1B" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="#C8C7CB" />
-    <TextView
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:background="#EFEFF4" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#C8C7CB" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/friends"
+                    style="@style/sidebar_list_item"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:layout_weight="1"
+                    android:drawablePadding="16dp"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/str_10"
+                    android:textAppearance="?attr/textAppearanceListItemSmall"
+                    android:textColor="#1B1B1B"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="16dp"
+                    app:srcCompat="@drawable/ic_right_black" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view7"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#C8C7CB" />
+
+            <View
+                android:id="@+id/view8"
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:background="#EFEFF4" />
+
+            <View
+                android:id="@+id/view9"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#C8C7CB" />
+
+            <TextView
+                style="@style/sidebar_list_item"
+                android:layout_marginLeft="16dp"
+                android:drawablePadding="16dp"
+                android:fontFamily="sans-serif-light"
+                android:text="Версия сервера:  2.3.0"
+                android:textAppearance="?attr/textAppearanceListItemSmall"
+                android:textColor="#1B1B1B"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#C8C7CB" />
+
+            <TextView
+                android:id="@+id/version_info"
+                style="@style/sidebar_list_item"
+                android:layout_marginLeft="16dp"
+                android:drawablePadding="16dp"
+                android:fontFamily="sans-serif-light"
+                android:text="Версия: 1.7.0 (1700)"
+                android:textAppearance="?attr/textAppearanceListItemSmall"
+                android:textColor="#1B1B1B"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#C8C7CB" />
+
+            <TextView
+                android:id="@+id/policy_mss"
+                style="@style/sidebar_list_item"
+                android:layout_marginLeft="16dp"
+                android:drawablePadding="16dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/str_3"
+                android:textAppearance="?attr/textAppearanceListItemSmall"
+                android:textColor="#1B1B1B"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#C8C7CB" />
+
+            <TextView
         android:id="@+id/supportConnect"
         style="@style/sidebar_list_item"
         android:layout_marginLeft="16dp"
@@ -572,10 +649,11 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#C8C7CB" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="28dp"
-        android:background="#EFEFF4" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:background="#EFEFF4" />
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"

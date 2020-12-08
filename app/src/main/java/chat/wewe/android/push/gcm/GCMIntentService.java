@@ -2,24 +2,15 @@ package chat.wewe.android.push.gcm;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.media.AudioAttributes;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,24 +20,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import chat.wewe.android.BuildConfig;
-import chat.wewe.android.R;
 import chat.wewe.android.RocketChatApplication;
-import chat.wewe.android.activity.Constants;
-import chat.wewe.android.activity.LoginActivity;
-import chat.wewe.android.activity.MainActivity;
+import chat.wewe.android.fragment.sidebar.FragmentSetting;
 import chat.wewe.android.push.PushConstants;
 import chat.wewe.android.push.PushManager;
 import chat.wewe.android.service.PortSipService;
-
-import static chat.wewe.android.service.PortSipService.ACTION_PUSH_MESSAGE;
 
 @SuppressLint("NewApi")
 public class GCMIntentService extends GcmListenerService implements PushConstants {
 
   private static final String LOG_TAG = "GCMIntentService";
+    private static Object Activity;
 
-  @Override
+
+    @Override
   public void onMessageReceived(String from, Bundle extras) {
     Log.d(LOG_TAG, "onMessage - from: " + from);
 
@@ -61,9 +48,17 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
     if ("sip".equals(extras.getString("params")))
       startServiceSip();
 
-    if(!RocketChatApplication.isActivityVisible())
+  if(!RocketChatApplication.isActivityVisible() && !"sip".equals(extras.getString("params")))
       PushManager.INSTANCE.handle(applicationContext, extras);
 
+
+
+    if (!"push".equals(extras.getString("collapse_key") )&& !"sip".equals(extras.getString("params"))) {
+      PushManager.INSTANCE.handle(applicationContext, extras);
+
+      Log.d(LOG_TAG, "MESSAGE!!" + extras.toString());
+      setLogout(applicationContext,true);
+    }
 
   }
 
@@ -255,7 +250,7 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
 
   public void startServiceSip(){
     Intent onLineIntent = new Intent(this, PortSipService.class);
-    onLineIntent.setAction(PortSipService.ACTION_PUSH_MESSAGE);
+    onLineIntent.setAction(PortSipService.ACTION_SIP_REGIEST);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       getBaseContext().startForegroundService(onLineIntent);
@@ -271,5 +266,16 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
     return (String) appName;
   }
 
+  public static void   setLogout(Context context,Boolean set) {
+    if(RocketChatApplication.isActivityVisible()) {
+      FragmentSetting.setLogout();
+      context.getSharedPreferences("SIP", Context.MODE_PRIVATE).edit().clear().commit();
+      context.getSharedPreferences("pin", Context.MODE_PRIVATE).edit().clear().commit();
+      context.getSharedPreferences("Setting", Context.MODE_PRIVATE).edit().clear().commit();
+    }
 
+    //  logout.closeView();
+
+   // context.getSharedPreferences("push-set", MODE_PRIVATE).edit().putBoolean("setLogout", set).commit();
+  }
 }

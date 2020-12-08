@@ -23,7 +23,6 @@ import chat.wewe.android.service.PortSipService;
 import chat.wewe.android.util.CallManager;
 
 import static android.content.Context.MODE_PRIVATE;
-import static chat.wewe.android.activity.Intro.callstatic;
 import static chat.wewe.android.service.PortSipService.EXTRA_REGISTER_STATE;
 
 public class LoginFragment extends BaseFragment implements AdapterView.OnItemSelectedListener, View.OnClickListener, PortMessageReceiver.BroadcastListener{
@@ -98,21 +97,6 @@ public class LoginFragment extends BaseFragment implements AdapterView.OnItemSel
         view.findViewById(R.id.btonline).setOnClickListener(this);
         view.findViewById(R.id.btoffline).setOnClickListener(this);
 
-        if(callstatic==0) {
-
-            SaveUserInfo();
-            Intent onLineIntent = new Intent(getActivity(), PortSipService.class);
-            onLineIntent.setAction(PortSipService.ACTION_SIP_REGIEST);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                getActivity().startService(onLineIntent);
-            } else {
-                getActivity().startService(onLineIntent);
-            }
-            mtxStatus.setText("RegisterServer..");
-
-        }
-
     }
 
 
@@ -182,16 +166,13 @@ public class LoginFragment extends BaseFragment implements AdapterView.OnItemSel
     private void setOnlineStatus(String tips) {
         if (CallManager.Instance().regist) {
             mtxStatus.setText(TextUtils.isEmpty(tips)?getString(R.string.online):tips);
-            if (callstatic==0)
-       //  getActivity().finish();
 
-            callstatic=1;
         } else {
             mtxStatus.setText(TextUtils.isEmpty(tips)?getString(R.string.offline):tips);
       //      getActivity().finish();
         }
         if(mtxStatus.getText().equals("No DNS results")){
-            callstatic=0;
+
             getActivity().finish();
         }
     }

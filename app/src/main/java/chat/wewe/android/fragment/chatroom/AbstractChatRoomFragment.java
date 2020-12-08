@@ -38,7 +38,7 @@ public abstract class AbstractChatRoomFragment extends AbstractFragment {
 
         if (getActivity().getSharedPreferences("Sub", MODE_PRIVATE).getBoolean("Sub", false)==true || getActivity().getSharedPreferences("Sub", MODE_PRIVATE).getBoolean("SubApi", false)==true ) {
           Log.d("QQWEWE", "YES");
-          startActivity(new Intent(getActivity(), chat.wewe.android.ui.MainActivity.class).putExtra("uid", uid).putExtra("name", title));
+        startActivity(new Intent(getActivity(), chat.wewe.android.ui.MainActivity.class).putExtra("uid", uid).putExtra("name", title));
         }else {
           startActivity(new Intent(getActivity(), Success.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
         }

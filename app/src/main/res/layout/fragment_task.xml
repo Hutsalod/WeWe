@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
+    android:background="#FFFFFF"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -24,7 +25,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="4dp"
                 android:visibility="visible"
-                app:srcCompat="@drawable/s222" />
+                app:srcCompat="@drawable/s000" />
 
             <TextView
                 android:id="@+id/testUsers"

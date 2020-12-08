@@ -391,4 +391,16 @@ without your confirmation.</string>
                  <item quantity = "few">%d neue Nachrichten </item>
                  <item quantity = "many">%d neue Nachrichten </item>
     </plurals>
+
+    <string name = "reg_ok">Registrierung erfolgreich, bitte anmelden</string>
+    <string name="reg_error_5">Логин не может содержать Кириллицу</string>
+    <string name="reg_error_4">Ошибка регистрации на SIP</string>
+    <string name="reg_error_3">Ошибка регистрации на WeWe</string>
+    <string name="reg_error_2">Пользователь существует</string>
+    <string name="reg_error_1">Не верные входные параметры</string>
+    <string name="helps_password">Забыл пароль</string>
+    <string name="send_email">Успешно отправлено на почту!</string>
+    <string name="pass_six">Пароль должен состоять из более чем 6 символов</string>
+    <string name="vers_name">Ваше приложенные устарело, для корректной работы нужно обновить приложения!</string>
+    <string name="privat_chat">Privat Chat</string>
 </resources>

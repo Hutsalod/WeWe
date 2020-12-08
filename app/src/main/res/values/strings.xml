@@ -13,16 +13,16 @@
     <string name="dialog_add_channel_private">private</string>
     <string name="dialog_add_channel_read_only">read only</string>
 
-    <string name="menu_1">Чаты</string>
-    <string name="menu_2">Звонки</string>
-    <string name="menu_3">Контакты</string>
-    <string name="menu_4">Настройки</string>
-    <string name="menu_5">Задачи</string>
+    <string name = "menu_1"> Chats </string>
+    <string name = "menu_2"> Calls </string>
+    <string name = "menu_3"> Contacts </string>
+    <string name = "menu_4"> Settings </string>
+    <string name = "menu_5"> Tasks </string>
 
 
     <string name="fmt_dialog_view_latest_message_title">New %d messages</string>
-    <string name="fmt_room_user_count">Всего: %,d пользователей</string>
-    <string name="dialog_add_channel_name_title">НАЗВАНИЕ КАНАЛА</string>
+    <string name = "fmt_room_user_count"> Total: %,d users </string>
+    <string name = "dialog_add_channel_name_title"> CHANNEL NAME </string>
     <string name="fragment_room_list_pinned_message_title">Pinned Messages (%s)</string>
     <string name="fragment_room_list_favorite_message_title">Favorite Messages (%s)</string>
     <string name="fragment_room_list_file_list_title">File list (%s)</string>
@@ -33,7 +33,7 @@
     <string name="fragment_room_list_no_file_list_to_show">No file list to show</string>
     <string name="fragment_room_list_no_member_list_to_show">No member list to show</string>
 
-    <string name="users_of_room_title">Список участников</string>
+    <string name = "users_of_room_title"> Member List </string>
     <string name="start_of_conversation">Start of conversation</string>
     <string name="sending">Sending…</string>
     <string name="not_synced">Not synced</string>
@@ -90,6 +90,8 @@
     <string name="edit_message">Edit message</string>
     <string name="message_options_no_message_info">Ooops. Something\'s up!</string>
     <string name="message_options_no_permissions_info">You have no permissions</string>
+
+
 
     <string name="menu_pinned_messages">Pinned messages</string>
     <string name="menu_favorite_messages">Favorite messages</string>
@@ -286,7 +288,7 @@ without your confirmation.</string>
     <string name="str_3">Политика конфиденциальности</string>
     <string name="str_4">Доступ с неколько устройств</string>
 
-    <string name="str_5">Защита</string>
+    <string name="str_5">Пин-код</string>
 
     <string name="str_6">Язык</string>
 
@@ -390,4 +392,16 @@ without your confirmation.</string>
     <string name="write_task">Описание задачи</string>
 
     <string name="delete_message">Удалить личною переписку</string>
+
+    <string name = "reg_ok">Registration successful, please log in</string>
+    <string name="reg_error_5">Логин не может содержать Кириллицу</string>
+    <string name="reg_error_4">Ошибка регистрации на SIP</string>
+    <string name="reg_error_3">Ошибка регистрации на WeWe</string>
+    <string name="reg_error_2">Пользователь существует</string>
+    <string name="reg_error_1">Не верные входные параметры</string>
+    <string name="helps_password">Забыл пароль</string>
+    <string name="send_email">Успешно отправлено на почту!</string>
+    <string name="pass_six">Password must be more than 6 characters</string>
+    <string name="vers_name">Ваше приложенные устарело, для корректной работы нужно обновить приложения!</string>
+    <string name="privat_chat">Приватный чат</string>
 </resources>

@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:theme="@style/AppTheme.Dark"
 
     tools:context="chat.wewe.android.fragment.sidebar.SidebarMainFragment">
@@ -27,7 +28,7 @@
                 android:layout_height="24dp"
                 android:layout_marginLeft="12dp"
                 android:visibility="visible"
-                app:srcCompat="@drawable/s222" />
+                app:srcCompat="@drawable/s000" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -95,7 +96,12 @@
             android:textColor="#1B1B1B"
             android:textSize="14sp"
             tools:text="John Doe" />
-
+        <TextView
+            android:id="@+id/status_connetc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Chat: Онлайн SIP: Онлайн" />
         <chat.wewe.android.widget.DownUpToggleView
             android:id="@+id/toggle_user_action"
             android:layout_width="wrap_content"

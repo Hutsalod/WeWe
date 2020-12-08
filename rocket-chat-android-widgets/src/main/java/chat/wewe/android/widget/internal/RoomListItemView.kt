@@ -2,20 +2,15 @@ package chat.wewe.android.widget.internal
 
 import android.annotation.TargetApi
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
-import android.os.AsyncTask
 import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
 import chat.wewe.android.widget.R
+import chat.wewe.android.widget.helper.AvatarHelper.getTextDrawable
 import chat.wewe.android.widget.helper.DrawableHelper
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -85,44 +80,22 @@ class RoomListItemView : FrameLayout {
 
     fun setRoomName(roomName: String) {
         name.text = roomName
-        val a_char = roomName[0]
-        iconText.text = "" + a_char.toString().substring(0, 1).toUpperCase()
-        Glide.with(this.context)
-                .load("https://chat.weltwelle.com/avatar/" + roomName)
-                .placeholder(R.drawable.list_user)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .listener(object : RequestListener<String?, GlideDrawable?> {
-                    override fun onException(e: java.lang.Exception?, model: String?, target: Target<GlideDrawable?>?, isFirstResource: Boolean): Boolean {
-                        iconText.visibility = View.VISIBLE
-                        return false;
-                    }
 
-                    override fun onResourceReady(resource: GlideDrawable?, model: String?, target: Target<GlideDrawable?>?, isFromMemoryCache: Boolean, isFirstResource: Boolean): Boolean {
-                        iconText.visibility = View.GONE
-                        return false;
-                    }
-                })
-
-            .into(avatarUser)
-
-
+        val placeholderDrawable = getTextDrawable(roomName, context)
+        avatar.loadImage("https://chat.weltwelle.com/avatar/$roomName", placeholderDrawable)
 
     }
 
-    fun setRoomAvatar(image : Bitmap? ){
-        if (image == null) {
-            avatarUser.setImageResource(R.drawable.list_user)
-            iconText.visibility = View.VISIBLE
-        } else {
-            avatarUser.setImageBitmap(image)
-            iconText.visibility = View.GONE
-        }
 
-    }
 
     fun setRoomTime(time : String ){
         timeText.setText(time)
     }
+
+    fun setRoomLastMessage(msg : String ){
+        message_out.setText(msg)
+    }
+
 
     fun showPrivateChannelIcon() {
         type.setImageDrawable(privateChannelDrawable)
@@ -169,30 +142,5 @@ class RoomListItemView : FrameLayout {
     }
 
 
-    private inner class DownloadImageFromInternet(internal var imageView: ImageView) : AsyncTask<String, Void, Bitmap>() {
-        override fun doInBackground(vararg urls: String): Bitmap? {
-            val imageURL = urls[0]
-            var bimage: Bitmap? = null
-            try {
-                val `in` = java.net.URL(imageURL).openStream()
-                bimage = BitmapFactory.decodeStream(`in`)
-            } catch (e: Exception) {
-                Log.e("Error Message", e.message)
-                e.printStackTrace()
-            }
 
-            return bimage
-        }
-
-        override fun onPostExecute(result: Bitmap?) {
-            val iconText = findViewById<View>(R.id.iconText) as TextView
-            if (result == null) {
-                imageView.setImageResource(R.drawable.list_user)
-                iconText.visibility = View.VISIBLE
-            } else {
-                imageView.setImageBitmap(result)
-                iconText.visibility = View.GONE
-            }
-        }
-    }
 }

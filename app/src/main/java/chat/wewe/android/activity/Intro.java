@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import java.util.Locale;
 
 import chat.wewe.android.R;
+import chat.wewe.android.RocketChatCache;
 import chat.wewe.android.api.BaseApiService;
 import chat.wewe.android.api.UtilsApiChat;
 
@@ -23,11 +24,9 @@ import chat.wewe.android.api.UtilsApiChat;
 public class Intro extends AppCompatActivity {
 
     private CountDownTimer countDownTimer;
-    public static int callstatic = 0,StatusU = 4;
     public static boolean callSet,subscription;
-    SharedPreferences SipData,sPrefs,sPref;
-    BaseApiService mApiServiceChat;
-    String code;
+    private SharedPreferences SipData,sPref;
+    private String code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,27 +37,15 @@ public class Intro extends AppCompatActivity {
         setContentView(R.layout.intro);
 
 
-        this.getSharedPreferences("caches", 0).edit().clear().apply();
+       // this.getSharedPreferences("caches", 0).edit().clear().apply();
 
-
+        RocketChatCache.INSTANCE.setSelectedRoomId(null);
         SipData = getSharedPreferences("SIP", MODE_PRIVATE);
-        mApiServiceChat = UtilsApiChat.getAPIService();
-        sPrefs = getSharedPreferences("pin", MODE_PRIVATE);
-        code = sPrefs.getString("code", "");
+        code = getSharedPreferences("pin", MODE_PRIVATE).getString("code", "");
         sPref = getSharedPreferences("Setting", MODE_PRIVATE);
         setLocale(SipData.getString("LANG_APP", "ru"));
 
-     //   SaveUserInfo();
 
-        Log.d("getListStatusq", "NAME " + SipData.getString("LANG_APP", ""));
-            countDownTimer = new CountDownTimer(500, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                }
-
-                @Override
-                public void onFinish() {
-                    cancel();
 
 
                     if(sPref.getInt("privary", '0')=='1'){
@@ -67,9 +54,6 @@ public class Intro extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), PrivaryPolicy.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                     }
 
-                }
-            };
-            countDownTimer.start();
 
     }
     @Override

@@ -2,7 +2,11 @@ package chat.wewe.android.fragment.sidebar;
 
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
+import android.util.Log;
 import android.webkit.CookieManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -194,6 +198,7 @@ public class SidebarMainPresenter extends BasePresenter<SidebarMainContract.View
 
             RoomSidebar roomSidebar = new RoomSidebar();
 
+
             roomSidebar.setId(room.getId());
             roomSidebar.setRoomId(room.getRoomId());
             roomSidebar.setRoomName(roomName);
@@ -203,6 +208,8 @@ public class SidebarMainPresenter extends BasePresenter<SidebarMainContract.View
             roomSidebar.setUnread(room.getUnread());
             roomSidebar.setUpdateAt(room.getUpdatedAt());
             roomSidebar.setLastSeen(room.getLastSeen());
+
+
 
             if (roomType.equals(Room.TYPE_DIRECT_MESSAGE)) {
                 userToObserverList.add(roomName);

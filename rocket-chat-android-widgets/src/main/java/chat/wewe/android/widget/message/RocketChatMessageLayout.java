@@ -21,6 +21,8 @@ import chat.wewe.android.widget.helper.MarkDown;
 public class RocketChatMessageLayout extends LinearLayout {
   private LayoutInflater inflater;
 
+
+
   public RocketChatMessageLayout(Context context) {
     super(context);
     initialize(context, null);

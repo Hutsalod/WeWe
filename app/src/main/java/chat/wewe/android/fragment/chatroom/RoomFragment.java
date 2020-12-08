@@ -17,26 +17,39 @@ import android.support.v13.view.inputmethod.InputConnectionCompat;
 import android.support.v13.view.inputmethod.InputContentInfoCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.os.BuildCompat;
+import android.support.v4.util.ArrayMap;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SlidingPaneLayouts;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 
 import com.hadisatrio.optional.Optional;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import chat.wewe.persistence.encrypt.Cryptor;
 import chat.wewe.android.BackgroundLooper;
 import chat.wewe.android.R;
 import chat.wewe.android.RocketChatApplication;
 import chat.wewe.android.RocketChatCache;
 import chat.wewe.android.activity.MainActivity;
+import chat.wewe.android.activity.ShowUserDetailed;
 import chat.wewe.android.activity.room.RoomActivity;
 import chat.wewe.android.api.MethodCallHelper;
+import chat.wewe.android.api.UtilsApi;
 import chat.wewe.android.fragment.chatroom.dialog.FileUploadProgressDialogFragment;
 import chat.wewe.android.fragment.sidebar.SidebarMainFragment;
 import chat.wewe.android.fragment.sidebar.dialog.AddTaskFragment;
@@ -93,10 +106,15 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import okhttp3.ResponseBody;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
+import static chat.wewe.persistence.encrypt.Cryptor.privatChat;
 
 /**
  * Chat room screen.
@@ -112,6 +130,8 @@ public class RoomFragment extends AbstractChatRoomFragment implements
     private static final int DIALOG_ID = 1;
     private static final String HOSTNAME = "hostname";
     private static final String ROOM_ID = "roomId";
+    private boolean privat = false;
+    private String privatKey = "", publiKey = "";
 
     private String hostname;
     private String token;
@@ -147,7 +167,7 @@ public class RoomFragment extends AbstractChatRoomFragment implements
 
     private Optional<SlidingPaneLayouts> optionalPane;
     private SidebarMainFragment sidebarFragment;
-
+    private float dX,dY;
 
 
     public RoomFragment() {
@@ -208,7 +228,29 @@ public class RoomFragment extends AbstractChatRoomFragment implements
             presenter.loadMessages();
         }
 
+        privatKey = getActivity().getSharedPreferences("Sip", MODE_PRIVATE).getString("CHAT_PRIVAT", "");
+        publiKey = getActivity().getSharedPreferences("Sip", MODE_PRIVATE).getString("CHAT_PUBLIC", "");
+        Log.d("CHAT_PRIVAT","CHAT_PRIVAT "+privatKey);
+        Log.d("CHAT_PRIVAT","CHAT_PUBLIC "+publiKey);
+        if (privatKey.isEmpty()) {
+
+            KeyPair kp = Cryptor.getKeyPair();
+
+            PublicKey publicKey = kp.getPublic();
+            byte[] publicKeyBytes = publicKey.getEncoded();
+            publiKey = new String(Base64.encode(publicKeyBytes, Base64.DEFAULT));
+
+            PrivateKey privateKey = kp.getPrivate();
+            byte[] privateKeyBytes = privateKey.getEncoded();
+            privatKey = new String(Base64.encode(privateKeyBytes, Base64.DEFAULT));
+            setPrivatKey(getActivity().getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", ""), privatKey);
+
+            getActivity().getSharedPreferences("Sip", MODE_PRIVATE).edit()
+                    .putString("CHAT_PUBLIC", publiKey).putString("CHAT_PRIVAT", privatKey).commit();
+        }
+
         Preferences = getActivity().getSharedPreferences("Setting", MODE_PRIVATE);
+
     }
 
     @Override
@@ -239,7 +281,7 @@ public class RoomFragment extends AbstractChatRoomFragment implements
         };
         messageListAdapter.registerAdapterDataObserver(recyclerViewAutoScrollManager);
 
-        scrollListener = new LoadMoreScrollListener(linearLayoutManager, 40) {
+        scrollListener = new LoadMoreScrollListener(linearLayoutManager, 1) {
             @Override
             public void requestMoreItem() {
                 presenter.loadMoreMessages();
@@ -264,6 +306,9 @@ public class RoomFragment extends AbstractChatRoomFragment implements
                 }
             }
         };
+
+
+        getPrivatKey(getActivity().getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", ""),RocketChatCache.INSTANCE.getUserName());
 
         setupToolbar();
         setupSidebar();
@@ -347,6 +392,9 @@ public class RoomFragment extends AbstractChatRoomFragment implements
                     break;
                 case R.id.add_user_group:
                     addUserGroup();
+                    break;
+                case R.id.privat_chat:
+                    privatChat();
                     break;
                 default:
                     return super.onOptionsItemSelected(menuItem);
@@ -457,7 +505,12 @@ public class RoomFragment extends AbstractChatRoomFragment implements
                 messageFormLayout.getEditText(),
                 messageFormLayout
         );
-        Log.d("TEST_WEWE","s 1");
+
+
+        sendShare();
+    }
+
+    public void sendShare(){
         Intent intent = getActivity().getIntent();
         String action = intent.getAction();
         String type = intent.getType();
@@ -476,6 +529,11 @@ public class RoomFragment extends AbstractChatRoomFragment implements
 
                             case DialogInterface.BUTTON_NEGATIVE:
                                 dialog.dismiss();
+                                intent.setAction(null);
+                                break;
+
+                            case DialogInterface.BUTTON_NEUTRAL:
+                                intent.setAction(null);
                                 break;
                         }
                     }
@@ -518,7 +576,7 @@ public class RoomFragment extends AbstractChatRoomFragment implements
                     .show(getFragmentManager(), "FileUploadProgressDialogFragment");
             Log.d("TEST_WEWE","TUPDATE1");
         } else {
-            // show error.
+
         }
     }
 
@@ -616,13 +674,33 @@ public class RoomFragment extends AbstractChatRoomFragment implements
         return true;
     }
 
+
+
     private void sendMessage(String messageText) {
         if (editingMessage == null) {
-            presenter.sendMessage(messageText);
+            if(privatChat == true) {
+                String encrypted = Cryptor.encryptRSAToString(messageText, publiKey);
+                presenter.sendMessage("\uD83D\uDD11 " +  encrypted);
+            }else{
+                presenter.sendMessage(messageText);
+            }
         } else {
             presenter.updateMessage(editingMessage, messageText);
         }
     }
+
+    private void privatChat(){
+        if(privatChat == false) {
+            presenter.sendMessage("\uD83D\uDD12 *ВХОД В ПРИВАТНЫЙ ЧАТ*");
+            Log.d("CHAT_PRIVAT","CHAT_PRIVAT "+privatKey);
+            methodCallHelper.usersMessage(true, "2", privatKey, roomId.replaceAll(userId, ""), roomId);
+            privatChat = true;
+        }else {
+            presenter.sendMessage("\uD83D\uDD13 *ВЫХОД С ПРИВАТНОГО ЧАТА*");
+            privatChat = false;
+        }
+    }
+
 
     @Override
     public void setupWith(@NonNull RocketChatAbsoluteUrl rocketChatAbsoluteUrl) {
@@ -630,7 +708,6 @@ public class RoomFragment extends AbstractChatRoomFragment implements
             token = rocketChatAbsoluteUrl.getToken();
             userId = rocketChatAbsoluteUrl.getUserId();
             messageListAdapter.setAbsoluteUrl(rocketChatAbsoluteUrl);
-
         }
     }
 
@@ -757,6 +834,7 @@ public class RoomFragment extends AbstractChatRoomFragment implements
         Activity context = getActivity();
         if (context != null && context instanceof MainActivity) {
             MessagePopup.take(message)
+                    .setProfil(this::showUsersDetail)
                     .setReplyAction(msg -> presenter.replyMessage(message, false))
                     .setEditAction(this::onEditMessage)
                     .setCopyAction(msg -> onCopy(message.getMessage()))
@@ -764,6 +842,15 @@ public class RoomFragment extends AbstractChatRoomFragment implements
                     .setDeleteAction(this::onDeleteMessage)
                     .setForwardAction(this::openDialogUserss)
                     .showWith(context);
+        }
+    }
+
+
+    public void showUsersDetail(Message message) {
+        Activity context = getActivity();
+        if (context != null && context instanceof MainActivity) {
+
+            showUserDetailed(message);
         }
     }
 
@@ -825,6 +912,77 @@ public class RoomFragment extends AbstractChatRoomFragment implements
             startActivity(intent);
         }
     }
+
+    private void showUserDetailed(Message message) {
+       String email = (message.getUser().getEmails().toArray().length>0) ? message.getUser().getEmails().get(0).getAddress() : "";
+        if (getActivity() != null) {
+            Intent intent = new Intent(getActivity(), ShowUserDetailed.class)
+                    .putExtra("name",message.getUser().getName())
+                    .putExtra("status",message.getUser().getStatus())
+                    .putExtra("username",message.getUser().getUsername())
+                    .putExtra("rols",email)
+                    .putExtra("roomId", roomId)
+                    .putExtra("roomType", roomType)
+                    .putExtra("hostname", hostname)
+                    .putExtra("token", token)
+                    .putExtra("userId", userId);
+
+            startActivity(intent);
+        }
+    }
+
+
+    private void setPrivatKey(String token,String key){
+        Map<String, Object> jsonParams = new ArrayMap<>();
+        jsonParams.put("UF_PUBLIC_KEY", key);
+        UtilsApi.getAPIService().setPublicKey(" KEY:"+token,jsonParams)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()){
+
+                            Log.d("TEST_CRYPT"," "+response.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.e("debug", "onFailure: ERROR > " + t.toString());
+                    }
+                });
+    }
+
+    private void getPrivatKey(String token,String name){
+
+        UtilsApi.getAPIService().getPublicKey(" KEY:"+token,name)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()){
+                            try {
+                            JSONObject jsonRESULTS = new JSONObject(response.body().string());
+
+                                getActivity().getSharedPreferences("Sip", MODE_PRIVATE).edit()
+                                        .putString(name, jsonRESULTS.getString("status")).commit();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.e("debug", "onFailure: ERROR > " + t.toString());
+                    }
+                });
+
+    }
+
+
 
     public void sendUsers(String msg){
         presenter.sendMessage("@"+msg + " Добавить");

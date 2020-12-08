@@ -1,16 +1,20 @@
 package chat.wewe.android.service;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,12 +26,17 @@ import com.portsip.PortSipEnumDefine;
 import com.portsip.PortSipErrorcode;
 import com.portsip.PortSipSdk;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 import chat.wewe.android.R;
 import chat.wewe.android.RocketChatApplication;
+import chat.wewe.android.activity.Constants;
 import chat.wewe.android.activity.Intro;
 import chat.wewe.android.ui.IncomingActivity;
 import chat.wewe.android.ui.MainActivity;
@@ -75,10 +84,12 @@ public class PortSipService extends Service implements OnPortSIPEvent {
     private final String APPID = "chat.wewe.android";
     private PortSipSdk mEngine;
     private RocketChatApplication applicaton;
-    private final int SERVICE_NOTIFICATION  = 31414;
+    private  final int SERVICE_NOTIFICATION  = 31414;
+    private   final int PENDINGCALL_NOTIFICATION = SERVICE_NOTIFICATION+1;
     private String channelID = "PortSipService";
+    private String callChannelID = "Call Channel";
     private String pushToken;
-
+    private NotificationManager notificationManager;
     HashMap<String, String> headers = new HashMap<String, String>();
 
     @Override
@@ -88,10 +99,12 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
         mEngine = applicaton.mEngine;
 
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            NotificationChannel channel = new NotificationChannel(channelID, "Sip", NotificationManager.IMPORTANCE_LOW);
+            NotificationChannel channel = new NotificationChannel(channelID, "Sip", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel callChannel = new NotificationChannel(callChannelID, getString(R.string.app_name), NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(channel);
+            notificationManager.createNotificationChannel(callChannel);
 
         }
       showServiceNotifiCation();
@@ -137,7 +150,7 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
         }
 
-        stopSelf();
+
         return result;
     }
 
@@ -145,7 +158,10 @@ public class PortSipService extends Service implements OnPortSIPEvent {
     public void onDestroy() {
         super.onDestroy();
         mEngine.destroyConference();
-
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            notificationManager.deleteNotificationChannel(channelID);
+            notificationManager.deleteNotificationChannel(callChannelID);
+        }
         if (mCpuLock != null) {
             mCpuLock.release();
         }
@@ -169,8 +185,8 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
         int transType = preferences.getInt(TRANS, 1);
         int srtpType = preferences.getInt(SRTP, 1);
-        String userName = preferences.getString(USER_NAME, " ");
-        String password = preferences.getString(USER_PWD, " ");
+        String userName = preferences.getString(USER_NAME, "");
+        String password = preferences.getString(USER_PWD, "");
         String displayName = preferences.getString(USER_DISPALYNAME, "");
         String authName = preferences.getString(USER_AUTHNAME, "");
         String userDomain = preferences.getString(USER_DOMAIN, "");
@@ -237,11 +253,13 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
         result = mEngine.setLicenseKey("2ANDRB4xQ0ExNkJCMUM4OUU1ODY2QTg5MTZDMDNGNzIwNUU4Q0BFMjg2QzhEQjVDMjA3QUM0Q0VGNjlCQ0M5NEJBRDIyM0A5MDJBRkYyQzdBMThGNzhGNTg4M0I2RTUzRTA4RjhGRkBCMEVDNkZFNkQxQTI5NEQ0MDAyQzhBRTY0NTZGNUY1Rg");
         if (result == PortSipErrorcode.ECoreWrongLicenseKey) {
+            Log.d("TEST_WEWE","start");Log.d("TEST_WEWE","start");
             showTipMessage("The wrong license key was detected, please check with sales@portsip.com or support@portsip.com");
             return;
         }
         else if (result  == PortSipErrorcode.ECoreTrialVersionLicenseKey)
         {
+            Log.d("TEST_WEWE","stop");
             Log.w("Trial Version","This trial version SDK just allows short conversation, you can't hearing anything after 2-3 minutes, contact us: sales@portsip.com to buy official version.");
             showTipMessage("This Is Trial Version");
         }
@@ -274,9 +292,7 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
     private void showTipMessage(String tipMessage)
     {
-        Intent broadIntent = new Intent(REGISTER_CHANGE_ACTION);
-        broadIntent.putExtra(EXTRA_REGISTER_STATE,tipMessage);
-        sendPortSipMessage(tipMessage, broadIntent);
+        Log.d("SIPTEST","TEST "+tipMessage);
     }
 
     public static void ConfigPreferences(Context context, SharedPreferences preferences, PortSipSdk sdk) {
@@ -442,6 +458,7 @@ public class PortSipService extends Service implements OnPortSIPEvent {
         keepCpuRun(false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void onInviteIncoming(long sessionId,
                                  String callerDisplayName,
@@ -469,7 +486,11 @@ public class PortSipService extends Service implements OnPortSIPEvent {
         Intent activityIntent = new Intent(this, IncomingActivity.class);
         activityIntent.putExtra("incomingSession",sessionId);
         activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(activityIntent);
+        if(isForeground()){
+            startActivity(activityIntent);
+        }else{
+            showPendingCallNotification(this, callerDisplayName, caller, activityIntent);
+        }
         Log.d("TEST_WEWE","CALL start");
 
         Intent broadIntent = new Intent(CALL_CHANGE_ACTION);
@@ -932,10 +953,7 @@ public class PortSipService extends Service implements OnPortSIPEvent {
         }
         builder.setSmallIcon(R.drawable.ic_stat_name)
                 .setContentIntent(contentIntent)
-                .setPriority(Notification.PRIORITY_MIN)
                 .build();
-
-        mNotifyMgr.notify(1, builder.build());
 
         sendBroadcast(broadIntent);
     }
@@ -960,8 +978,8 @@ public class PortSipService extends Service implements OnPortSIPEvent {
                     mCpuLock.acquire();
                 }
             }
-            String s = FirebaseInstanceId.getInstance().getToken();
-            headers.put("guid",    "8D31B96A-02AC-4531-976F-A455686F8FE2");
+
+            headers.put("guid",    UUID.randomUUID().toString());
             headers.put("token",    FirebaseInstanceId.getInstance().getToken());
 
 
@@ -980,13 +998,72 @@ public class PortSipService extends Service implements OnPortSIPEvent {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private boolean isForeground(){
+        String[] activitys;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+            activitys = getActivePackages(this);
+        }else{
+            activitys = getActivePackagesCompat(this);
+        }
+        if(activitys.length>0){
+            String packagename = getPackageName();
+            //String processName= getProcessName();||activityname.contains(processName)
+            for(String activityname:activitys){
 
-    private PendingIntent openParkingViolationScreen() {
+                if(activityname.contains(packagename)){
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private String[] getActivePackagesCompat(Context context) {
+        ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        final List<ActivityManager.RunningTaskInfo> taskInfo = mActivityManager.getRunningTasks(1);
+        final ComponentName componentName = taskInfo.get(0).topActivity;
+        final String[] activePackages = new String[1];
+        activePackages[0] = componentName.getPackageName();
+        return activePackages;
+    }
+
+    private String[] getActivePackages(Context context) {
+        final Set<String> activePackages = new HashSet<String>();
+        ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        final List<ActivityManager.RunningAppProcessInfo> processInfos = mActivityManager.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo processInfo : processInfos) {
+            if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                activePackages.addAll(Arrays.asList(processInfo.pkgList));
+            }
+        }
+        return activePackages.toArray(new String[activePackages.size()]);
+    }
+
+
+    private PendingIntent openParkingViolationScreen(int notificationId) {
         Log.d("TEST_WEWE","CALL start2");
 
         Intent fullScreenIntent = new Intent(this, IncomingActivity.class);
+        fullScreenIntent.putExtra("incomingSession",notificationId);
         return PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+    }
+
+    public void showPendingCallNotification(Context context, String contenTitle,String contenText,Intent intent) {
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelID)
+                .setContentTitle(contenTitle)
+                .setContentText(contenText)
+                .setAutoCancel(true)
+                .setShowWhen(true)
+                .setContentIntent(contentIntent)
+                .setFullScreenIntent(contentIntent, true);
+        notificationManager.notify(PENDINGCALL_NOTIFICATION, builder.build());
     }
 }
 

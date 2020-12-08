@@ -12,6 +12,7 @@ import chat.wewe.android.widget.message.RocketChatMessageLayout
 import chat.wewe.android.widget.message.RocketChatMessageUrlsLayout
 import chat.wewe.core.SyncState
 import chat.wewe.core.models.Message
+import com.vanniktech.emoji.EmojiTextView
 
 class MessageRenderer(val message: Message, val autoLoadImage: Boolean) {
 

@@ -41,6 +41,8 @@ interface RoomContract {
         fun onCopy(message: String)
 
         fun showMessageActions(message: Message)
+
+
     }
 
     interface Presenter : BaseContract.Presenter<View> {

@@ -574,12 +574,14 @@ public class NumpadFragment extends BaseFragment implements AdapterView.OnItemSe
                     portSipSdk.muteSession(currentLine.sessionID, false,
                             false, false, false);
                     currentLine.bMute = false;
+                    Log.d("BBBRRR","++");
                     ((Button) view).setText("Mute");
                 } else {
                     portSipSdk.muteSession(currentLine.sessionID, true,
                             true, true, true);
                     currentLine.bMute = true;
                     ((Button) view).setText("UnMute");
+                    Log.d("BBBRRR","--");
                 }
             }
             break;

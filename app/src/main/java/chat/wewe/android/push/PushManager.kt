@@ -6,9 +6,12 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Icon
+import android.media.AudioAttributes
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
@@ -24,14 +27,12 @@ import chat.wewe.android.R
 import chat.wewe.android.RocketChatCache
 import chat.wewe.android.activity.MainActivity
 import chat.wewe.android.helper.Logger
-import chat.wewe.android.service.PortSipService
 import chat.wewe.core.interactors.MessageInteractor
 import chat.wewe.core.models.Room
 import chat.wewe.core.models.User
 import chat.wewe.persistence.realm.repositories.RealmMessageRepository
 import chat.wewe.persistence.realm.repositories.RealmRoomRepository
 import chat.wewe.persistence.realm.repositories.RealmUserRepository
-import com.google.firebase.iid.FirebaseInstanceId
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
@@ -53,7 +54,6 @@ object PushManager {
     const val EXTRA_ROOM_ID = "chat.wewe.android.EXTRA_ROOM_ID"
     private const val REPLY_LABEL = "REPLY"
     private const val REMOTE_INPUT_REPLY = "REMOTE_INPUT_REPLY"
-
     // Notifications received from the same server are grouped in a single bundled notification.
     // This map associates a host to a group id.
     private val groupMap = HashMap<String, TupleGroupIdMessageCount>()
@@ -76,17 +76,12 @@ object PushManager {
         val style = data["style"] as String?
         val summaryText = data["summaryText"] as String?
         val count = data["count"] as String?
-        val title = data["title"] as String?
+        var title = data["title"] as String ?
         val params = data["params"] as String?
-
-
-
-        if (ejson == null || message == null || title == null) {
-            return
-        }
+        title = if (title == null) "" else title;
 
         val lastPushMessage = PushMessage(title, message, image, ejson, count, notId, summaryText, style)
-
+        Log.d("MESSAGE LOGS", "MESSAGE ")
         // We should use Timber here
         if (BuildConfig.DEBUG) {
             Log.d(PushMessage::class.java.simpleName, lastPushMessage.toString())
@@ -102,6 +97,7 @@ object PushManager {
      */
     fun clearNotificationsByHost(host: String) {
         hostToPushMessageList.remove(host)
+
     }
 
     /**
@@ -172,9 +168,9 @@ object PushManager {
                 manager.notify(notId, notification)
             }
 
-            groupNotification?.let {
+       /*     groupNotification?.let {
                 manager.notify(groupTuple.first, groupNotification)
-            }
+            }*/
         } else {
             val notification = createSingleNotification(context, lastPushMessage)
             val pushMessageList = hostToPushMessageList.get(host)
@@ -297,6 +293,16 @@ object PushManager {
                 groupChannel.enableLights(false)
                 groupChannel.enableVibration(true)
                 groupChannel.setShowBadge(true)
+                val audioAttribute = AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build()
+                val soundTrackUri = Uri.Builder()
+                        .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                        .authority(context.getResources().getResourcePackageName(R.raw.wewe))
+                        .appendPath(context.getResources().getResourceTypeName(R.raw.wewe))
+                        .appendPath(context.getResources().getResourceEntryName(R.raw.wewe))
+                        .build()
+                groupChannel.setSound(soundTrackUri, audioAttribute)
                 manager.createNotificationChannel(groupChannel)
             }
 
@@ -381,9 +387,12 @@ object PushManager {
         }
     }
 
+
+
     @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.N)
     internal fun createSingleNotificationForNougatAndAbove(context: Context, lastPushMessage: PushMessage): Notification? {
+
         val manager: NotificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -394,7 +403,7 @@ object PushManager {
             val id = notificationId.toInt()
             val contentIntent = getContentIntent(context, id, lastPushMessage)
             val deleteIntent = getDismissIntent(context, lastPushMessage)
-
+            
             val builder = Notification.Builder(context)
                     .setWhen(createdAt)
                     .setContentTitle(title.fromHtml())
@@ -412,6 +421,16 @@ object PushManager {
                 channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
                 channel.enableLights(false)
                 channel.enableVibration(true)
+                val audioAttribute = AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build()
+                val soundTrackUri = Uri.Builder()
+                        .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                        .authority(context.getResources().getResourcePackageName(R.raw.wewe))
+                        .appendPath(context.getResources().getResourceTypeName(R.raw.wewe))
+                        .appendPath(context.getResources().getResourceEntryName(R.raw.wewe))
+                        .build()
+                channel.setSound(soundTrackUri, audioAttribute)
                 channel.setShowBadge(true)
                 manager.createNotificationChannel(channel)
             }
@@ -508,6 +527,7 @@ object PushManager {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun Notification.Builder.setMessageNotification(ctx: Context): Notification.Builder {
+
         val res = ctx.resources
         val smallIcon = res.getIdentifier(
                 "rocket_chat_notification", "drawable", ctx.packageName)
@@ -545,13 +565,14 @@ object PushManager {
     private fun NotificationCompat.Builder.setMessageNotification(): NotificationCompat.Builder {
         val ctx = this.mContext
         val res = ctx.resources
+
         val smallIcon = res.getIdentifier(
                 "rocket_chat_notification", "drawable", ctx.packageName)
         with(this, {
             setAutoCancel(true)
             setShowWhen(true)
             color = ctx.resources.getColor(R.color.colorPrimary)
-            setDefaults(Notification.DEFAULT_ALL)
+           setDefaults(Notification.DEFAULT_ALL)
             setSmallIcon(R.drawable.ic_stat_name)
         })
         return this
@@ -560,10 +581,10 @@ object PushManager {
 
 
     internal data class PushMessage(
-            val title: String? = null,
-            val message: String? = null,
+            val title: String? = "WeWe",
+            val message: String? = "Test",
             val image: String? = null,
-            val ejson: String? = null,
+            val ejson: String? = "",
             val count: String? = null,
             val notificationId: String,
             val summaryText: String? = null,
@@ -577,7 +598,7 @@ object PushManager {
 
         init {
             val json = if (ejson == null) JSONObject() else JSONObject(ejson)
-            host = json.optString("host", null)
+            host = "https://chat.weltwelle.com"
             rid = json.optString("rid", null)
             type = json.optString("type", null)
             channelName = json.optString("name", null)

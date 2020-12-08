@@ -3,9 +3,12 @@ package chat.wewe.android.layouthelper.chatroom;
 import android.view.View;
 import android.widget.TextView;
 
+import com.vanniktech.emoji.EmojiTextView;
+
 import chat.wewe.android.R;
 import chat.wewe.android.renderer.MessageRenderer;
 import chat.wewe.android.widget.AbsoluteUrl;
+import chat.wewe.android.widget.message.RocketChatMessageLayout;
 
 /**
  * ViewData holder of NORMAL chat message.

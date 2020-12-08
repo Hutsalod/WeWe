@@ -7,13 +7,15 @@
         android:name=".RocketChatApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppThemeIntro">
 
         <activity
             android:name="chat.wewe.android.activity.Intro"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,52 +30,68 @@
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
         <intent-filter>
             <action android:name="android.intent.action.SEND"/>
             <category android:name="android.intent.category.DEFAULT"/>
             <data android:mimeType="image/*"/>
-            <data android:mimeType="video/*"/>
         </intent-filter>/>
         </activity>
         <activity
             android:name=".activity.PrivaryPolicy"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.PinCode"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.PinCodeLong"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.AddServerActivity"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.LoginActivity"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
 
-        <activity android:name=".activity.Success" />
-        <activity android:name=".activity.AddTaskActivity" />
+        <activity android:name=".activity.Success"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.AddTaskActivity"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".activity.room.RoomActivity"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".activity.ShowUserDetailed"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+
+
+        <activity
             android:name=".ui.MainActivity"
-            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
             android:noHistory="true"
             android:turnScreenOn="true"
             android:showWhenLocked="true"/>
         <activity
             android:name=".ui.IncomingActivity"
             android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
             android:noHistory="true"
             android:turnScreenOn="true"
             android:showWhenLocked="true"
@@ -176,6 +194,8 @@
         android:icon="@drawable/perm_group_microphone"
         android:label="@string/permgrouplab_microphone"
         android:priority="600" />
+
+
     <permission-group
         android:name="android.permission-group.CAMERA"
         android:description="@string/permgroupdesc_camera"
@@ -220,19 +240,11 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RAISED_THREAD_PRIORITY" />
 
-
-    <uses-feature
-        android:name="android.hardware.camera.autofocus"
-        android:required="false" />
-
-    <uses-feature
-        android:name="android.hardware.camera.full"
-        android:required="false" />
-
-    <uses-feature
-        android:name="android.hardware.telephony"
-        android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.full" android:required="false" />
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
 
     <permission
         android:name="chat.wewe.android.permission.C2D_MESSAGE"

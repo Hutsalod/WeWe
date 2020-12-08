@@ -282,7 +282,7 @@ without your confirmation.</string>
     <string name="str_3">Политика конфиденциальности</string>
     <string name="str_4">Доступ с неколько устройств</string>
 
-    <string name="str_5">Защита</string>
+    <string name="str_5">Пин-код</string>
 
     <string name="str_6">Язык</string>
 
@@ -358,7 +358,7 @@ without your confirmation.</string>
         <item>720P</item>
         <item>1080P</item>
     </string-array>
-    <string name="menu_0">Сообщения</string>
+    <string name="menu_0">Чаты</string>
     <string name="open_key">Открыть клавиатуру</string>
     <string name="alter_server">Альтернативный сервер</string>
     <string name="minim_video">Сжимать видео</string>
@@ -390,4 +390,16 @@ without your confirmation.</string>
         <string name = "fmt_dialog_view_latest_message_title"> Neue %d Nachrichten </string>
         <string name = "fmt_room_user_count"> Всего: %d пользователей </string>
         <string name = "dialog_add_channel_name_title"> НАЗВАНИЕ КАНАЛА </string>
+
+    <string name = "reg_ok">Регистрация успешна, пожалуйста, авторизируйтесь</string>
+    <string name="reg_error_5">Логин не может содержать Кириллицу</string>
+    <string name="reg_error_4">Ошибка регистрации на SIP</string>
+    <string name="reg_error_3">Ошибка регистрации на WeWe</string>
+    <string name="reg_error_2">Пользователь существует</string>
+    <string name="reg_error_1">Не верные входные параметры</string>
+    <string name="helps_password">Забыл пароль</string>
+    <string name="send_email">Успешно отправлено на почту!</string>
+    <string name="pass_six">Пароль должен состоять из более чем 6 символов</string>
+    <string name="vers_name">Ваше приложенные устарело, для корректной работы нужно обновить приложения!</string>
+    <string name="privat_chat">Приватный чат</string>
 </resources>

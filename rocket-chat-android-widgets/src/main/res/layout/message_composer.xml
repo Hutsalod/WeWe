@@ -149,7 +149,7 @@
             android:layout_marginBottom="14dp"
             android:background="@null"
             android:hint="@string/message_composer_message_hint"
-            android:inputType="textCapSentences|textMultiLine"
+            android:inputType="textMultiLine|textCapSentences|textEmailAddress"
             android:maxLines="7"
             android:minLines="1"
             android:textSize="14sp"
@@ -157,6 +157,23 @@
             app:layout_constraintLeft_toRightOf="@+id/cont"
             app:layout_constraintRight_toLeftOf="@+id/container"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/button_emoji"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:background="@null"
+            android:paddingStart="16dp"
+            android:paddingLeft="16dp"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
+            android:tint="#B6B6B6"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/container"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/cont"
+            app:layout_constraintTop_toTopOf="parent"
+            fresco:srcCompat="@drawable/ic_insert_emoticon_black_24dp" />
 
         <FrameLayout
             android:id="@+id/container"

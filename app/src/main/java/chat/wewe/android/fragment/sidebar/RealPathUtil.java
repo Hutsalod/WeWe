@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -19,6 +20,7 @@ import java.io.IOException;
 public class RealPathUtil {
 
     private static Uri filePathUri = null;
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getPath(final Context context, final Uri uri)
     {
         //check here to KITKAT or new version

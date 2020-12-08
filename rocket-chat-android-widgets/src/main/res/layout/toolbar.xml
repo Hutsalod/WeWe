@@ -50,8 +50,8 @@
             android:id="@+id/call_video_btn"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="12dp"
+            android:layout_marginRight="24dp"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_call_video_btn"
             android:visibility="visible" />
 
@@ -60,7 +60,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginRight="12dp"
+            android:layout_marginRight="16dp"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_call_btn"
             android:visibility="visible" />
     </LinearLayout>

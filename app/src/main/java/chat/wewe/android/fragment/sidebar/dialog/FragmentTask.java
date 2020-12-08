@@ -1,17 +1,8 @@
 package chat.wewe.android.fragment.sidebar.dialog;
 
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,23 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -47,31 +28,16 @@ import chat.wewe.android.StatusConnect;
 import chat.wewe.android.activity.AddTaskActivity;
 import chat.wewe.android.adapter.AdapterTask;
 import chat.wewe.android.adapter.AdapterTaskList;
-import chat.wewe.android.adapter.RecyclerViewCheck;
-import chat.wewe.android.adapter.RecyclerViewTask;
 import chat.wewe.android.api.MethodCallHelper;
-import chat.wewe.android.api.UtilsApi;
-import chat.wewe.android.api.UtilsApiChat;
 import chat.wewe.android.fragment.AbstractFragment;
 import chat.wewe.android.fragment.FragmentGetTask;
 import chat.wewe.android.fragment.sidebar.SidebarMainContract;
-import chat.wewe.android.fragment.sidebar.SidebarMainPresenter;
-import chat.wewe.android.helper.AbsoluteUrlHelper;
-import chat.wewe.android.activity.MainActivity;
 import chat.wewe.android.widget.WaitingView;
-import chat.wewe.core.interactors.RoomInteractor;
-import chat.wewe.core.interactors.SessionInteractor;
-import chat.wewe.persistence.realm.repositories.RealmRoomRepository;
-import chat.wewe.persistence.realm.repositories.RealmServerInfoRepository;
-import chat.wewe.persistence.realm.repositories.RealmSessionRepository;
-import chat.wewe.persistence.realm.repositories.RealmSpotlightRepository;
-import chat.wewe.persistence.realm.repositories.RealmUserRepository;
 import icepick.State;
 
-import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static org.webrtc.ContextUtils.getApplicationContext;
+
 
 
 public class FragmentTask extends AbstractFragment implements StatusConnect {
@@ -98,22 +64,22 @@ public class FragmentTask extends AbstractFragment implements StatusConnect {
 
 
   private RecyclerView.LayoutManager mLayoutManager;
-  private SidebarMainContract.Presenter presenter;
+  private Boolean status;
 
   public  MethodCallHelper methodCall;
   public ImageView addTaskActivity,filtr_button,stanUsers;
-  private static final String HOSTNAME = "hostname",USERID = "userId",NAME = "name";
+  private static final String HOSTNAME = "hostname";
   TextView testUsers;
 
 
   public FragmentTask() {
   }
 
-  public static FragmentTask create(String hostname) {
+  public static FragmentTask create(String hostname, Boolean status) {
 
     Bundle args = new Bundle();
     args.putString(HOSTNAME, hostname);
-
+    args.putBoolean("status", status);
 
     FragmentTask fragment = new FragmentTask();
     fragment.setArguments(args);
@@ -129,6 +95,7 @@ public class FragmentTask extends AbstractFragment implements StatusConnect {
     userId =  RocketChatCache.INSTANCE.getUserId();
 
     hostname = getArguments().getString(HOSTNAME);
+    status = getArguments().getBoolean("status");
 
     methodCall = new MethodCallHelper(getContext(), hostname);
 
@@ -165,6 +132,10 @@ public class FragmentTask extends AbstractFragment implements StatusConnect {
 
     stanUsers = v.findViewById(R.id.stanUsers);
 
+    if(status==true)
+      this.stanUsers.setImageResource(R.drawable.s222);
+    else
+      this.stanUsers.setImageResource(R.drawable.s000);
 
     recyclerView.setNestedScrollingEnabled(false);
     mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
@@ -270,50 +241,62 @@ public class FragmentTask extends AbstractFragment implements StatusConnect {
   }
 
   public void showTasks() {
+    Log.d("WEWE_Q","TASKS !");
+
     waiting.setVisibility(VISIBLE);
     methodCall.getAllTaskAndUsersByUserId(userId).continueWithTask(task -> {
+      Log.d("TEST_WEWE","TASKS !"+task.getResult().getJSONArray("tasks").toString());
 
       info = task.getResult().getJSONArray("tasks");
+      Log.d("TEST_WEWE","TASKS !"+info);
+
       for (int i = 0; i < info.length(); i++) {
+        Log.d("TEST_WEWE","TASKS !");
         if (info.getJSONObject(i).getString("_closed").equals("false")) {
+          Log.d("TEST_WEWE","TASKS !");
           if(filtr_layaut.getVisibility()==VISIBLE){
+            Log.d("TEST_WEWE","TASKS !");
             if(info.getJSONObject(i).getString("_rid").contains(room.get(room_filtr.getSelectedItemPosition())) )
               if(user_filtr.getSelectedItemId()!=0) {
                 Log.d("TEST_WEWE","TASK !"+room_filtr.getSelectedItem().toString().contains(info.getJSONObject(i).getString("_createdBy")));
-
+                Log.d("TEST_WEWE","TASKS !"+info);
                 if (room_filtr.getSelectedItem().toString().contains(info.getJSONObject(i).getString("_createdBy")))
-                add(info.getJSONObject(i).isNull("_name") ? " " : info.getJSONObject(i).getString("_name"), info.getJSONObject(i).isNull("_taskText") ? " " : info.getJSONObject(i).getString("_taskText"), info.getJSONObject(i).isNull("_createdBy") ? " " : "Ответственный: " + info.getJSONObject(i).getString("_createdBy"), "от " + new SimpleDateFormat("dd.MM.yyyy hh:mm").format(new java.util.Date((long) info.getJSONObject(i).getJSONObject("_date").getLong("$date"))), info.getJSONObject(i).isNull("_numberId") ? 0 : info.getJSONObject(i).getInt("_numberId"), info.getJSONObject(i).isNull("_closed") ? false : info.getJSONObject(i).getBoolean("_closed"), info.getJSONObject(i).getString("_rid"), info.getJSONObject(i).getString("_priority"));
+                add(info.getJSONObject(i).isNull("_name") ? " " : info.getJSONObject(i).getString("_name"), info.getJSONObject(i).isNull("_taskText") ? " " : info.getJSONObject(i).getString("_taskText"), info.getJSONObject(i).isNull("_createdBy") ? " " : "Ответственный: " + info.getJSONObject(i).getString("_createdBy"), "от " + new SimpleDateFormat("dd.MM.yyyy hh:mm").format(new java.util.Date((long) info.getJSONObject(i).getJSONObject("_date").getLong("$date"))), info.getJSONObject(i).isNull("_numberId") ? 0 : info.getJSONObject(i).getInt("_numberId"), info.getJSONObject(i).isNull("_closed") ? false : info.getJSONObject(i).getBoolean("_closed"), info.getJSONObject(i).isNull("_rid")  ? "" : info.getJSONObject(i).getString("_rid"), info.getJSONObject(i).isNull("_priority")  ? "" : info.getJSONObject(i).getString("_priority"));
               }else{
-                add(info.getJSONObject(i).isNull("_name") ? " " : info.getJSONObject(i).getString("_name"), info.getJSONObject(i).isNull("_taskText") ? " " : info.getJSONObject(i).getString("_taskText"), info.getJSONObject(i).isNull("_createdBy") ? " " : "Ответственный: " + info.getJSONObject(i).getString("_createdBy"), "от " + new SimpleDateFormat("dd.MM.yyyy hh:mm").format(new java.util.Date((long) info.getJSONObject(i).getJSONObject("_date").getLong("$date"))), info.getJSONObject(i).isNull("_numberId") ? 0 : info.getJSONObject(i).getInt("_numberId"), info.getJSONObject(i).isNull("_closed") ? false : info.getJSONObject(i).getBoolean("_closed"), info.getJSONObject(i).getString("_rid"), info.getJSONObject(i).getString("_priority"));
+
+                add(info.getJSONObject(i).isNull("_name") ? " " : info.getJSONObject(i).getString("_name"), info.getJSONObject(i).isNull("_taskText") ? " " : info.getJSONObject(i).getString("_taskText"), info.getJSONObject(i).isNull("_createdBy") ? " " : "Ответственный: " + info.getJSONObject(i).getString("_createdBy"), "от " + new SimpleDateFormat("dd.MM.yyyy hh:mm").format(new java.util.Date((long) info.getJSONObject(i).getJSONObject("_date").getLong("$date"))), info.getJSONObject(i).isNull("_numberId") ? 0 : info.getJSONObject(i).getInt("_numberId"), info.getJSONObject(i).isNull("_closed") ? false : info.getJSONObject(i).getBoolean("_closed"), info.getJSONObject(i).isNull("_rid")  ? "" : info.getJSONObject(i).getString("_rid"), info.getJSONObject(i).isNull("_priority")  ? "" : info.getJSONObject(i).getString("_priority"));
               }
 
           }else{
-            add(info.getJSONObject(i).isNull("_name") ? " " : info.getJSONObject(i).getString("_name"), info.getJSONObject(i).isNull("_taskText") ? " " : info.getJSONObject(i).getString("_taskText"), info.getJSONObject(i).isNull("_createdBy") ? " " : "Ответственный: " + info.getJSONObject(i).getString("_createdBy"), "от " + new SimpleDateFormat("dd.MM.yyyy hh:mm").format(new java.util.Date((long) info.getJSONObject(i).getJSONObject("_date").getLong("$date"))), info.getJSONObject(i).isNull("_numberId") ? 0 : info.getJSONObject(i).getInt("_numberId"), info.getJSONObject(i).isNull("_closed") ? false : info.getJSONObject(i).getBoolean("_closed"), info.getJSONObject(i).getString("_rid"), info.getJSONObject(i).getString("_priority"));
+            add(info.getJSONObject(i).isNull("_name") ? " " : info.getJSONObject(i).getString("_name"), info.getJSONObject(i).isNull("_taskText") ? " " : info.getJSONObject(i).getString("_taskText"), info.getJSONObject(i).isNull("_createdBy") ? " " : "Ответственный: " + info.getJSONObject(i).getString("_createdBy"), "от " + new SimpleDateFormat("dd.MM.yyyy hh:mm").format(new java.util.Date((long) info.getJSONObject(i).getJSONObject("_date").getLong("$date"))), info.getJSONObject(i).isNull("_numberId") ? 0 : info.getJSONObject(i).getInt("_numberId"), info.getJSONObject(i).isNull("_closed") ? false : info.getJSONObject(i).getBoolean("_closed"), info.getJSONObject(i).isNull("_rid")  ? "" : info.getJSONObject(i).getString("_rid"), info.getJSONObject(i).isNull("_priority")  ? "" : info.getJSONObject(i).getString("_priority"));
           }
+          initRecyclerView();
         }
 
       }
-
+      Log.d("TEST_WEWE","TASKS  2!");
       for (int i = 0; i < info.length(); i++) {
         if (info.getJSONObject(i).getString("_closed").equals("true")){
           if(filtr_layaut.getVisibility()==VISIBLE){
             if(info.getJSONObject(i).getString("_rid").contains(room.get(room_filtr.getSelectedItemPosition())))
-
+              Log.d("TEST_WEWE","TASKS !");
               if(user_filtr.getSelectedItemId()!=0)
                 Log.d("TEST_WEWE","TASK !"+room_filtr.getSelectedItem().toString().contains(info.getJSONObject(i).getString("_createdBy")));
 
             if (room_filtr.getSelectedItem().toString().contains(info.getJSONObject(i).getString("_createdBy")))
 
-                  add(info.getJSONObject(i).isNull("_name") ? " " : info.getJSONObject(i).getString("_name"), info.getJSONObject(i).isNull("_taskText") ? " " : info.getJSONObject(i).getString("_taskText"), info.getJSONObject(i).isNull("_createdBy") ? " " : "Ответственный: " + info.getJSONObject(i).getString("_createdBy"), "от " + new SimpleDateFormat("dd.MM.yyyy hh:mm").format(new java.util.Date((long) info.getJSONObject(i).getJSONObject("_date").getLong("$date"))), info.getJSONObject(i).isNull("_numberId") ? 0 : info.getJSONObject(i).getInt("_numberId"), info.getJSONObject(i).isNull("_closed") ? false : info.getJSONObject(i).getBoolean("_closed"), info.getJSONObject(i).getString("_rid"), info.getJSONObject(i).getString("_priority"));
+              add(info.getJSONObject(i).isNull("_name") ? " " : info.getJSONObject(i).getString("_name"), info.getJSONObject(i).isNull("_taskText") ? " " : info.getJSONObject(i).getString("_taskText"), info.getJSONObject(i).isNull("_createdBy") ? " " : "Ответственный: " + info.getJSONObject(i).getString("_createdBy"), "от " + new SimpleDateFormat("dd.MM.yyyy hh:mm").format(new java.util.Date((long) info.getJSONObject(i).getJSONObject("_date").getLong("$date"))), info.getJSONObject(i).isNull("_numberId") ? 0 : info.getJSONObject(i).getInt("_numberId"), info.getJSONObject(i).isNull("_closed") ? false : info.getJSONObject(i).getBoolean("_closed"), info.getJSONObject(i).isNull("_rid")  ? "" : info.getJSONObject(i).getString("_rid"), info.getJSONObject(i).isNull("_priority")  ? "" : info.getJSONObject(i).getString("_priority"));
 
 
-              }else {
-            add(info.getJSONObject(i).isNull("_name") ? " " : info.getJSONObject(i).getString("_name"), info.getJSONObject(i).isNull("_taskText") ? " " : info.getJSONObject(i).getString("_taskText"), info.getJSONObject(i).isNull("_createdBy") ? " " : "Ответственный: " + info.getJSONObject(i).getString("_createdBy"), "от " + new SimpleDateFormat("dd.MM.yyyy hh:mm").format(new java.util.Date((long) info.getJSONObject(i).getJSONObject("_date").getLong("$date"))), info.getJSONObject(i).isNull("_numberId") ? 0 : info.getJSONObject(i).getInt("_numberId"), info.getJSONObject(i).isNull("_closed") ? false : info.getJSONObject(i).getBoolean("_closed"), info.getJSONObject(i).getString("_rid"), info.getJSONObject(i).getString("_priority"));
+          }else {
+            add(info.getJSONObject(i).isNull("_name") ? " " : info.getJSONObject(i).getString("_name"), info.getJSONObject(i).isNull("_taskText") ? " " : info.getJSONObject(i).getString("_taskText"), info.getJSONObject(i).isNull("_createdBy") ? " " : "Ответственный: " + info.getJSONObject(i).getString("_createdBy"), "от " + new SimpleDateFormat("dd.MM.yyyy hh:mm").format(new java.util.Date((long) info.getJSONObject(i).getJSONObject("_date").getLong("$date"))), info.getJSONObject(i).isNull("_numberId") ? 0 : info.getJSONObject(i).getInt("_numberId"), info.getJSONObject(i).isNull("_closed") ? false : info.getJSONObject(i).getBoolean("_closed"), info.getJSONObject(i).isNull("_rid")  ? "" : info.getJSONObject(i).getString("_rid"), info.getJSONObject(i).isNull("_priority")  ? "" : info.getJSONObject(i).getString("_priority"));
           }
+          initRecyclerView();
           }
+
       }
       waiting.setVisibility(GONE);
-      initRecyclerView();
+
 
 
 
@@ -333,7 +316,7 @@ public class FragmentTask extends AbstractFragment implements StatusConnect {
       @Override
       public void onGet(String position, String rid) {
 
-   getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.cont_item4, FragmentGetTask.create(RocketChatCache.INSTANCE.getSelectedServerHostname(),rid,position))
+   getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.cont_item4, FragmentGetTask.create(RocketChatCache.INSTANCE.getSelectedServerHostname(),rid,position,status))
                 .commit();
       }
     });

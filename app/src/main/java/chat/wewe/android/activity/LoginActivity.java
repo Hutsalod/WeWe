@@ -59,7 +59,7 @@ public class LoginActivity extends AbstractFragmentActivity implements LoginCont
     }
 
     private void showFragment(Fragment fragment, String hostname) {
-        setContentView(R.layout.simple_screen);
+        setContentView(R.layout.simple_screen_login);
         injectHostnameArgTo(fragment, hostname);
         super.showFragment(fragment);
     }

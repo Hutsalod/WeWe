@@ -24,7 +24,6 @@ public class UserItem implements AutocompleteItem {
   @NonNull
   @Override
   public String getSuggestion() {
-    //noinspection ConstantConditions
     return user.getUsername();
   }
 

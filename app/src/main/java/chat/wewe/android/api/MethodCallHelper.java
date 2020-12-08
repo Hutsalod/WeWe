@@ -350,6 +350,7 @@ public class MethodCallHelper {
     }
 
     public Task<JSONArray> loadMissedMessages(final String roomId, final long timestamp) {
+
         return call("loadMissedMessages", TIMEOUT_MS, () -> new JSONArray()
                 .put(roomId)
                 .put(timestamp > 0 ? new JSONObject().put("$date", timestamp) : JSONObject.NULL)
@@ -508,10 +509,8 @@ public class MethodCallHelper {
     }
 
     public Task<Void>  hideAndEraseRooms(final String Id) {
-
         return call("hideAndEraseRooms", TIMEOUT_MS, () -> new JSONArray().put(Id))
                 .onSuccessTask(task -> Task.forResult(null));
-
     }
 
         public Task<Void> getPublicSettings(String currentHostname) {
@@ -795,10 +794,9 @@ public class MethodCallHelper {
     }
 
     //Вспомогательные методы
-    public Task<Void> getLastMessageByRoomId(String roomId,String numberId,String message) {
+ /*   public Task<JSONObject> getLastMessageByRoomId(String roomId) {
         try {
 
-            Log.d("XSWQAZ",""+RealmSession.ID);
             JSONObject messageJson = new JSONObject()
                     .put("rid", roomId);
             return getLastMessageByRoomId(messageJson);
@@ -806,7 +804,8 @@ public class MethodCallHelper {
         } catch (JSONException exception) {
             return Task.forError(exception);
         }
-    }
+    }*/
+
 
     public Task<JSONObject> AddMsgToTask(String rid, int numberId, String msgText, String uid) {
         try {
@@ -924,10 +923,12 @@ public class MethodCallHelper {
                 .onSuccessTask(task -> Task.forResult(null));
     }
 
-    private Task<Void> getLastMessageByRoomId(final JSONObject messageJson) {
+    public Task<JSONObject> getLastMessageByRoomId(final String messageJson) {
         return call("getLastMessageByRoomId", TIMEOUT_MS, () -> new JSONArray().put(messageJson))
-                .onSuccessTask(task -> Task.forResult(null));
+                .onSuccessTask(CONVERT_TO_JSON_OBJECT);
     }
+
+
 
 
     public Task<JSONArray> getUsersByRoomId(final String messageJson) {

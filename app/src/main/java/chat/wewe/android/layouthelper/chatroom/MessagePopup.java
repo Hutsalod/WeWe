@@ -34,6 +34,7 @@ import io.reactivex.disposables.Disposable;
 
 public class MessagePopup {
     private static volatile MessagePopup singleton = null;
+    private static final Action PROFILL_ACTION_INFO = new Action("Профиль", null, true);
     private static final Action REPLY_ACTION_INFO = new Action("Ответить  сообщение", null, true);
     private static final Action QUOTE_ACTION_INFO = new Action("Цитата сообщение", null, true);
     private static final Action FORWARD_ACTION_INFO = new Action("Переслать сообщение", null, true);
@@ -109,6 +110,7 @@ public class MessagePopup {
     }
 
     private void addDefaultActions() {
+        singleton.defaultActions.add(PROFILL_ACTION_INFO);
         singleton.defaultActions.add(REPLY_ACTION_INFO);
         singleton.defaultActions.add(QUOTE_ACTION_INFO);
         singleton.defaultActions.add(FORWARD_ACTION_INFO);
@@ -165,6 +167,11 @@ public class MessagePopup {
 
     public MessagePopup setCopyAction(ActionListener actionListener) {
         COPY_ACTION_INFO.actionListener = actionListener;
+        return singleton;
+    }
+
+    public MessagePopup setProfil(ActionListener actionListener) {
+        PROFILL_ACTION_INFO.actionListener = actionListener;
         return singleton;
     }
 

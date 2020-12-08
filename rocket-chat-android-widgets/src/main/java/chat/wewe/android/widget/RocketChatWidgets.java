@@ -25,7 +25,6 @@ public class RocketChatWidgets {
         .newBuilder(context, okHttpClient)
         .setRequestListeners(listeners)
         .setDownsampleEnabled(true)
-        .experiment().setBitmapPrepareToDraw(true)
         .experiment().setPartialImageCachingEnabled(true)
         .build();
 

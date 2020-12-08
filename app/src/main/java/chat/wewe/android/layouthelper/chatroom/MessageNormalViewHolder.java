@@ -2,6 +2,8 @@ package chat.wewe.android.layouthelper.chatroom;
 
 import android.view.View;
 
+import com.vanniktech.emoji.EmojiTextView;
+
 import chat.wewe.android.R;
 import chat.wewe.android.renderer.MessageRenderer;
 import chat.wewe.android.widget.AbsoluteUrl;
@@ -16,6 +18,7 @@ public class MessageNormalViewHolder extends AbstractMessageViewHolder {
   private final RocketChatMessageLayout body;
   private final RocketChatMessageUrlsLayout urls;
   private final RocketChatMessageAttachmentsLayout attachments;
+
 
   /**
    * constructor WITH hostname.

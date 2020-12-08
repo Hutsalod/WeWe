@@ -23,7 +23,6 @@ import bolts.Task;
 import chat.wewe.android.R;
 import chat.wewe.android.RocketChatCache;
 import chat.wewe.android.adapter.RecyclerViewCheck;
-import chat.wewe.android.adapter.TabAdapter;
 import chat.wewe.android.api.MethodCallHelper;
 import chat.wewe.android.fragment.sidebar.dialog.FragmentTask;
 
@@ -107,7 +106,7 @@ public class FragmentTaskTab extends Fragment {
             public void onClick(View view) {
                 methodCall.removeTask(_rid, Integer.valueOf(index), RocketChatCache.INSTANCE.getUserName()).continueWith(task -> {
                     getTask();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.cont_item4, FragmentTask.create( RocketChatCache.INSTANCE.getSelectedServerHostname())).setReorderingAllowed(false)
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.cont_item4, FragmentTask.create( RocketChatCache.INSTANCE.getSelectedServerHostname(), true)).setReorderingAllowed(false)
                             .commit();
                     return null;
                 });

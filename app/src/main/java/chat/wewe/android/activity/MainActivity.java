@@ -1,57 +1,59 @@
 package chat.wewe.android.activity;
 
-import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.SlidingPaneLayouts;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import chat.wewe.android.BuildConfig;
 import chat.wewe.android.ConnectionStatusManager;
 import chat.wewe.android.LaunchUtil;
 import chat.wewe.android.R;
 import chat.wewe.android.RocketChatApplication;
 import chat.wewe.android.RocketChatCache;
+import chat.wewe.android.VersionChecker;
+import chat.wewe.android.api.DeviceGet;
 import chat.wewe.android.api.MethodCallHelper;
 import chat.wewe.android.api.UtilsApi;
 import chat.wewe.android.fragment.FragmentContact;
 import chat.wewe.android.fragment.call_number.FragmentKeyboard;
-import chat.wewe.android.fragment.chatroom.HomeFragment;
 import chat.wewe.android.fragment.chatroom.RoomFragment;
 import chat.wewe.android.fragment.sidebar.FragmentSetting;
 import chat.wewe.android.fragment.sidebar.SidebarMainFragment;
@@ -62,7 +64,6 @@ import chat.wewe.android.service.ConnectivityManagerApi;
 import chat.wewe.android.service.PortSipService;
 import chat.wewe.android.widget.RoomToolbar;
 import chat.wewe.android.widget.helper.DebouncingOnClickListener;
-import chat.wewe.android.widget.helper.FrescoHelper;
 import chat.wewe.core.interactors.CanCreateRoomInteractor;
 import chat.wewe.core.interactors.RoomInteractor;
 import chat.wewe.core.interactors.SessionInteractor;
@@ -86,7 +87,7 @@ import static android.view.View.VISIBLE;
 
 public class MainActivity extends AbstractAuthedActivity implements MainContract.View {
     public RoomToolbar toolbar;
-    public SlidingPaneLayouts pane;
+    public static SlidingPaneLayouts pane;
     private MainContract.Presenter presenter;
     private volatile AtomicReference<Crouton> croutonStatusTicker = new AtomicReference<>();
     private View croutonView;
@@ -95,16 +96,18 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
     private AnimatedVectorDrawableCompat tryAgainSpinnerAnimatedDrawable;
     private LinearLayout call, setting, contacts, task,chat;
     public BottomNavigationView navigation;
-    private Boolean codeSet = false;
+    private Boolean codeSet = false, status = false,update = false;
     private SharedPreferences Preferences;
+    private View notificationBadge;
+
 
 
     //Fragments
-    FragmentContact fragmentContact = new FragmentContact ();
-    FragmentKeyboard fragmentKeyboard = new FragmentKeyboard();
-    SidebarMainFragment fragmentSidebar = new SidebarMainFragment();
-    FragmentSetting fragmentSetting = new FragmentSetting();
-    FragmentTask fragmentTask = new FragmentTask();
+    public FragmentContact fragmentContact = new FragmentContact ();
+    public FragmentKeyboard fragmentKeyboard = new FragmentKeyboard();
+    public SidebarMainFragment fragmentSidebar = new SidebarMainFragment();
+    public FragmentSetting fragmentSetting = new FragmentSetting();
+    public FragmentTask fragmentTask = new FragmentTask();
 
 
 
@@ -135,14 +138,16 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
 
         navigation.setSelectedItemId(R.id.action_chat);
 
-        Preferences = getSharedPreferences("pin", MODE_PRIVATE);
-        String code = Preferences.getString("code", "");
-        if (!code.equals(""))
-            startActivity(new Intent(getApplication(), PinCodeLong.class));
+        if(RocketChatCache.INSTANCE.getSessionToken() != null){
+                String code = getSharedPreferences("pin", MODE_PRIVATE).getString("code", "");
+                if (code != "")
+                    startActivity(new Intent(getApplication(), PinCodeLong.class));
 
-        if(!getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", "").equals("")){
+
         getSettings(getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", ""));
+         getVersion();
         }
+
 
 
     }
@@ -156,6 +161,7 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
             hostname = RocketChatCache.INSTANCE.getSelectedServerHostname();
             if (hostname == null) {
                 showAddServerScreen();
+
             } else {
                 onHostnameUpdated();
                 if (!hostname.equalsIgnoreCase(previousHostname)) {
@@ -168,7 +174,12 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
             presenter.bindView(this);
             presenter.loadSignedInServers(hostname);
             roomId = RocketChatCache.INSTANCE.getSelectedRoomId();
+            if(getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", "") != "") {
+                pane.setVisibility(VISIBLE);
 
+
+            }
+            DeviceGet.getDevice(getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", ""));
         }
         RocketChatApplication.activityResumed();
     }
@@ -179,28 +190,46 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
             presenter.release();
         }
         Crouton.cancelAllCroutons();
-        if(codeSet==true) {
-            String code = Preferences.getString("code", "");
-            if (!code.equals(""))
-                startActivity(new Intent(getApplication(), PinCodeLong.class));
-        }codeSet=true;
+
+
+
         super.onPause();
         RocketChatApplication.activityPaused();
     }
 
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("codeSet","codeSet "+codeSet);
+        if(codeSet==true) {
+            String code = getSharedPreferences("pin", MODE_PRIVATE).getString("code", "");
+            if (code != "") {
+                codeSet = false;
+                startActivity(new Intent(getApplication(), PinCodeLong.class));
+            }
+        }
+        codeSet=true;
+    }
+
+
+
+
     private void setupToolbar() {
         if (pane != null) {
+
             pane.setPanelSlideListener(new SlidingPaneLayouts.PanelSlideListener() {
                 @Override
                 public void onPanelSlide(@NonNull View view, float v) {
                     //Ref: ActionBarDrawerToggle#setProgress
                     // toolbar.setNavigationIconProgress(v);
+
                 }
 
                 @Override
                 public void onPanelOpened(@NonNull View view) {
                     toolbar.setNavigationIconVerticalMirror(true);
+
                 }
 
                 @Override
@@ -213,6 +242,7 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
                         sidebarMainFragment.toggleUserActionContainer(false);
                         sidebarMainFragment.showUserActionContainer(false);
                     }
+
                 }
             });
 
@@ -243,6 +273,7 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
 
         if (presenter != null) {
             presenter.release();
+
         }
 
         RoomInteractor roomInteractor = new RoomInteractor(new RealmRoomRepository(hostname));
@@ -286,18 +317,19 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
         if (sidebarFragment == null) {
             fragmentSidebar = SidebarMainFragment.create(selectedServerHostname);
             sidebarFragment = fragmentSidebar;
-
         }
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.sidebar_fragment_container, sidebarFragment, selectedServerHostname)
-                .commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.sidebar_fragment_container, sidebarFragment, selectedServerHostname).commit();
 
-        fragmentSetting = FragmentSetting.create(RocketChatCache.INSTANCE.getSelectedServerHostname(), RocketChatCache.INSTANCE.getUserId());
-        getSupportFragmentManager().beginTransaction().replace(R.id.cont_item3, fragmentSetting)
-                .commit();
-        getSupportFragmentManager().beginTransaction().replace(R.id.cont, fragmentContact).commit();
+            fragmentSetting = FragmentSetting.create(RocketChatCache.INSTANCE.getSelectedServerHostname(), RocketChatCache.INSTANCE.getUserId());
+            getSupportFragmentManager().beginTransaction().replace(R.id.cont_item3, fragmentSetting).commit();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.cont_item2, fragmentKeyboard).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.cont, fragmentContact).commit();
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.cont_item2, fragmentKeyboard).commit();
+
+            fragmentTask = FragmentTask.create(RocketChatCache.INSTANCE.getSelectedServerHostname(), status);
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.cont_item4, fragmentTask).commit();
 
 
 
@@ -307,6 +339,7 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
     protected void onRoomIdUpdated() {
         super.onRoomIdUpdated();
         presenter.onOpenRoom(hostname, roomId);
+
     }
 
     @Override
@@ -345,13 +378,16 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
 
     @Override
     public void showLoginScreen() {
+        codeSet=false;
         LaunchUtil.showLoginActivity(this, hostname);
         showConnectionOk();
+
     }
 
     @Override
     public void showConnectionError() {
-        ConnectionStatusManager.INSTANCE.setConnectionError(this::showConnectionErrorCrouton);
+       // ConnectionStatusManager.INSTANCE.setConnectionError(this::showConnectionErrorCrouton);
+        status = false;
         fragmentContact.noConnect();
         fragmentKeyboard.noConnect();
         fragmentSidebar.noConnect();
@@ -361,22 +397,25 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
 
     @Override
     public void showConnecting() {
-        ConnectionStatusManager.INSTANCE.setConnecting(this::showConnectingCrouton);
-        fragmentContact.okConnect();
-        fragmentKeyboard.okConnect();
-        fragmentSidebar.okConnect();
-        fragmentSetting.okConnect();
-        fragmentTask.okConnect();
+
+        status = true;
+        fragmentContact.Connecting();
+        fragmentKeyboard.Connecting();
+        fragmentSidebar.Connecting();
+        fragmentSetting.Connecting();
+        fragmentTask.Connecting();
     }
 
     @Override
     public void showConnectionOk() {
+        status = true;
         ConnectionStatusManager.INSTANCE.setOnline(this::dismissStatusTickerIfShowing);
         fragmentContact.okConnect();
         fragmentKeyboard.okConnect();
         fragmentSidebar.okConnect();
         fragmentSetting.okConnect();
         fragmentTask.okConnect();
+
     }
 
     private void showConnectingCrouton(boolean success) {
@@ -429,6 +468,7 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
                 .setConfiguration(configuration);
 
         croutonStatusTicker.set(crouton);
+
     }
 
     private void dismissStatusTickerIfShowing(boolean success) {
@@ -497,7 +537,7 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
                     contacts.setVisibility(GONE);
                     setting.setVisibility(GONE);
                     task.setVisibility(VISIBLE);
-                    fragmentTask = FragmentTask.create(RocketChatCache.INSTANCE.getSelectedServerHostname());
+                    fragmentTask = FragmentTask.create(RocketChatCache.INSTANCE.getSelectedServerHostname(),status);
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.cont_item4, fragmentTask).commit();
                     return true;
@@ -507,6 +547,12 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
                     contacts.setVisibility(GONE);
                     task.setVisibility(GONE);
                     setting.setVisibility(VISIBLE);
+
+                    if (update == true) {
+                        showUpdate();
+                        update = false;
+                        notificationBadge.setVisibility(GONE);
+                    }
                     return true;
             }
 
@@ -517,6 +563,7 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
     @DebugLog
     public void onLogout() {
         presenter.prepareToLogout();
+        codeSet=false;
         if (RocketChatCache.INSTANCE.getSelectedServerHostname() == null) {
             finish();
             LaunchUtil.showMainActivity(this);
@@ -544,7 +591,8 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
 
     private void getSettings(String token){
 
-        UtilsApi.getAPIService().getSettings(" KEY:"+token)
+
+        UtilsApi.getAPIService().getSettings("KEY:"+token)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -552,13 +600,12 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
                             try {
                                 JSONObject jsonRESULTS = new JSONObject(response.body().string());
                                 if (jsonRESULTS.getString("status").equals("200")){
-                                    Log.d("QQWEWE", "!33");
+                                    logPost(token);
                                     if (jsonRESULTS.getJSONObject("result").getString("INNER_GROUP").equals("true")) {
-                                        Log.d("QQWEWE", "YES_SAVE");
                                         getSharedPreferences("Sub", Context.MODE_PRIVATE).edit().putBoolean("SubApi", true).commit();
-                                        startServiceSip();
+                                      startServiceSip();
                                     }else if (getSharedPreferences("Sub", MODE_PRIVATE).getBoolean("Sub", false)==true){
-                                        startServiceSip();
+                                      startServiceSip();
                                     } else  {
                                         getSharedPreferences("Sub", Context.MODE_PRIVATE).edit().putBoolean("SubApi", false).commit();
                                     }
@@ -579,19 +626,88 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
                         Log.e("debug", "onFailure: ERROR > " + t.toString());
                     }
                 });
+
+    }
+
+    private void logPost(String token){
+        Map<String, Object> jsonParams = new ArrayMap<>();
+        jsonParams.put("device_id", Build.MODEL);
+        jsonParams.put("version", BuildConfig.VERSION_NAME);
+        UtilsApi.getAPIService().postLog(" KEY:"+token,jsonParams)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()){
+
+                    }
+                }
+
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+            Log.e("debug", "onFailure: ERROR > " + t.toString());
+        }
+    });
     }
 
 
-    public void startServiceSip(){
-        Intent onLineIntent = new Intent(this, PortSipService.class);
-        onLineIntent.setAction(PortSipService.ACTION_PUSH_MESSAGE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(onLineIntent);
-        }else{
-           startService(onLineIntent);
+    public void startServiceSip(){
+        if (getSharedPreferences("SIP", Context.MODE_PRIVATE).getString("UF_SIP_NUMBER", null) != null){
+            Intent onLineIntent = new Intent(this, PortSipService.class);
+            onLineIntent.setAction(PortSipService.ACTION_SIP_REGIEST);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startService(onLineIntent);
+            } else {
+                startService(onLineIntent);
+            }
         }
 
+    }
+
+    public void getVersion(){
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(4);
+        notificationBadge = LayoutInflater.from(this).inflate( R.layout.view_notification_badge, menuView, false);
+
+        try {
+            String versionApp = getPackageManager().getPackageInfo(getPackageName(),0).versionName.substring(0, 5);
+            String latestVersion = new VersionChecker().execute().get();
+            if(!versionApp.contains(latestVersion) && Calendar.getInstance()
+                    .get(Calendar.DAY_OF_MONTH)!=getSharedPreferences("vDay", MODE_PRIVATE).getInt("vDay",0)) {
+                update = true;
+                itemView.addView(notificationBadge);
+
+
+             //
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void showUpdate(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.vers_name)
+                .setCancelable(false)
+                .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                getSharedPreferences("vDay", MODE_PRIVATE).edit().putInt("vDay", Calendar.getInstance().get(Calendar.DAY_OF_MONTH)).commit();
+                            }
+                        }
+                ).setPositiveButton("ОБНОВИТЬ", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=chat.wewe.android")));
+            }
+        });
+        builder.create().show();
     }
 
 

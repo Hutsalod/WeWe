@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/privat_chat"
+        android:title="@string/privat_chat"
+        app:showAsAction="never" />
+
     <item android:id="@+id/action_pinned_messages"
         android:title="@string/menu_pinned_messages"
         app:showAsAction="never" />

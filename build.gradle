@@ -2,8 +2,8 @@
 apply from: rootProject.file('dependencies.gradle')
 
 ext {
-    compileSdkVersion = 28
-    targetSdkVersion = 28
+    compileSdkVersion = 29
+    targetSdkVersion = 29
     buildToolsVersion = "28.0.0"
 }
 
@@ -22,6 +22,7 @@ buildscript {
         classpath 'com.google.gms:google-services:3.1.0'
         classpath 'com.github.triplet.gradle:play-publisher:1.1.5'
         classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.2.0'
     }
 
     // Exclude the version that the android plugin depends on.

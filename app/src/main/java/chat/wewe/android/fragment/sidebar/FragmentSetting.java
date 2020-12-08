@@ -30,28 +30,31 @@ import com.jakewharton.rxbinding2.widget.RxCompoundButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
 import chat.wewe.android.BuildConfig;
 import chat.wewe.android.R;
+import chat.wewe.android.RocketChatCache;
 import chat.wewe.android.StatusConnect;
 import chat.wewe.android.activity.Intro;
 import chat.wewe.android.activity.MainActivity;
 import chat.wewe.android.activity.PinCode;
 import chat.wewe.android.api.BaseApiService;
+import chat.wewe.android.api.DeviceGet;
 import chat.wewe.android.api.MethodCallHelper;
 import chat.wewe.android.api.UtilsApi;
 import chat.wewe.android.api.UtilsApiChat;
 import chat.wewe.android.fragment.AbstractFragment;
 import chat.wewe.android.fragment.sidebar.dialog.EditPasswordDialogFragment;
+import chat.wewe.android.fragment.sidebar.dialog.EmailFragment;
 import chat.wewe.android.fragment.sidebar.dialog.LogDialogFragment;
 import chat.wewe.android.helper.AbsoluteUrlHelper;
 import chat.wewe.android.helper.Logger;
 import chat.wewe.android.layouthelper.chatroom.roomlist.RoomListAdapter;
 import chat.wewe.android.renderer.UserRenderer;
+import chat.wewe.android.service.PortSipService;
 import chat.wewe.core.interactors.RoomInteractor;
 import chat.wewe.core.interactors.SessionInteractor;
 import chat.wewe.core.models.RoomSidebar;
@@ -63,9 +66,6 @@ import chat.wewe.persistence.realm.repositories.RealmSpotlightRepository;
 import chat.wewe.persistence.realm.repositories.RealmUserRepository;
 import hugo.weaving.DebugLog;
 import io.reactivex.disposables.Disposable;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,20 +73,17 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
-import static org.webrtc.ContextUtils.getApplicationContext;
 
 public class FragmentSetting extends AbstractFragment implements SidebarMainContract.View, StatusConnect {
 
     private NestedScrollView actionContainers,languageLayaut,secyrityLayaut,blaclistScrol;
     private SharedPreferences SipData,Preferences;
     private  SwitchCompat switch1;
-    private   TextView exetGoogle;
-    private Uri mFileUri;
-    private String TOKEN_rocket = "";
+    private   TextView stan_user_name,statusConnetc;
     private BaseApiService mApiServiceChat,mApiService;
     private  final Integer REQUEST_GET_SINGLE_FILE = 51;
     private String device = "0";
-    private SidebarMainContract.Presenter presenter;
+    static private SidebarMainContract.Presenter presenter;
     private RoomListAdapter adapter;
     private SearchView searchView;
     private TextView loadMoreResultsText;
@@ -95,6 +92,7 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
     private String hostname,userId;
     public  MethodCallHelper methodCallHelper;
     public ImageView stanUsers;
+    private boolean dialogSet = false;
     private static final String HOSTNAME = "hostname",USERID = "userId";
     public static int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 5469;
     @Override
@@ -107,7 +105,6 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
     protected void onSetupView() {
 
         switch1 = (SwitchCompat) rootView.findViewById(R.id.deviceprivat);
-        exetGoogle = (TextView) rootView.findViewById(R.id.exetGoogle);
         setupVersionInfo();
         setupUserStatusButtons();
         setupLogoutButton();
@@ -117,6 +114,9 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
         secyrityLayaut = (NestedScrollView) rootView.findViewById(R.id.secyrityLayaut);
         blaclistScrol = (NestedScrollView) rootView.findViewById(R.id.blaclistScrol);
 
+        if(switch1!=null) {
+            DeviceGet.getSettings(getActivity().getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", ""), switch1);
+        }
     }
 
     public static FragmentSetting create(String hostname, String userId) {
@@ -135,7 +135,7 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
         super.onCreate(savedInstanceState);
 
         hostname = getArguments().getString(HOSTNAME);
-        userId = getArguments().getString(HOSTNAME);
+        userId = getArguments().getString(USERID);
         RealmUserRepository userRepository = new RealmUserRepository(hostname);
 
         AbsoluteUrlHelper absoluteUrlHelper = new AbsoluteUrlHelper(
@@ -171,26 +171,11 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         stanUsers = view.findViewById(R.id.stanUsers);
+        stan_user_name = view.findViewById(R.id.current_user_name);
+        statusConnetc = view.findViewById(R.id.status_connetc);
         presenter.bindView(this);
 
-        if (getActivity().getSharedPreferences("Sub", MODE_PRIVATE).getBoolean("Sub", false)==true || getActivity().getSharedPreferences("Sub", MODE_PRIVATE).getBoolean("SubApi", false)==true ) {
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                if (!Settings.canDrawOverlays(getActivity())) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setMessage("Для нормального отображение звонков, нужно разрешить настройки!")
-                            .setCancelable(false)
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    testPermission();
-                                }
-                            });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-
-                }
-            }
-        }
 
         return view;
     }
@@ -220,6 +205,15 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
         versionInfoView.setText(getString(R.string.version_info_text, BuildConfig.VERSION_NAME));
     }
 
+    static public  void setLogout(){
+
+        Log.d("QQWEWE", "!33");
+
+
+                    presenter.prepareToLogOut();
+
+    }
+
     private void setupUserStatusButtons() {
         rootView.findViewById(R.id.btn_language).setOnClickListener(view -> {
             actionContainers.setVisibility(View.GONE);
@@ -234,8 +228,7 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
                 device = "1";
             else
                 device = "0";
-            Log.i("Test",device);
-            postDevice();
+            DeviceGet.postDevice(getActivity().getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", ""),device);
         });
 
         rootView.findViewById(R.id.exetGoogle).setOnClickListener(view -> {
@@ -273,6 +266,12 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
         rootView.findViewById(R.id.edit_password).setOnClickListener(view -> {
             EditPasswordDialogFragment di = new EditPasswordDialogFragment().create();
             di.show(getActivity().getSupportFragmentManager(), "example dialog");
+        });
+
+
+
+        rootView.findViewById(R.id.edit_email).setOnClickListener(view -> {
+             new EmailFragment().create().show(getActivity().getSupportFragmentManager(), "EmailFragment");
         });
 
         rootView.findViewById(R.id.policy_mss).setOnClickListener(view -> {
@@ -378,7 +377,11 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which){
                         case DialogInterface.BUTTON_POSITIVE:
-                            methodCallHelper.hideAndEraseRooms(userId);
+                            methodCallHelper.hideAndEraseRooms(RocketChatCache.INSTANCE.getUserId());
+                            Log.d("jsonRESULTS","ttt"+userId);
+                            closeUserActionContainer();
+                            // Clear relative data and set new hostname if any.
+                            presenter.prepareToLogOut();
                             break;
 
                         case DialogInterface.BUTTON_NEGATIVE:
@@ -454,7 +457,7 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == REQUEST_GET_SINGLE_FILE) {
             if (data != null) {
-                mFileUri = data.getData();
+
             //  setAvatarFile(mFileUri);
 
 
@@ -465,7 +468,7 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
 
 
     public void DeleteGooglePay(){
-        mApiService.removeTransactionid("KEY:"+SipData.getString("TOKENWE",""))
+        mApiService.removeTransactionid("KEY:"+getActivity().getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", ""))
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -494,41 +497,24 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
                 });
     }
 
-    private void postDevice(){
-        mApiServiceChat.postDevice(" KEY:"+SipData.getString("TOKENWE",""),device)
-                .enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()){
-                            try {
-                                JSONObject jsonRESULTS = new JSONObject(response.body().string());
-                                if (jsonRESULTS.getString("status").equals("200")){
-                                    String UF_ROCKET_LOGIN = jsonRESULTS.getJSONObject("result").getString("UF_ROCKET_LOGIN");
-                                    String UF_ROCKET_PASSWORD = jsonRESULTS.getJSONObject("result").getString("UF_ROCKET_PASSWORD");
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.e("debug", "onFailure: ERROR > " + t.toString());
-                    }
-                });
-    }
 
     private void setupLogoutButton() {
         rootView.findViewById(R.id.btn_logout).setOnClickListener(view -> {
+
+            getActivity().getSharedPreferences("SIP", Context.MODE_PRIVATE).edit().clear().commit();
+            getActivity().getSharedPreferences("pin", Context.MODE_PRIVATE).edit().clear().commit();
+            getActivity().getSharedPreferences("Setting", Context.MODE_PRIVATE).edit().clear().commit();
+            Intent offLineIntent = new Intent(getActivity(), PortSipService.class);
+            offLineIntent.setAction(PortSipService.ACTION_SIP_UNREGIEST);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                getActivity().startService(offLineIntent);
+            }else{
+                getActivity().startService(offLineIntent);
+            }
             closeUserActionContainer();
             // Clear relative data and set new hostname if any.
             presenter.prepareToLogOut();
-
-
         });
     }
 
@@ -551,6 +537,27 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
 
         }
 
+        if(RocketChatCache.INSTANCE.getSessionToken() != null) {
+            if (getActivity().getSharedPreferences("Sub", MODE_PRIVATE).getBoolean("Sub", false) == true || getActivity().getSharedPreferences("Sub", MODE_PRIVATE).getBoolean("SubApi", false) == true) {
+                if (dialogSet == false) {
+                    dialogSet = true;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (!Settings.canDrawOverlays(getActivity())) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setMessage("Для нормального отображение звонков, нужно разрешить настройки!")
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            testPermission();
+                                        }
+                                    });
+                            builder.create().show();
+
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
@@ -607,20 +614,23 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
         }
     }
 
-
-
     @Override
     public void noConnect() {
         stanUsers.setImageResource(R.drawable.s000);
+        statusConnetc.setText("Chat: Офлайн SIP: Офлайн");
     }
 
     @Override
     public void Connecting() {
         this.stanUsers.setImageResource(R.drawable.s112);
+        statusConnetc.setText("Chat: Онлайн SIP: Онлайн");
     }
 
     @Override
     public void okConnect() {
         this.stanUsers.setImageResource(R.drawable.s222);
+        statusConnetc.setText("Chat: Онлайн SIP: Онлайн");
     }
+
+
 }

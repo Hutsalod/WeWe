@@ -122,6 +122,8 @@ public abstract class AbstractDDPDocEventSubscriber implements Registrable {
             throwable -> {
             }
         );
+
+
   }
 
   protected void onDocumentAdded(DDPSubscription.Added docEvent) {

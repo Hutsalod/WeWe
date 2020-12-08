@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.eftimoff.viewpagertransformers.RotateUpTransformer;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.vanniktech.emoji.EmojiImageView;
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.emoji.Emoji;
+import com.vanniktech.emoji.ios.IosEmojiProvider;
+import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
+import com.vanniktech.emoji.listeners.OnEmojiClickListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 
 import chat.wewe.android.widget.AbsoluteUrl;
 import chat.wewe.android.widget.R;
@@ -42,7 +55,8 @@ public class MessageFormLayout extends LinearLayout {
 
   private ImageButton attachButton;
   private ImageButton sendButton;
-
+  private ImageButton emoji;
+  private EmojiPopup emojiPopup;
   private RelativeLayout replyBar;
   private ImageView replyCancelButton;
   private SimpleDraweeView replyThumb;
@@ -52,10 +66,12 @@ public class MessageFormLayout extends LinearLayout {
   private  BlocingUsers blocingUsers;
   private Button buttonBlackList;
   private ConstraintLayout keyboard_container;
-
+  private ImageKeyboardEditText editText;
   private ExtraActionSelectionClickListener extraActionSelectionClickListener;
   private SubmitTextListener submitTextListener;
   private ImageKeyboardEditText.OnCommitContentListener listener;
+
+  static final String TAG = "MessageFormLayout";
 
   public MessageFormLayout(Context context) {
     super(context);
@@ -91,6 +107,8 @@ public class MessageFormLayout extends LinearLayout {
       }
     });
 
+    EmojiManager.install(new IosEmojiProvider());
+
     replyCancelButton = composer.findViewById(R.id.reply_cancel);
     replyMessageText = composer.findViewById(R.id.reply_message);
     replyUsernameText = composer.findViewById(R.id.reply_username);
@@ -98,6 +116,7 @@ public class MessageFormLayout extends LinearLayout {
     replyBar = composer.findViewById(R.id.reply_bar);
     checkbox = composer.findViewById(R.id.checkbox2);
     sendButton = composer.findViewById(R.id.button_send);
+    emoji = composer.findViewById(R.id.button_emoji);
 
     keyboard_container = composer.findViewById(R.id.keyboard_container);
 
@@ -115,6 +134,13 @@ public class MessageFormLayout extends LinearLayout {
             submitTextListener.onSubmitText(messageText);
           clearReplyContent();
         }
+      }
+    });
+
+    emoji.setOnClickListener(new DebouncingOnClickListener() {
+      @Override
+      public void doClick(View v) {
+        emojiPopup.toggle();
       }
     });
 
@@ -150,7 +176,7 @@ public class MessageFormLayout extends LinearLayout {
     sendButton.setScaleX(0);
     sendButton.setScaleY(0);
     sendButton.setVisibility(GONE);
-    ImageKeyboardEditText editText = composer.findViewById(R.id.editor);
+    editText = composer.findViewById(R.id.editor);
 
     editText.addTextChangedListener(new TextWatcher() {
       @Override
@@ -183,7 +209,7 @@ public class MessageFormLayout extends LinearLayout {
         return false;
       }
     });
-
+    setUpEmojiPopup(composer);
     addView(composer);
   }
 
@@ -355,4 +381,48 @@ public class MessageFormLayout extends LinearLayout {
       buttonBlackList.setVisibility(GONE);
     }
   }
+
+  private void setUpEmojiPopup(ViewGroup composer) {
+    emojiPopup = EmojiPopup.Builder.fromRootView(composer)
+            .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+              @Override
+              public void onEmojiBackspaceClick(View ignore) {
+                Log.d(TAG, "Clicked on Backspace");
+              }
+            })
+            .setOnEmojiClickListener(new OnEmojiClickListener() {
+              @Override
+              public void onEmojiClick(@NonNull EmojiImageView ignore, @NonNull Emoji ignore2) {
+                Log.d(TAG, "Clicked on emoji");
+              }
+            })
+            .setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
+              @Override
+              public void onEmojiPopupShown() {
+                emoji.setImageResource(R.drawable.ic_close);
+              }
+            })
+            .setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
+              @Override
+              public void onKeyboardOpen(int ignore) {
+                Log.d(TAG, "Opened soft keyboard");
+              }
+            })
+            .setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
+              @Override
+              public void onEmojiPopupDismiss() {
+                emoji.setImageResource(R.drawable.ic_insert_emoticon_black_24dp);
+              }
+            })
+            .setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
+              @Override
+              public void onKeyboardClose() {
+                Log.d(TAG, "Closed soft keyboard");
+              }
+            })
+            .setKeyboardAnimationStyle(R.style.emoji_slide_animation_style)
+            .setPageTransformer(new RotateUpTransformer())
+            .build(editText);
+  }
+
 }

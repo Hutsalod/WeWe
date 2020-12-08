@@ -31,18 +31,18 @@
 
             <Button
                 android:id="@+id/answer_audio"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
 
-                android:layout_marginBottom="60dp"
+                android:layout_marginBottom="80dp"
                 android:background="@drawable/ic_call_btn" />
 
             <Button
                 android:id="@+id/answer_video"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginBottom="60dp"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginBottom="80dp"
                 android:background="@drawable/ic_call_video_btn" />
         </LinearLayout>
 

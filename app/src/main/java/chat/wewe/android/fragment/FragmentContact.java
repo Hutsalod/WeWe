@@ -122,13 +122,7 @@ public class FragmentContact extends AbstractFragment implements StatusConnect {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),Manifest.permission.READ_CONTACTS) ||
                     ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_CONTACTS)){
 
-                Snackbar.make(recyclerView, "permission Contact", Snackbar.LENGTH_INDEFINITE)
-                        .setAction("OK", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                ActivityCompat.requestPermissions(getActivity(),PERMISSION_CONTACT,REQUEST_CONTACT);
-                            }
-                        }).show();
+
             } else {
                 ActivityCompat.requestPermissions(getActivity(),PERMISSION_CONTACT,REQUEST_CONTACT);
             }

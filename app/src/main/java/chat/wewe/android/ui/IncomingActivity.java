@@ -68,10 +68,11 @@ public class IncomingActivity extends Activity implements PortMessageReceiver.Br
                 keyguardManager.requestDismissKeyguard(this, null);
             }
         }else {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-            window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-            window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+            final Window win = getWindow();
+            win.addFlags( WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                    | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                    | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                    | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         }
         setContentView(R.layout.incomingview);
         Log.d("TEST_WEWE","CALL incomingview");

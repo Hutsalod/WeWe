@@ -131,6 +131,8 @@ public class RoomPresenter extends BasePresenter<RoomContract.View>
     public void onMessageTap(@Nullable Message message) {
         if (message == null) {
             return;
+        }else {
+
         }
 
         if (message.getSyncState() == SyncState.FAILED) {
