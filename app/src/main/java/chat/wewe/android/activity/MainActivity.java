@@ -1,10 +1,8 @@
 package chat.wewe.android.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
@@ -26,7 +24,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,17 +45,20 @@ import chat.wewe.android.LaunchUtil;
 import chat.wewe.android.R;
 import chat.wewe.android.RocketChatApplication;
 import chat.wewe.android.RocketChatCache;
-import chat.wewe.android.VersionChecker;
+import chat.wewe.android.api.LogApi;
+import chat.wewe.android.helper.VersionApp;
+import chat.wewe.android.helper.VersionChecker;
 import chat.wewe.android.api.DeviceGet;
 import chat.wewe.android.api.MethodCallHelper;
 import chat.wewe.android.api.UtilsApi;
 import chat.wewe.android.fragment.FragmentContact;
 import chat.wewe.android.fragment.call_number.FragmentKeyboard;
 import chat.wewe.android.fragment.chatroom.RoomFragment;
-import chat.wewe.android.fragment.sidebar.FragmentSetting;
+import chat.wewe.android.fragment.setting.FragmentSetting;
 import chat.wewe.android.fragment.sidebar.SidebarMainFragment;
 import chat.wewe.android.fragment.sidebar.dialog.FragmentTask;
 import chat.wewe.android.helper.KeyboardHelper;
+import chat.wewe.android.receiver.PortMessageReceiver;
 import chat.wewe.android.service.ConnectivityManager;
 import chat.wewe.android.service.ConnectivityManagerApi;
 import chat.wewe.android.service.PortSipService;
@@ -87,20 +87,18 @@ import static android.view.View.VISIBLE;
 
 public class MainActivity extends AbstractAuthedActivity implements MainContract.View {
     public RoomToolbar toolbar;
+    public VersionApp versionApp = new VersionApp();
     public static SlidingPaneLayouts pane;
-    private MainContract.Presenter presenter;
+    public BottomNavigationView navigation;
+    public MainContract.Presenter presenter;
     private volatile AtomicReference<Crouton> croutonStatusTicker = new AtomicReference<>();
     private View croutonView;
     private ImageView croutonTryAgainImage;
     private TextView croutonText;
     private AnimatedVectorDrawableCompat tryAgainSpinnerAnimatedDrawable;
     private LinearLayout call, setting, contacts, task,chat;
-    public BottomNavigationView navigation;
-    private Boolean codeSet = false, status = false,update = false;
-    private SharedPreferences Preferences;
+    private Boolean codeSet = false, status = false, update = false;
     private View notificationBadge;
-
-
 
     //Fragments
     public FragmentContact fragmentContact = new FragmentContact ();
@@ -108,8 +106,6 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
     public SidebarMainFragment fragmentSidebar = new SidebarMainFragment();
     public FragmentSetting fragmentSetting = new FragmentSetting();
     public FragmentTask fragmentTask = new FragmentTask();
-
-
 
     @Override
     public int getLayoutContainerForFragment() {
@@ -130,25 +126,11 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
         contacts = findViewById(R.id.contacts);
         task = findViewById(R.id.task);
         chat = findViewById(R.id.chat);
-
+        navigation.setSelectedItemId(R.id.action_chat);
         getSupportFragmentManager().executePendingTransactions();
-
         loadCroutonViewIfNeeded();
         setupToolbar();
-
-        navigation.setSelectedItemId(R.id.action_chat);
-
-        if(RocketChatCache.INSTANCE.getSessionToken() != null){
-                String code = getSharedPreferences("pin", MODE_PRIVATE).getString("code", "");
-                if (code != "")
-                    startActivity(new Intent(getApplication(), PinCodeLong.class));
-
-
-        getSettings(getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", ""));
-         getVersion();
-        }
-
-
+        startSetting();
 
     }
 
@@ -161,7 +143,6 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
             hostname = RocketChatCache.INSTANCE.getSelectedServerHostname();
             if (hostname == null) {
                 showAddServerScreen();
-
             } else {
                 onHostnameUpdated();
                 if (!hostname.equalsIgnoreCase(previousHostname)) {
@@ -171,17 +152,21 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
             }
         } else {
             connectivityManager.keepAliveServer();
+            if(pane.isOpen())
             presenter.bindView(this);
             presenter.loadSignedInServers(hostname);
             roomId = RocketChatCache.INSTANCE.getSelectedRoomId();
-            if(getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", "") != "") {
-                pane.setVisibility(VISIBLE);
+            pane.setVisibility(VISIBLE);
 
-
-            }
-            DeviceGet.getDevice(getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", ""));
         }
         RocketChatApplication.activityResumed();
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        RocketChatApplication.activityPaused();
+        super.onDestroy();
     }
 
     @Override
@@ -190,18 +175,14 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
             presenter.release();
         }
         Crouton.cancelAllCroutons();
-
-
-
         super.onPause();
-        RocketChatApplication.activityPaused();
-    }
 
+    }
 
     @Override
     protected void onStop() {
+        RocketChatApplication.activityPaused();
         super.onStop();
-        Log.d("codeSet","codeSet "+codeSet);
         if(codeSet==true) {
             String code = getSharedPreferences("pin", MODE_PRIVATE).getString("code", "");
             if (code != "") {
@@ -212,28 +193,23 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
         codeSet=true;
     }
 
-
-
-
     private void setupToolbar() {
         if (pane != null) {
-
             pane.setPanelSlideListener(new SlidingPaneLayouts.PanelSlideListener() {
                 @Override
                 public void onPanelSlide(@NonNull View view, float v) {
                     //Ref: ActionBarDrawerToggle#setProgress
                     // toolbar.setNavigationIconProgress(v);
-
                 }
 
                 @Override
                 public void onPanelOpened(@NonNull View view) {
                     toolbar.setNavigationIconVerticalMirror(true);
-
                 }
-
                 @Override
                 public void onPanelClosed(@NonNull View view) {
+
+
                     toolbar.setNavigationIconVerticalMirror(false);
                     Fragment fragment = getSupportFragmentManager()
                             .findFragmentById(R.id.sidebar_fragment_container);
@@ -242,7 +218,6 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
                         sidebarMainFragment.toggleUserActionContainer(false);
                         sidebarMainFragment.showUserActionContainer(false);
                     }
-
                 }
             });
 
@@ -251,6 +226,7 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
                     if (pane.isSlideable() && !pane.isOpen()) {
                         pane.openPane();
                     }
+
                 });
             }
         }
@@ -258,9 +234,8 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
     }
 
     private boolean closeSidebarIfNeeded() {
-        // REMARK: Tablet UI doesn't have SlidingPane!
         if (pane != null && pane.isSlideable() && pane.isOpen()) {
-            pane.closePane();
+         //   pane.closePane();
             return true;
         }
         return false;
@@ -273,22 +248,17 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
 
         if (presenter != null) {
             presenter.release();
-
         }
 
         RoomInteractor roomInteractor = new RoomInteractor(new RealmRoomRepository(hostname));
-
         CanCreateRoomInteractor createRoomInteractor = new CanCreateRoomInteractor(
                 new RealmUserRepository(hostname),
                 new SessionInteractor(new RealmSessionRepository(hostname))
         );
-
         SessionInteractor sessionInteractor = new SessionInteractor(
                 new RealmSessionRepository(hostname)
         );
-
         PublicSettingRepository publicSettingRepository = new RealmPublicSettingRepository(hostname);
-
         presenter = new MainPresenter(
                 roomInteractor,
                 createRoomInteractor,
@@ -297,15 +267,10 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
                 ConnectivityManager.getInstance(getApplicationContext()),
                 publicSettingRepository
         );
-
         updateSidebarMainFragment();
-
         presenter.bindView(this);
         presenter.loadSignedInServers(hostname);
-
         roomId = RocketChatCache.INSTANCE.getSelectedRoomId();
-
-
     }
 
     private void updateSidebarMainFragment() {
@@ -313,25 +278,20 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
 
         String selectedServerHostname = RocketChatCache.INSTANCE.getSelectedServerHostname();
         Fragment sidebarFragment = findFragmentByTag(selectedServerHostname);
-
         if (sidebarFragment == null) {
             fragmentSidebar = SidebarMainFragment.create(selectedServerHostname);
             sidebarFragment = fragmentSidebar;
         }
             getSupportFragmentManager().beginTransaction().replace(R.id.sidebar_fragment_container, sidebarFragment, selectedServerHostname).commit();
-
             fragmentSetting = FragmentSetting.create(RocketChatCache.INSTANCE.getSelectedServerHostname(), RocketChatCache.INSTANCE.getUserId());
-            getSupportFragmentManager().beginTransaction().replace(R.id.cont_item3, fragmentSetting).commit();
-
-            getSupportFragmentManager().beginTransaction().replace(R.id.cont, fragmentContact).commit();
-
-            getSupportFragmentManager().beginTransaction().replace(R.id.cont_item2, fragmentKeyboard).commit();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.cont_item3, fragmentSetting)
+                    .replace(R.id.cont, fragmentContact)
+                    .replace(R.id.cont_item2, fragmentKeyboard)
+                    .commit();
 
             fragmentTask = FragmentTask.create(RocketChatCache.INSTANCE.getSelectedServerHostname(), status);
-
             getSupportFragmentManager().beginTransaction().replace(R.id.cont_item4, fragmentTask).commit();
-
-
 
     }
 
@@ -350,11 +310,7 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
     @Override
     public void showHome() {
         if (pane != null) {
-            if (pane.isOpen()) {
-                pane.openPane();
-            } else {
-                pane.openPane();
-            }
+       //     pane.openPane();
         }
 
     }
@@ -381,23 +337,21 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
         codeSet=false;
         LaunchUtil.showLoginActivity(this, hostname);
         showConnectionOk();
-
     }
 
     @Override
     public void showConnectionError() {
-       // ConnectionStatusManager.INSTANCE.setConnectionError(this::showConnectionErrorCrouton);
-        status = false;
         fragmentContact.noConnect();
         fragmentKeyboard.noConnect();
         fragmentSidebar.noConnect();
         fragmentSetting.noConnect();
         fragmentTask.noConnect();
+        status = false;
+        retryConnectionTime();
     }
 
     @Override
     public void showConnecting() {
-
         status = true;
         fragmentContact.Connecting();
         fragmentKeyboard.Connecting();
@@ -418,34 +372,6 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
 
     }
 
-    private void showConnectingCrouton(boolean success) {
-        if (success) {
-            croutonText.setText(R.string.server_config_activity_authenticating);
-            croutonTryAgainImage.setOnClickListener(null);
-            tryAgainSpinnerAnimatedDrawable.start();
-            Crouton.cancelAllCroutons();
-            updateCrouton();
-            croutonStatusTicker.get().show();
-        }
-    }
-
-    private void showConnectionErrorCrouton(boolean success) {
-        if (success) {
-            tryAgainSpinnerAnimatedDrawable.stop();
-            croutonText.setText(R.string.fragment_retry_login_error_title);
-
-            croutonTryAgainImage.setOnClickListener(new DebouncingOnClickListener() {
-                @Override
-                public void doClick(View v) {
-                    retryConnection();
-                }
-            });
-
-            Crouton.cancelAllCroutons();
-            updateCrouton();
-            croutonStatusTicker.get().show();
-        }
-    }
 
     private void loadCroutonViewIfNeeded() {
         if (croutonView == null) {
@@ -455,7 +381,6 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
             tryAgainSpinnerAnimatedDrawable =
                     AnimatedVectorDrawableCompat.create(this, R.drawable.ic_loading_animated);
             croutonTryAgainImage.setImageDrawable(tryAgainSpinnerAnimatedDrawable);
-
             updateCrouton();
         }
     }
@@ -466,7 +391,6 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
 
         Crouton crouton = Crouton.make(this, croutonView, getLayoutContainerForFragment())
                 .setConfiguration(configuration);
-
         croutonStatusTicker.set(crouton);
 
     }
@@ -479,7 +403,6 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
 
     private void retryConnection() {
         croutonStatusTicker.set(null);
-        showConnecting();
         ConnectivityManager.getInstance(getApplicationContext()).keepAliveServer();
     }
 
@@ -497,15 +420,8 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
         }
     }
 
-    private void changeServerIfNeeded(String serverHostname) {
-        if (!hostname.equalsIgnoreCase(serverHostname)) {
-            RocketChatCache.INSTANCE.setSelectedServerHostname(serverHostname);
-        }
-    }
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -549,7 +465,7 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
                     setting.setVisibility(VISIBLE);
 
                     if (update == true) {
-                        showUpdate();
+                        versionApp.showUpdate(MainActivity.this).show();
                         update = false;
                         notificationBadge.setVisibility(GONE);
                     }
@@ -576,22 +492,23 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-
             switch (event.getKeyCode()) {
-
                 case KeyEvent.KEYCODE_BACK:
-                    navigation.setSelectedItemId(R.id.action_chat);
-                    pane.openPane();
-                    return true;
+                    if (navigation.getSelectedItemId() == R.id.action_chat && pane.isOpen() == true) {
+                        finish();
+                    } else {
+                        navigation.setSelectedItemId(R.id.action_chat);
+                        pane.openPane();
+
+                    }
+                    return false;
             }
 
         }
         return super.dispatchKeyEvent(event);
     }
 
-    private void getSettings(String token){
-
-
+    private void sendSettings(String token){
         UtilsApi.getAPIService().getSettings("KEY:"+token)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -600,7 +517,7 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
                             try {
                                 JSONObject jsonRESULTS = new JSONObject(response.body().string());
                                 if (jsonRESULTS.getString("status").equals("200")){
-                                    logPost(token);
+                                    new LogApi().logPost(token);
                                     if (jsonRESULTS.getJSONObject("result").getString("INNER_GROUP").equals("true")) {
                                         getSharedPreferences("Sub", Context.MODE_PRIVATE).edit().putBoolean("SubApi", true).commit();
                                       startServiceSip();
@@ -609,8 +526,6 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
                                     } else  {
                                         getSharedPreferences("Sub", Context.MODE_PRIVATE).edit().putBoolean("SubApi", false).commit();
                                     }
-
-
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -629,26 +544,6 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
 
     }
 
-    private void logPost(String token){
-        Map<String, Object> jsonParams = new ArrayMap<>();
-        jsonParams.put("device_id", Build.MODEL);
-        jsonParams.put("version", BuildConfig.VERSION_NAME);
-        UtilsApi.getAPIService().postLog(" KEY:"+token,jsonParams)
-                .enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()){
-
-                    }
-                }
-
-        @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) {
-            Log.e("debug", "onFailure: ERROR > " + t.toString());
-        }
-    });
-    }
-
 
 
     public void startServiceSip(){
@@ -657,7 +552,7 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
             onLineIntent.setAction(PortSipService.ACTION_SIP_REGIEST);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startService(onLineIntent);
+                startForegroundService(onLineIntent);
             } else {
                 startService(onLineIntent);
             }
@@ -665,21 +560,24 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
 
     }
 
+    public void bindView() {
+        presenter.bindView(this);
+    }
+
+
     public void getVersion(){
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
         BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(4);
         notificationBadge = LayoutInflater.from(this).inflate( R.layout.view_notification_badge, menuView, false);
-
         try {
             String versionApp = getPackageManager().getPackageInfo(getPackageName(),0).versionName.substring(0, 5);
             String latestVersion = new VersionChecker().execute().get();
             if(!versionApp.contains(latestVersion) && Calendar.getInstance()
                     .get(Calendar.DAY_OF_MONTH)!=getSharedPreferences("vDay", MODE_PRIVATE).getInt("vDay",0)) {
-                update = true;
-                itemView.addView(notificationBadge);
-
-
-             //
+                if (latestVersion != "0.0.0") {
+                    update = true;
+                    itemView.addView(notificationBadge);
+                }
             }
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -688,26 +586,29 @@ public class MainActivity extends AbstractAuthedActivity implements MainContract
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
-
     }
 
-    public void showUpdate(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.vers_name)
-                .setCancelable(false)
-                .setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                getSharedPreferences("vDay", MODE_PRIVATE).edit().putInt("vDay", Calendar.getInstance().get(Calendar.DAY_OF_MONTH)).commit();
-                            }
-                        }
-                ).setPositiveButton("ОБНОВИТЬ", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://play.google.com/store/apps/details?id=chat.wewe.android")));
+    public void retryConnectionTime(){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (status == false)
+                    retryConnection();
             }
-        });
-        builder.create().show();
+        }, 15000);
+    }
+
+    public void startSetting(){
+        if(RocketChatCache.INSTANCE.getSessionToken() != null){
+            String code = getSharedPreferences("pin", MODE_PRIVATE).getString("code", "");
+            if (code != "")
+            startActivity(new Intent(getApplication(), PinCodeLong.class));
+            sendSettings(getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", ""));
+            getVersion();
+            DeviceGet.getDevice(getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", ""));
+        }
+
     }
 
 

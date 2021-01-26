@@ -39,5 +39,7 @@ public class MessageNormalViewHolder extends AbstractMessageViewHolder {
     messageRenderer.showBody(body);
     messageRenderer.showUrl(urls);
     messageRenderer.showAttachment(attachments, absoluteUrl);
+
+
   }
 }

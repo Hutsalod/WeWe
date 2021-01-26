@@ -62,16 +62,12 @@ public abstract class AbstractAddRoomDialogFragment extends RxAppCompatDialogFra
   protected abstract Task<Void> getMethodCallForSubmitAction();
 
   protected final void createRoom() {
-    Toast.makeText(getActivity().getApplicationContext(), "ggg", Toast.LENGTH_SHORT).show();
-    Log.d("TEST_WEWE","yy");
     showOrHideWaitingView(true);
     getMethodCallForSubmitAction().continueWith(task -> {
       showOrHideWaitingView(false);
       if (task.isFaulted()) {
         Toast.makeText(getContext(), task.getError().getMessage(), Toast.LENGTH_SHORT).show();
-        Log.d("TEST_WEWE",""+task.getError().getMessage());
       } else {
-        Log.d("TEST_WEWE",""+task.getError().getMessage());
         dismiss();
       }
       return null;

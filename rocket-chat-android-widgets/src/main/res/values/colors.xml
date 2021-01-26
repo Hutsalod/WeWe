@@ -14,10 +14,10 @@
   <color name="color_alert">#FFF44336</color> <!-- Red 500-->
   
   <!-- User status colors-->
-  <color name="color_user_status_online">#FF4CAF50</color> <!-- Green 500 -->
+  <color name="color_user_status_online">#60B163</color> <!-- Green 500 -->
   <color name="color_user_status_busy">#FFF44336</color> <!-- Red 500-->
   <color name="color_user_status_away">#FFFFC107</color> <!-- Amber 500-->
-  <color name="color_user_status_offline">#607D8B</color> <!-- Blue Grey 500-->
+  <color name="color_user_status_offline">#901f2329</color> <!-- Blue Grey 500-->
   <color name="serverstatus_selected">#FFFFFFFF</color>
   <color name="serverstatus_outline">#c2c2c2</color>
   <color name="colorTools">#888888</color>

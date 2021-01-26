@@ -130,6 +130,7 @@
             app:queryHint="@string/spotlight_search"
             style="@style/SearchViewStyle"
             app:searchIcon="@drawable/ic_searchs"
+            app:closeIcon="@drawable/ic_close_black"
             app:iconifiedByDefault="false" />
     </FrameLayout>
 

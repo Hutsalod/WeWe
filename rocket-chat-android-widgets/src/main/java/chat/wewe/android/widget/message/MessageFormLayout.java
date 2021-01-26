@@ -366,6 +366,7 @@ public class MessageFormLayout extends LinearLayout {
     void onSubmitText(String message);
   }
 
+
   public interface BlocingUsers {
     void onSubmitText();
   }

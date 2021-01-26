@@ -84,12 +84,12 @@ public class PortSipService extends Service implements OnPortSIPEvent {
     private final String APPID = "chat.wewe.android";
     private PortSipSdk mEngine;
     private RocketChatApplication applicaton;
-    private  final int SERVICE_NOTIFICATION  = 31414;
-    private   final int PENDINGCALL_NOTIFICATION = SERVICE_NOTIFICATION+1;
+    private  static final int SERVICE_NOTIFICATION  = 31414;
+    public   static final int PENDINGCALL_NOTIFICATION = SERVICE_NOTIFICATION+1;
     private String channelID = "PortSipService";
     private String callChannelID = "Call Channel";
     private String pushToken;
-    private NotificationManager notificationManager;
+    private NotificationManager mNotificationManager;
     HashMap<String, String> headers = new HashMap<String, String>();
 
     @Override
@@ -99,13 +99,12 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
         mEngine = applicaton.mEngine;
 
-        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelID, "Sip", NotificationManager.IMPORTANCE_HIGH);
-            NotificationChannel callChannel = new NotificationChannel(callChannelID, getString(R.string.app_name), NotificationManager.IMPORTANCE_HIGH);
-            notificationManager.createNotificationChannel(channel);
-            notificationManager.createNotificationChannel(callChannel);
-
+            NotificationChannel channel = new NotificationChannel(channelID, "WeWe SIP", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel call = new NotificationChannel(callChannelID, "WeWe Call", NotificationManager.IMPORTANCE_HIGH);
+            mNotificationManager.createNotificationChannel(channel);
+            mNotificationManager.createNotificationChannel(call);
         }
       showServiceNotifiCation();
     }
@@ -117,14 +116,13 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
         Notification.Builder builder;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            builder = new Notification.Builder(this,channelID);
+            builder = new Notification.Builder(this,channelID).setOnlyAlertOnce(true);
         }else{
             builder = new Notification.Builder(this);
 
         }
 
-        startForeground(SERVICE_NOTIFICATION,builder.setSmallIcon(R.drawable.ic_stat_name).build());
-
+        startForeground(SERVICE_NOTIFICATION, builder.setSmallIcon(R.drawable.ic_logo_vector).setContentTitle(getString(R.string.app_name)).setContentText("WeWe Call").build());
 
     }
 
@@ -150,24 +148,34 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
         }
 
-
+        mNotificationManager.cancelAll();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+           mNotificationManager.deleteNotificationChannel(channelID);
+        }
+        mNotificationManager.cancel(SERVICE_NOTIFICATION);
         return result;
     }
+
+
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         mEngine.destroyConference();
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            notificationManager.deleteNotificationChannel(channelID);
-            notificationManager.deleteNotificationChannel(callChannelID);
-        }
+
         if (mCpuLock != null) {
             mCpuLock.release();
         }
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.cancelAll();
+        mNotificationManager.cancelAll();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            mNotificationManager.deleteNotificationChannel(channelID);
+            mNotificationManager.deleteNotificationChannel(callChannelID);
+        }
+        mNotificationManager = null;
+        Log.d("WEWE_CALL"," onDestroy");
 
+        mEngine.removeUser();
+        mEngine.DeleteCallManager();
 
     }
 
@@ -253,7 +261,7 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
         result = mEngine.setLicenseKey("2ANDRB4xQ0ExNkJCMUM4OUU1ODY2QTg5MTZDMDNGNzIwNUU4Q0BFMjg2QzhEQjVDMjA3QUM0Q0VGNjlCQ0M5NEJBRDIyM0A5MDJBRkYyQzdBMThGNzhGNTg4M0I2RTUzRTA4RjhGRkBCMEVDNkZFNkQxQTI5NEQ0MDAyQzhBRTY0NTZGNUY1Rg");
         if (result == PortSipErrorcode.ECoreWrongLicenseKey) {
-            Log.d("TEST_WEWE","start");Log.d("TEST_WEWE","start");
+            Log.d("TEST_WEWE","start");
             showTipMessage("The wrong license key was detected, please check with sales@portsip.com or support@portsip.com");
             return;
         }
@@ -486,13 +494,13 @@ public class PortSipService extends Service implements OnPortSIPEvent {
         Intent activityIntent = new Intent(this, IncomingActivity.class);
         activityIntent.putExtra("incomingSession",sessionId);
         activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Ring.getInstance(this).startRingTone();
         if(isForeground()){
             startActivity(activityIntent);
         }else{
-            showPendingCallNotification(this, callerDisplayName, caller, activityIntent);
-        }
-        Log.d("TEST_WEWE","CALL start");
 
+            showPendingCallNotification(this, callerDisplayName, session.displayName, activityIntent);
+        }
         Intent broadIntent = new Intent(CALL_CHANGE_ACTION);
         broadIntent.putExtra(EXTRA_CALL_SEESIONID, sessionId);
 
@@ -503,7 +511,7 @@ public class PortSipService extends Service implements OnPortSIPEvent {
         sendPortSipMessage(description, broadIntent);
 
 
-        Ring.getInstance(this).startRingTone();
+
     }
 
     @Override
@@ -566,10 +574,10 @@ public class PortSipService extends Service implements OnPortSIPEvent {
             broadIntent.putExtra(EXTRA_CALL_SEESIONID, sessionId);
             String description = session.lineName + " onInviteFailure";
             broadIntent.putExtra(EXTRA_CALL_DESCRIPTION, description);
-
+            Log.d("TEST_WEWE","onInviteFailure session");
             sendPortSipMessage(description, broadIntent);
         }
-
+        Log.d("TEST_WEWE","onInviteFailure ");
         Ring.getInstance(this).stopRingBackTone();
     }
 
@@ -615,8 +623,10 @@ public class PortSipService extends Service implements OnPortSIPEvent {
             broadIntent.putExtra(EXTRA_CALL_DESCRIPTION, description);
 
             sendPortSipMessage(description, broadIntent);
+            mNotificationManager.cancel(PENDINGCALL_NOTIFICATION);
+            Log.d("TEST_WEWE","onInviteConnected session");
         }
-
+        Log.d("TEST_WEWE","onInviteConnected ");
         CallManager.Instance().setSpeakerOn(applicaton.mEngine, CallManager.Instance().isSpeakerOn());
     }
 
@@ -633,12 +643,16 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
             Intent broadIntent = new Intent(CALL_CHANGE_ACTION);
             broadIntent.putExtra(EXTRA_CALL_SEESIONID, sessionId);
-            String description = "1";
+            String description = session.lineName +  " OnInviteClosed";
             broadIntent.putExtra(EXTRA_CALL_DESCRIPTION, description);
             sendPortSipMessage(description, broadIntent);
 
         }
+        unregisterToServer();
         Ring.getInstance(this).stopRingTone();
+        mNotificationManager.cancel(PENDINGCALL_NOTIFICATION);
+
+
     }
 
     @Override
@@ -691,7 +705,9 @@ public class PortSipService extends Service implements OnPortSIPEvent {
             broadIntent.putExtra(EXTRA_CALL_DESCRIPTION, description);
 
             sendPortSipMessage(description, broadIntent);
+
         }
+        Log.d("TEST_WEWE","onReferAccepted session");
         Ring.getInstance(this).stopRingTone();
     }
 
@@ -718,7 +734,7 @@ public class PortSipService extends Service implements OnPortSIPEvent {
             broadIntent.putExtra(EXTRA_CALL_SEESIONID, sessionId);
             String description = session.lineName + " Transfer succeeded, call closed";
             broadIntent.putExtra(EXTRA_CALL_DESCRIPTION, description);
-
+            Log.d("TEST_WEWE","onACTVTransferSuccess session");
             sendPortSipMessage(description, broadIntent);
             // Close the call after succeeded transfer the call
             mEngine.hangUp(sessionId);
@@ -941,7 +957,6 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
     //--------------------
     public void sendPortSipMessage(String message, Intent broadIntent) {
-        NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Intent intent = new Intent(this, chat.wewe.android.activity.MainActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
@@ -951,10 +966,14 @@ public class PortSipService extends Service implements OnPortSIPEvent {
         }else{
             builder = new Notification.Builder(this);
         }
+
+        Log.d("WEWE_CALL"," "+message);
         builder.setSmallIcon(R.drawable.ic_stat_name)
+                .setContentTitle("Sip Notify")
+                .setContentText(message)
                 .setContentIntent(contentIntent)
                 .build();
-
+       // mNotificationManager.notify(1, builder.build());
         sendBroadcast(broadIntent);
     }
 
@@ -1045,7 +1064,7 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
 
     private PendingIntent openParkingViolationScreen(int notificationId) {
-        Log.d("TEST_WEWE","CALL start2");
+
 
         Intent fullScreenIntent = new Intent(this, IncomingActivity.class);
         fullScreenIntent.putExtra("incomingSession",notificationId);
@@ -1053,17 +1072,29 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
     }
 
+
+
+
     public void showPendingCallNotification(Context context, String contenTitle,String contenText,Intent intent) {
+
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelID)
-                .setContentTitle(contenTitle)
-                .setContentText(contenText)
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, callChannelID)
+                .setContentTitle("Входящий звонок")
+                .setContentText(contenTitle)
+                .setSmallIcon(R.drawable.ic_call)
+                .setCategory(NotificationCompat.CATEGORY_CALL)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .addAction(0,"Принять", PendingIntent.getActivity(context, 1, intent.putExtra("TRYING", 1), PendingIntent.FLAG_UPDATE_CURRENT))
+                .addAction(R.drawable.ic_finish_call,
+                        "Отказать", PendingIntent.getActivity(context, 2, intent.putExtra("TRYING", 2),PendingIntent.FLAG_UPDATE_CURRENT))
                 .setAutoCancel(true)
                 .setShowWhen(true)
                 .setContentIntent(contentIntent)
                 .setFullScreenIntent(contentIntent, true);
-        notificationManager.notify(PENDINGCALL_NOTIFICATION, builder.build());
+        mNotificationManager.notify(PENDINGCALL_NOTIFICATION, builder.build());
+
     }
 }
 

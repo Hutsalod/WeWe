@@ -35,8 +35,6 @@ public interface BaseApiService {
                                            @Field("VOIP") String voip,
                                            @Field("PUSH") String push);
 
-    // Fungsi ini untuk memanggil API http://10.0.2.2/mahasiswa/register.php
-
 
     @FormUrlEncoded
     @POST("rest_api/register/")
@@ -57,15 +55,8 @@ public interface BaseApiService {
     @POST("rest/user/email/")
     Call<JsonObject> postEmail(@Header("Authorization-Token") String authKeys, @Body Map<String, Object> params);
 
-    @Headers({"Content-type: application/json"})
-    @POST("rest/user/voip_token/")
-    public Call<ResponseBody> voip_token(@Header("Authorization-Token") String Token, @Body Map<String, Object> params);
-
     @GET("rest/user/settings/")
     Call<ResponseBody> getSettings(@Header("Authorization-Token") String authKeys);
-
-    @GET("rest/user/devices/")
-    Call<ResponseBody> getDevices(@Header("Authorization-Token") String authKeys);
 
 
     @GET("rest/user/access_device/")
@@ -101,58 +92,4 @@ public interface BaseApiService {
 
 
 
-    @GET("api/v1/users.info?")
-    public Call<ResponseBody>getStatus(@Query("username") String user, @Header("X-Auth-Token") String Token, @Header("X-User-Id") String id);
-
-@GET("api/v1/spotlight?")
-    public Call<ResponseBody>getList(@Query("query") String user, @Header("X-Auth-Token") String Token, @Header("X-User-Id") String id);
-
-
-    @GET("rest/blacklist/get/")
-    Call<ResponseBody>getBlacklist(@Header("Authorization-Token") String Token);
-
-    @Headers({"Content-Type: application/json"})
-    @POST("rest/blacklist/add/")
-    Call<ResponseBody>getBlacklistAdd(@Header("Authorization-Token") String Token, @Body Map<String, Object> params);
-
-    @Headers({"Content-Type: application/json"})
-    @POST("rest/call/voip/")
-    Call<ResponseBody>postCallvoip(@Header("Authorization-Token") String Token, @Body Map<String, Object> params);
-
-    @Headers({"Content-Type: application/json"})
-    @POST("rest/blacklist/delete/")
-    Call<JsonObject>getBlacklistDell(@Header("Authorization-Token") String Token, @Body Map<String, Object> params);
-
-
-    @GET("api/v1/users.list?count=0")
-    Call<ResponseBody>getListStatus(@Header("X-Auth-Token") String Token, @Header("X-User-Id") String Id);
-
-
-    @Headers({"Content-type: application/json"})
-    @POST("api/v1/push.token")
-    Call<ResponseBody>setPush(@Header("Authorization-Token") String Token, @Header("X-User-Id") String Id, @Body Map<String, Object> params);
-
-    @Multipart
-    @POST("api/v1/users.setAvatar")
-    Call<ResponseBody> setAvatarFile(@Header("X-Auth-Token") String Token, @Header("X-User-Id") String Id,
-                                     @Part MultipartBody.Part image);
-
-    @GET("api/v1/chat.search?")
-    @Headers({"Content-type: application/json"})
-    Call<ResponseBody> chat_search(@Header("X-Auth-Token") String Token, @Header("X-User-Id") String Id,
-                                   @Query("roomId") String text, @Query("searchText") String search);
-
-    @GET("api/v1/chat.ignoreUser?")
-    @Headers({"Content-type: application/json"})
-    Call<ResponseBody> chat_ignoreUserh(@Header("X-Auth-Token") String Token, @Header("X-User-Id") String Id,
-                                        @Query("rid") String text, @Query("userId") String userId, @Query("ignore") Boolean ignore);
-
-    @GET("api/v1/im.files?")
-    Call<JsonObject> im_files(@Header("X-Auth-Token") String Token, @Header("X-User-Id") String Id,
-                              @Query("roomId") String text);
-
-
-    @GET
-     Call<ResponseBody> image_set(@Header("X-Auth-Token") String Token, @Header("X-User-Id") String Id,
-                                  @Url String url);
 }

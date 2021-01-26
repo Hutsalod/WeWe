@@ -31,7 +31,7 @@ public class NotificationUtils {
     private static final int NOTIFICATION_ID = 200;
     private static final String PUSH_NOTIFICATION = "pushNotification";
     private static final String CHANNEL_ID = "myChannel";
-    private static final String CHANNEL_NAME = "WeWe";
+    private static final String CHANNEL_NAME = "WeWe Service";
     private static final String URL = "url";
     private static final String ACTIVITY = "activity";
     Map<String, Class> activityMap = new HashMap<>();

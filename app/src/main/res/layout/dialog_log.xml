@@ -4,6 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+
     <EditText
         android:id="@+id/editText4"
         android:layout_width="match_parent"
@@ -11,6 +18,6 @@
         android:layout_weight="1"
         android:gravity="top"
         android:inputType="textMultiLine"
-        android:text="Name"
+        android:text="Loading..."
         android:textSize="14sp" />
 </LinearLayout>

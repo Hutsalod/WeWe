@@ -16,13 +16,13 @@
             android:layout_marginRight="5dp" />
 
     <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
-            fresco:actualImageScaleType="fitCenter"
-            android:layout_marginRight="8dp" />
+        android:id="@+id/image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        fresco:actualImageScaleType="fitCenter" />
 
     <LinearLayout
             android:layout_width="0px"

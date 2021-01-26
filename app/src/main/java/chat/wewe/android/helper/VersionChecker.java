@@ -1,4 +1,4 @@
-package chat.wewe.android;
+package chat.wewe.android.helper;
 
 import android.os.AsyncTask;
 import android.util.Log;

@@ -156,7 +156,6 @@ public class SidebarMainPresenter extends BasePresenter<SidebarMainContract.View
             if (task.isFaulted()) {
                 return Task.forError(task.getError());
             }
-
             clearSubscriptions();
             String currentHostname = RocketChatCache.INSTANCE.getSelectedServerHostname();
             RealmHelper realmHelper = RealmStore.getOrCreate(currentHostname);

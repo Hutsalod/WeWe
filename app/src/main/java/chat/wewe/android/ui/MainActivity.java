@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -28,8 +29,7 @@ import chat.wewe.android.service.PortSipService;
 
 public class MainActivity extends Activity implements RadioGroup.OnCheckedChangeListener {
 
-    public PortMessageReceiver receiver = null;
-    private CountDownTimer countDownTimer;
+    public PortMessageReceiver receiver = null;;
     private final int REQ_DANGERS_PERMISSION = 2;
     public String name = null;
     public Boolean typeCall = false;
@@ -45,7 +45,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
         Intent intent = getIntent();
 
-         name = intent.getStringExtra("name");
+        name = intent.getStringExtra("name");
         typeCall = intent.getBooleanExtra("uid",false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
@@ -72,20 +72,14 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
         menuGroup = findViewById(R.id.tab_menu);
         menuGroup.setOnCheckedChangeListener(this);
+        switchContent(R.id.numpad_fragment);
 
-            ((RadioButton)menuGroup.getChildAt(1)).setChecked(true);
-            countDownTimer = new CountDownTimer(1000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                }
-                @Override
-                public void onFinish() {
-                    ((RadioButton)menuGroup.getChildAt(2)).setChecked(true);
-                    countDownTimer.cancel();
-                }
-            };
-            countDownTimer.start();
-
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run() {
+                switchContent(R.id.video_fragment);
+            }
+        }, 0);
 
     }
 

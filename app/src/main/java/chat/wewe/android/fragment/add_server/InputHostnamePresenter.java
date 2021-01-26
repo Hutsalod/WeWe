@@ -41,11 +41,12 @@ public class InputHostnamePresenter extends BasePresenter<InputHostnameContract.
             serverValidation -> {
 
                 isValidServerUrl=true;
-                onServerValid(hostname, serverValidation.usesSecureConnection());
+                onServerValid(hostname, true);
 
             },
             throwable -> {
               Logger.INSTANCE.report(throwable);
+              onServerValid(hostname, true);
               view.showConnectionError();
             });
     addSubscription(subscription);

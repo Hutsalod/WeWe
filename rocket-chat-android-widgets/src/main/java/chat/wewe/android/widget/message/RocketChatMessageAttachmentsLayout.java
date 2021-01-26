@@ -12,9 +12,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +31,7 @@ import java.util.List;
 
 import chat.wewe.android.widget.AbsoluteUrl;
 import chat.wewe.android.widget.R;
+import chat.wewe.android.widget.activity.ShowImageUrls;
 import chat.wewe.android.widget.helper.FrescoHelper;
 import chat.wewe.core.models.Attachment;
 import chat.wewe.core.models.AttachmentAuthor;
@@ -41,6 +44,8 @@ public class RocketChatMessageAttachmentsLayout extends LinearLayout {
     private LayoutInflater inflater;
     private AbsoluteUrl absoluteUrl;
     private List<Attachment> attachments;
+
+
 
     public RocketChatMessageAttachmentsLayout(Context context) {
         super(context);
@@ -214,13 +219,12 @@ public class RocketChatMessageAttachmentsLayout extends LinearLayout {
         }
     }
 
-    private void showImageAttachment(Attachment attachment, View attachmentView, boolean autoloadImages) {
+    private void showImageAttachment(final Attachment attachment, final View attachmentView, boolean autoloadImages) {
         final View imageContainer = attachmentView.findViewById(R.id.image_container);
         if (attachment.getImageUrl() == null) {
             imageContainer.setVisibility(GONE);
             return;
         }
-
         imageContainer.setVisibility(VISIBLE);
 
         final SimpleDraweeView attachedImage = attachmentView.findViewById(R.id.image);
@@ -236,6 +240,15 @@ public class RocketChatMessageAttachmentsLayout extends LinearLayout {
                 GenericDraweeHierarchyBuilder.newInstance(getResources())
                         .setPlaceholderImage(placeholderDrawable)
                         .build());
+        attachmentView.findViewById(R.id.image).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(attachmentView.getContext(), ShowImageUrls.class).putExtra("url", absolutize(attachment.getImageUrl()));
+
+                attachmentView.getContext().startActivity(intent);
+            }
+        });
+
 
         loadImage(absolutize(attachment.getImageUrl()), attachedImage, load, true);
     }
@@ -274,8 +287,10 @@ public class RocketChatMessageAttachmentsLayout extends LinearLayout {
         if (autoloadImage || isCached(Uri.parse(url))) {
             load.setVisibility(GONE);
             FrescoHelper.INSTANCE.loadImageWithCustomization(drawee, url);
+
             return;
         }
+
 
         load.setOnClickListener(new OnClickListener() {
             @Override
@@ -285,6 +300,7 @@ public class RocketChatMessageAttachmentsLayout extends LinearLayout {
                 FrescoHelper.INSTANCE.loadImageWithCustomization(drawee, url);
             }
         });
+
     }
 
     private boolean isCached(Uri loadUri) {
@@ -297,5 +313,6 @@ public class RocketChatMessageAttachmentsLayout extends LinearLayout {
         return ImagePipelineFactory.getInstance()
                 .getMainFileCache().hasKey(cacheKey);
     }
+
 
 }

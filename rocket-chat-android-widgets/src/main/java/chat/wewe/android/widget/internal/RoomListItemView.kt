@@ -119,6 +119,7 @@ class RoomListItemView : FrameLayout {
 
     fun showOnlineUserStatusIcon() {
         prepareDrawableAndShow(R.color.color_user_status_online)
+        name.alpha = 1.0F
     }
 
     fun showBusyUserStatusIcon() {
@@ -131,6 +132,7 @@ class RoomListItemView : FrameLayout {
 
     fun showOfflineUserStatusIcon() {
         prepareDrawableAndShow(R.color.color_user_status_offline)
+        name.alpha = 0.9F
     }
 
     private fun prepareDrawableAndShow(@ColorRes resId: Int) {

@@ -158,7 +158,7 @@ public class SidebarMainFragment extends AbstractFragment implements SidebarMain
         setupLogoutButton();
         setupVersionInfo();
         openDialog();
-
+        ((MainActivity) getActivity()).pane.openPane();
         searchView = rootView.findViewById(R.id.search);
         EditText searchEditText = (EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchEditText.setTextColor(Color.parseColor("#909092"));
@@ -177,6 +177,7 @@ public class SidebarMainFragment extends AbstractFragment implements SidebarMain
                         ((MainActivity) getActivity()).pane.openPane();
                     } else {
                         ((MainActivity) getActivity()).pane.closePane();
+                        ((MainActivity) getActivity()).bindView();
                     }
                 }
             }

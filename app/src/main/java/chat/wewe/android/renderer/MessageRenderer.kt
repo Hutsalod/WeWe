@@ -95,6 +95,8 @@ class MessageRenderer(val message: Message, val autoLoadImage: Boolean) {
             rocketChatMessageAttachmentsLayout.setAbsoluteUrl(absoluteUrl)
             rocketChatMessageAttachmentsLayout.setAttachments(attachments, autoLoadImage)
             rocketChatMessageAttachmentsLayout.visibility = View.VISIBLE
+
+            rocketChatMessageAttachmentsLayout
         }
     }
 }

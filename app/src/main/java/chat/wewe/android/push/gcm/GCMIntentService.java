@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import chat.wewe.android.RocketChatApplication;
-import chat.wewe.android.fragment.sidebar.FragmentSetting;
+import chat.wewe.android.fragment.setting.FragmentSetting;
 import chat.wewe.android.push.PushConstants;
 import chat.wewe.android.push.PushManager;
 import chat.wewe.android.service.PortSipService;
@@ -55,8 +55,6 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
 
     if (!"push".equals(extras.getString("collapse_key") )&& !"sip".equals(extras.getString("params"))) {
       PushManager.INSTANCE.handle(applicationContext, extras);
-
-      Log.d(LOG_TAG, "MESSAGE!!" + extras.toString());
       setLogout(applicationContext,true);
     }
 
@@ -250,7 +248,7 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
 
   public void startServiceSip(){
     Intent onLineIntent = new Intent(this, PortSipService.class);
-    onLineIntent.setAction(PortSipService.ACTION_SIP_REGIEST);
+    onLineIntent.setAction(PortSipService.ACTION_PUSH_MESSAGE);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       getBaseContext().startForegroundService(onLineIntent);
@@ -274,8 +272,5 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
       context.getSharedPreferences("Setting", Context.MODE_PRIVATE).edit().clear().commit();
     }
 
-    //  logout.closeView();
-
-   // context.getSharedPreferences("push-set", MODE_PRIVATE).edit().putBoolean("setLogout", set).commit();
   }
 }

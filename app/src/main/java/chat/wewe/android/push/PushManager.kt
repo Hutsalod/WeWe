@@ -288,7 +288,7 @@ object PushManager {
 
             if (isAndroidVersionAtLeast(Build.VERSION_CODES.O)) {
                 builder.setChannelId(host)
-                val groupChannel = NotificationChannel(host, host, NotificationManager.IMPORTANCE_HIGH)
+                val groupChannel = NotificationChannel(host, "WeWe", NotificationManager.IMPORTANCE_HIGH)
                 groupChannel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
                 groupChannel.enableLights(false)
                 groupChannel.enableVibration(true)
@@ -417,7 +417,7 @@ object PushManager {
 
             if (isAndroidVersionAtLeast(android.os.Build.VERSION_CODES.O)) {
                 builder.setChannelId(host)
-                val channel = NotificationChannel(host, host, NotificationManager.IMPORTANCE_HIGH)
+                val channel = NotificationChannel(host, "WeWe", NotificationManager.IMPORTANCE_HIGH)
                 channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
                 channel.enableLights(false)
                 channel.enableVibration(true)

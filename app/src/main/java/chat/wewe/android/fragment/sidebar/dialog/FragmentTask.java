@@ -118,18 +118,13 @@ public class FragmentTask extends AbstractFragment implements StatusConnect {
 
 
     recyclerView = v.findViewById(R.id.recyclerv_view);
-
     filtr_layaut = v.findViewById(R.id.filtr);
-
     addTaskActivity = v.findViewById(R.id.addTaskActivity);
     filtr_button = v.findViewById(R.id.filtr_button);
-
     waiting = v.findViewById(R.id.waiting);
-
     room_filtr = v.findViewById(R.id.room_filtr);
     user_filtr = v.findViewById(R.id.user_filtr);
     testUsers = v.findViewById(R.id.testUsers);
-
     stanUsers = v.findViewById(R.id.stanUsers);
 
     if(status==true)
@@ -154,15 +149,13 @@ public class FragmentTask extends AbstractFragment implements StatusConnect {
       @Override
       public void onClick(View view) {
         filtr();
-
       }
     });
-    Log.d("TEST_WEWE","TASK !");
+
     return  v;
   }
 
   public void filtr(){
-
     if(filtr_layaut.getVisibility()==VISIBLE) {
       filtr_layaut.setVisibility(GONE);
     }else {
@@ -173,30 +166,20 @@ public class FragmentTask extends AbstractFragment implements StatusConnect {
 
 
   private void showSpiner(){
-
-
-
     methodCall.rooms_get().continueWith(task -> {
       final JSONArray roomRoles = task.getResult();
       user.add( "Нет");
       for (int i = 0; i < task.getResult().length(); i++) {
         if(!roomRoles.getJSONObject(i).isNull("t")) {
      //     if (roomRoles.getJSONObject(i).getString("t").contains("p")|| roomRoles.getJSONObject(i).getString("t").contains("c"))
-
             if (!roomRoles.getJSONObject(i).isNull("u")) {
               add.add(roomRoles.getJSONObject(i).getString("fname"));
               room.add(roomRoles.getJSONObject(i).getString("rid"));
-
-
             }
 
-
           if (roomRoles.getJSONObject(i).getString("t").contains("d"))
-
             if (!roomRoles.getJSONObject(i).isNull("u")) {
               user.add(roomRoles.getJSONObject(i).getString("name"));
-
-
             }
         }
       }

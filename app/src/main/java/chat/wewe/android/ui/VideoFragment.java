@@ -85,23 +85,8 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 		userId = SipData.getString("ID_RC","");
 		roomId = SipData.getString("RM_ID","");
 		hostname = SipData.getString("hostname","");
-	//	methodCallHelper = new MethodCallHelper(getApplicationContext(), "https://chat.weltwelle.com");
-	//	roomRepository = new RealmRoomRepository("https://chat.weltwelle.com");
 		TableLayout dtmfPad =  view.findViewById(R.id.dtmf_pad);
-		/*MessageInteractor messageInteractor = new MessageInteractor(
-				new RealmMessageRepository("https://chat.weltwelle.com"),
-				roomRepository
-		);
 
-		presenter = new RoomPresenter(
-				roomId,
-				userRepository,
-				messageInteractor,
-				roomRepository,
-				absoluteUrlHelper,
-				methodCallHelper,
-				ConnectivityManager.getInstance(getApplicationContext())
-		);*/
 
 
 		imgSwitchCamera = (ImageView)view.findViewById(R.id.ibcamera);
@@ -416,7 +401,9 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 					case CONNECTED:
 					case FAILED:
 					case CLOSED:
+
 						updateVideo(application.mEngine);
+						getActivity().finish();
 						break;
 
 				}

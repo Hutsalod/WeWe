@@ -1,11 +1,8 @@
 package chat.wewe.android.api;
 
-import android.content.Context;
-import android.os.Handler;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 
@@ -15,13 +12,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Map;
 
-import chat.wewe.android.fragment.sidebar.FragmentSetting;
+import chat.wewe.android.fragment.setting.FragmentSetting;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class DeviceGet {
 

@@ -186,7 +186,7 @@ public class LoginFragment extends BaseFragment implements AdapterView.OnItemSel
                 onLineIntent.setAction(PortSipService.ACTION_SIP_REGIEST);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    getActivity().startService(onLineIntent);
+                    getActivity().startForegroundService(onLineIntent);
                 }else{
                     getActivity().startService(onLineIntent);
                 }
@@ -196,7 +196,7 @@ public class LoginFragment extends BaseFragment implements AdapterView.OnItemSel
                 Intent offLineIntent = new Intent(getActivity(), PortSipService.class);
                 offLineIntent.setAction(PortSipService.ACTION_SIP_UNREGIEST);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    getActivity().startService(offLineIntent);
+                    getActivity().startForegroundService(offLineIntent);
                 }else{
                     getActivity().startService(offLineIntent);
                 }

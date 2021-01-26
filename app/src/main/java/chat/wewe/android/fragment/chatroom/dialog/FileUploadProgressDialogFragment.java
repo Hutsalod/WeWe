@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import chat.wewe.android.R;
@@ -33,6 +34,7 @@ public class FileUploadProgressDialogFragment extends AbstractChatRoomDialogFrag
     args.putString("uplId", uplId);
 
     FileUploadProgressDialogFragment fragment = new FileUploadProgressDialogFragment();
+    fragment.setCancelable(false);
     fragment.setArguments(args);
 
     return fragment;
@@ -70,12 +72,10 @@ public class FileUploadProgressDialogFragment extends AbstractChatRoomDialogFrag
 
     int syncstate = state.getSyncState();
     if (syncstate == SyncState.SYNCED) {
-      Log.d("TEST_WEWE","TUPDATE8");
       dismiss();
     } else if (syncstate == SyncState.FAILED) {
 
       //TODO: prompt retry.
-      Log.d("TEST_WEWE","TUPDATE7");
       dismiss();
     } else {
       final Dialog dialog = getDialog();
@@ -85,9 +85,16 @@ public class FileUploadProgressDialogFragment extends AbstractChatRoomDialogFrag
                 .progressTextInto(
                         dialog.findViewById(R.id.txt_filesize_uploaded),
                         dialog.findViewById(R.id.txt_filesize_total));
-        Log.d("TEST_WEWE","TUPDATE3");
+        dialog.findViewById(R.id.closed).setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            dismiss();
+          }
+        });
       }
     }
+
+
   }
 
   @Override

@@ -55,5 +55,6 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$rootProject.ext.kotlinVersion"
     testImplementation "org.jetbrains.kotlin:kotlin-test:$rootProject.ext.kotlinVersion"
     testImplementation 'junit:junit:4.12'
+
     testImplementation "org.mockito:mockito-core:2.10.0"
 }

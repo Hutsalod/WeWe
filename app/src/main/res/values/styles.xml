@@ -30,6 +30,7 @@
         <item name="actionModeBackground">?attr/colorPrimaryDark</item>
         <item name="android:statusBarColor" tools:targetApi="21">?attr/colorPrimaryDark</item>
         <item name="android:navigationBarColor" tools:targetApi="21">?attr/colorPrimaryDark</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
 
     </style>
 

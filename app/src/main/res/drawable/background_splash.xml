@@ -4,12 +4,10 @@
     <item
         android:drawable="@color/colorPrimary"/>
 
-    <item
-        android:width="160dp"
-        android:height="212dp"
-        android:gravity="center">
+        <item>
         <bitmap
-            android:gravity="fill"
+            android:gravity="center"
+
             android:src="@drawable/intro_logo"/>
     </item>
 

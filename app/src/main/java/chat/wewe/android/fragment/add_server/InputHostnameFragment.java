@@ -46,8 +46,6 @@ public class InputHostnameFragment extends AbstractFragment implements InputHost
 
         container = rootView.findViewById(R.id.container);
         waitingView = rootView.findViewById(R.id.waiting);
-        rootView.findViewById(R.id.btn_connect).setOnClickListener(view -> handleConnect());
-  //      handleConnect();
     }
 
     private void setupVersionInfo() {
@@ -55,10 +53,6 @@ public class InputHostnameFragment extends AbstractFragment implements InputHost
         versionInfoView.setText(getString(R.string.version_info_text, BuildConfig.VERSION_NAME));
     }
 
-    private void handleConnect() {
-      //  hideSoftKeyboard();
-        presenter.connectTo("http://chat.weltwelle.com");
-    }
 
     private void hideSoftKeyboard() {
         InputMethodManager inputManager = (InputMethodManager)
@@ -71,7 +65,7 @@ public class InputHostnameFragment extends AbstractFragment implements InputHost
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter.bindView(this);
-        handleConnect();
+        presenter.connectTo("http://chat.weltwelle.com");
     }
 
     @Override
@@ -80,11 +74,6 @@ public class InputHostnameFragment extends AbstractFragment implements InputHost
         super.onDestroyView();
     }
 
-    private String getHostname() {
-        final TextView editor = (TextView) rootView.findViewById(R.id.editor_hostname);
-
-        return TextUtils.or(TextUtils.or(editor.getText(), editor.getHint()), "").toString().toLowerCase();
-    }
 
     private void showError(String errString) {
         Snackbar.make(rootView, errString, Snackbar.LENGTH_LONG).show();
@@ -92,7 +81,6 @@ public class InputHostnameFragment extends AbstractFragment implements InputHost
 
     @Override
     public void showLoader() {
-        container.setVisibility(View.GONE);
         waitingView.setVisibility(View.VISIBLE);
     }
 
@@ -100,7 +88,6 @@ public class InputHostnameFragment extends AbstractFragment implements InputHost
     public void hideLoader(Boolean isValidServerUrl) {
         if(!isValidServerUrl) {
             waitingView.setVisibility(View.GONE);
-            container.setVisibility(View.VISIBLE);
         }
     }
 

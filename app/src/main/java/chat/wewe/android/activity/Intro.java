@@ -1,61 +1,48 @@
 package chat.wewe.android.activity;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Window;
-import android.view.WindowManager;
 
 import java.util.Locale;
 
 import chat.wewe.android.R;
 import chat.wewe.android.RocketChatCache;
-import chat.wewe.android.api.BaseApiService;
-import chat.wewe.android.api.UtilsApiChat;
 
 
-public class Intro extends AppCompatActivity {
+public class Intro extends Activity {
 
-    private CountDownTimer countDownTimer;
-    public static boolean callSet,subscription;
-    private SharedPreferences SipData,sPref;
-    private String code;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.intro);
 
+                RocketChatCache.INSTANCE.setSelectedRoomId(null);
+                setLocale(getSharedPreferences("SIP", MODE_PRIVATE).getString("LANG_APP", "ru"));
 
-       // this.getSharedPreferences("caches", 0).edit().clear().apply();
+                    NotificationManager notifManager =  (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+                    notifManager.cancelAll();
+                    if(getSharedPreferences("Setting", MODE_PRIVATE).getInt("privary", '0')=='1'){
 
-        RocketChatCache.INSTANCE.setSelectedRoomId(null);
-        SipData = getSharedPreferences("SIP", MODE_PRIVATE);
-        code = getSharedPreferences("pin", MODE_PRIVATE).getString("code", "");
-        sPref = getSharedPreferences("Setting", MODE_PRIVATE);
-        setLocale(SipData.getString("LANG_APP", "ru"));
+                        startActivity(new Intent(Intro.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                        Intro.this.finish();
 
-
-
-
-                    if(sPref.getInt("privary", '0')=='1'){
-                            startActivity(new Intent(getApplication(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                     }else{
-                        startActivity(new Intent(getApplicationContext(), PrivaryPolicy.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+
+                        startActivity(new Intent(Intro.this, PrivaryPolicy.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                        Intro.this.finish();
                     }
-
-
     }
+
+
+
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
 

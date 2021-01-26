@@ -51,11 +51,11 @@ class RoomListFragment : Fragment(), RoomListContract.View {
         val args = arguments
         args?.let {
             actionId = args.getInt("actionId")
-            roomId = args.getString("roomId")
-            roomType = args.getString("roomType")
-            hostname = args.getString("hostname")
-            token = args.getString("token")
-            userId = args.getString("userId")
+            roomId = args.getString("roomId").toString()
+            roomType = args.getString("roomType").toString()
+            hostname = args.getString("hostname").toString()
+            token = args.getString("token").toString()
+            userId = args.getString("userId").toString()
         }
     }
 

@@ -120,7 +120,7 @@
 
                         android:layout_weight="1"
                         android:textColor="#1B1B1B"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         tools:text="John Doe" />
 
                     <TextView
@@ -156,7 +156,7 @@
                     <TextView
                         android:id="@+id/btn_status_online"
                         style="@style/sidebar_list_item"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="8dp"
                         android:drawableLeft="@drawable/userstatus_online"
                         android:drawablePadding="14dp"
                         android:text="@string/user_status_online" />
@@ -164,7 +164,7 @@
                     <TextView
                         android:id="@+id/btn_status_away"
                         style="@style/sidebar_list_item"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="8dp"
                         android:drawableLeft="@drawable/userstatus_away"
                         android:drawablePadding="14dp"
                         android:text="@string/user_status_away" />
@@ -172,7 +172,7 @@
                     <TextView
                         android:id="@+id/btn_status_busy"
                         style="@style/sidebar_list_item"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="8dp"
                         android:drawableLeft="@drawable/userstatus_busy"
                         android:drawablePadding="14dp"
                         android:text="@string/user_status_busy" />
@@ -180,7 +180,7 @@
                     <TextView
                         android:id="@+id/btn_status_invisible"
                         style="@style/sidebar_list_item"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="8dp"
                         android:drawableLeft="@drawable/userstatus_offline"
                         android:drawablePadding="14dp"
                         android:text="@string/user_status_invisible" />
@@ -206,8 +206,8 @@
                 android:layout_height="wrap_content"
                 android:background="#EFEFF4"
                 android:textColor="#777777"
-                android:textSize="14sp"
-                android:paddingLeft="32dp"
+                android:textSize="16sp"
+                android:paddingLeft="24dp"
                 android:paddingBottom="@dimen/margin_8"
                 android:text="АКАУНТ WEWE" />
 
@@ -219,18 +219,17 @@
             <TextView
                 android:id="@+id/edit_password"
                 style="@style/sidebar_list_item"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:drawablePadding="16dp"
-                android:fontFamily="sans-serif-light"
                 android:text="Сменить пароль"
                 android:textAppearance="?attr/textAppearanceListItemSmall"
                 android:textColor="#1B1B1B"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="16dp"
                 android:background="#C8C7CB" />
 
@@ -247,7 +246,7 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_gravity="center"
-                        android:fontFamily="sans-serif-light"
+                        android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:text="@string/fa_sign_out"
                         android:textColor="#D85946"
@@ -257,17 +256,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
+                    android:fontFamily="sans-serif"
                     android:text="@string/delete_message"
                     android:textAppearance="?attr/textAppearanceListItemSmall"
                     android:textColor="#D85946"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="16dp"
                 android:background="#C8C7CB" />
 
@@ -284,7 +283,7 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_gravity="center"
-                        android:fontFamily="sans-serif-light"
+                        android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:text="@string/fa_sign_out"
                         android:textColor="#D85946"
@@ -294,11 +293,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
+                    android:fontFamily="sans-serif"
                     android:text="@string/fragment_sidebar_main_logout_title"
                     android:textAppearance="?attr/textAppearanceListItemSmall"
                     android:textColor="#D85946"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
 
@@ -318,8 +317,8 @@
                 android:layout_height="wrap_content"
                 android:background="#EFEFF4"
                 android:textColor="#777777"
-                android:textSize="14sp"
-                android:paddingLeft="32dp"
+                android:textSize="16sp"
+                android:paddingLeft="24dp"
                 android:paddingBottom="@dimen/margin_8"
                 android:text="НАСТРОЙКИ" />
 
@@ -331,89 +330,91 @@
             <TextView
                 android:id="@+id/btn_language"
                 style="@style/sidebar_list_item"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:drawablePadding="16dp"
-                android:fontFamily="sans-serif-light"
+                android:fontFamily="sans-serif"
                 android:text="@string/str_6"
                 android:textAppearance="?attr/textAppearanceListItemSmall"
                 android:textColor="#1B1B1B"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="16dp"
                 android:background="#C8C7CB" />
 
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/switch3"
                 style="@style/sidebar_list_item"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:checked="true"
                 android:drawablePadding="16dp"
-                android:fontFamily="sans-serif-light"
+                android:fontFamily="sans-serif"
                 android:text="@string/minim_video"
                 android:textAppearance="?attr/textAppearanceListItemSmall"
                 android:textColor="#1B1B1B"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:theme="@style/MySwitch" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="16dp"
                 android:background="#C8C7CB" />
 
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/switch2"
                 style="@style/sidebar_list_item"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:checked="false"
                 android:drawablePadding="16dp"
-                android:fontFamily="sans-serif-light"
+                android:fontFamily="sans-serif"
                 android:text="@string/alter_server"
                 android:textAppearance="?attr/textAppearanceListItemSmall"
                 android:textColor="#1B1B1B"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:theme="@style/MySwitch" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="16dp"
                 android:background="#C8C7CB" />
 
             <TextView
                 android:id="@+id/edit_email"
                 style="@style/sidebar_list_item"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:drawablePadding="16dp"
-                android:fontFamily="sans-serif-light"
+                android:fontFamily="sans-serif"
                 android:text="Привязка аккаунта к почте"
                 android:textAppearance="?attr/textAppearanceListItemSmall"
                 android:textColor="#1B1B1B"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="16dp"
                 android:background="#C8C7CB" />
 
             <TextView
                 android:id="@+id/exetGoogle"
                 style="@style/sidebar_list_item"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:drawablePadding="16dp"
-                android:fontFamily="sans-serif-light"
+                android:fontFamily="sans-serif"
                 android:text="@string/str_2"
                 android:textAppearance="?attr/textAppearanceListItemSmall"
                 android:textColor="#1B1B1B"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <View
         android:layout_width="match_parent"
@@ -430,8 +431,8 @@
                 android:layout_height="wrap_content"
                 android:background="#EFEFF4"
                 android:textColor="#777777"
-                android:textSize="14sp"
-                android:paddingLeft="32dp"
+                android:textSize="16sp"
+                android:paddingLeft="24dp"
                 android:paddingBottom="@dimen/margin_8"
                 android:text="БЕЗОПАСНОСТЬ" />
             <View
@@ -442,38 +443,38 @@
             <TextView
                 android:id="@+id/securityBtn"
                 style="@style/sidebar_list_item"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:drawablePadding="16dp"
-                android:fontFamily="sans-serif-light"
+                android:fontFamily="sans-serif"
                 android:text="@string/str_5"
                 android:textAppearance="?attr/textAppearanceListItemSmall"
                 android:textColor="#1B1B1B"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="16dp"
                 android:background="#C8C7CB" />
 
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/deviceprivat"
                 style="@style/sidebar_list_item"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:checked="true"
                 android:drawablePadding="16dp"
-                android:fontFamily="sans-serif-light"
+                android:fontFamily="sans-serif"
                 android:text="@string/str_4"
                 android:textAppearance="?attr/textAppearanceListItemSmall"
                 android:textColor="#1B1B1B"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:theme="@style/MySwitch" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="16dp"
                 android:background="#C8C7CB" />
 
@@ -485,14 +486,14 @@
                 <TextView
                     android:id="@+id/blaclist"
                     style="@style/sidebar_list_item"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_weight="1"
                     android:drawablePadding="16dp"
-                    android:fontFamily="sans-serif-light"
+                    android:fontFamily="sans-serif"
                     android:text="@string/str_11"
                     android:textAppearance="?attr/textAppearanceListItemSmall"
                     android:textColor="#1B1B1B"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:layout_width="25dp"
@@ -526,14 +527,14 @@
                     android:id="@+id/friends"
                     style="@style/sidebar_list_item"
                     android:layout_width="match_parent"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_weight="1"
                     android:drawablePadding="16dp"
-                    android:fontFamily="sans-serif-light"
+                    android:fontFamily="sans-serif"
                     android:text="@string/str_10"
                     android:textAppearance="?attr/textAppearanceListItemSmall"
                     android:textColor="#1B1B1B"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:layout_width="25dp"
@@ -563,73 +564,73 @@
 
             <TextView
                 style="@style/sidebar_list_item"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:drawablePadding="16dp"
-                android:fontFamily="sans-serif-light"
+                android:fontFamily="sans-serif"
                 android:text="Версия сервера:  2.3.0"
                 android:textAppearance="?attr/textAppearanceListItemSmall"
                 android:textColor="#1B1B1B"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="16dp"
                 android:background="#C8C7CB" />
 
             <TextView
                 android:id="@+id/version_info"
                 style="@style/sidebar_list_item"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:drawablePadding="16dp"
-                android:fontFamily="sans-serif-light"
+                android:fontFamily="sans-serif"
                 android:text="Версия: 1.7.0 (1700)"
                 android:textAppearance="?attr/textAppearanceListItemSmall"
                 android:textColor="#1B1B1B"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="16dp"
                 android:background="#C8C7CB" />
 
             <TextView
                 android:id="@+id/policy_mss"
                 style="@style/sidebar_list_item"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:drawablePadding="16dp"
-                android:fontFamily="sans-serif-light"
+                android:fontFamily="sans-serif"
                 android:text="@string/str_3"
                 android:textAppearance="?attr/textAppearanceListItemSmall"
                 android:textColor="#1B1B1B"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="16dp"
                 android:background="#C8C7CB" />
 
             <TextView
         android:id="@+id/supportConnect"
         style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:drawablePadding="16dp"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:text="@string/str_1"
         android:textAppearance="?attr/textAppearanceListItemSmall"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="sans-serif"
         android:textColor="#1B1B1B" />
 
     <View
         android:id="@+id/view3"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="16dp"
         android:background="#C8C7CB" />
 
@@ -637,13 +638,13 @@
         android:id="@+id/log"
 
         style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:drawablePadding="16dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="sans-serif"
         android:text="Log"
         android:textAppearance="?attr/textAppearanceListItemSmall"
         android:textColor="#1B1B1B"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 
     <View
         android:layout_width="match_parent"
@@ -652,7 +653,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="28dp"
+                android:layout_height="32dp"
                 android:background="#EFEFF4" />
     <View
         android:layout_width="match_parent"
@@ -698,69 +699,69 @@ android:visibility="gone">
     <TextView
         android:id="@+id/languagede"
         style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:drawablePadding="16dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="sans-serif"
         android:background="@android:color/white"
         android:text="@string/language_1"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textAppearance="?attr/textAppearanceListItemSmall"
         android:textColor="#1B1B1B" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="16dp"
         android:background="#C8C7CB" />
 
     <TextView
         android:id="@+id/languageen"
         style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:drawablePadding="16dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="sans-serif"
         android:background="@android:color/white"
         android:text="@string/language_2"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textAppearance="?attr/textAppearanceListItemSmall"
         android:textColor="#1B1B1B" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="16dp"
         android:background="#C8C7CB" />
 
     <TextView
         android:id="@+id/languageru"
         style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:drawablePadding="16dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="sans-serif"
         android:background="@android:color/white"
         android:text="@string/language_3"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textAppearance="?attr/textAppearanceListItemSmall"
         android:textColor="#1B1B1B" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="16dp"
         android:background="#C8C7CB" />
 
     <TextView
         android:id="@+id/languageua"
         style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:drawablePadding="16dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="sans-serif"
         android:text="@string/language_4"
         android:background="@android:color/white"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textAppearance="?attr/textAppearanceListItemSmall"
         android:textColor="#1B1B1B" />
 
@@ -782,11 +783,11 @@ android:visibility="gone">
     <TextView
         android:id="@+id/nazadq"
         style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:drawablePadding="16dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="sans-serif"
         android:text="@string/str_7"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textAppearance="?attr/textAppearanceListItemSmall"
         android:textColor="#1B1B1B" />
 
@@ -855,27 +856,27 @@ android:visibility="gone">
     <TextView
         android:id="@+id/okKey"
         style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:drawablePadding="16dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="sans-serif"
         android:text="@string/str_9"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textAppearance="?attr/textAppearanceListItemSmall"
         android:textColor="#1B1B1B" />
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="16dp"
         android:background="#C8C7CB" />
     <TextView
         android:id="@+id/noKey"
         style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:drawablePadding="16dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="sans-serif"
         android:text="@string/str_8"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textAppearance="?attr/textAppearanceListItemSmall"
         android:textColor="#1B1B1B" />
 
@@ -930,11 +931,11 @@ android:visibility="gone">
     <TextView
         android:id="@+id/nazad2"
         style="@style/sidebar_list_item"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:drawablePadding="16dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="sans-serif"
         android:text="@string/str_7"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textAppearance="?attr/textAppearanceListItemSmall"
         android:textColor="#1B1B1B" />
 

@@ -22,6 +22,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.portsip.PortSipErrorcode;
 
@@ -36,61 +37,46 @@ import chat.wewe.android.util.Session;
 public class IncomingActivity extends Activity implements PortMessageReceiver.BroadcastListener, View.OnClickListener {
 
     public PortMessageReceiver receiver = null;
-    RocketChatApplication application;
-    TextView tips;
-    Button btnVideo;
-    long mSessionid;
-    boolean exit = false;
-    boolean notific = true;
-    private  final int NOTIFICATION_ID = 200;
-    private  final String PUSH_NOTIFICATION = "pushNotification";
-    private  final String CHANNEL_ID = "myChannel";
-    private  final String CHANNEL_NAME = "WeWe";
-    static final int RESULT_ENABLE = 1;
+    private RocketChatApplication application;
+    private TextView tips;
+    private Button btnVideo;
+    private long mSessionid;
+    private int mState;
+    public boolean exit = false;
 
-    DevicePolicyManager deviceManger;
-    ActivityManager activityManager;
-    ComponentName compName;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("TEST_WEWE","CALL incomingview");
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            setShowWhenLocked(true);
-            setTurnScreenOn(true);
-            KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-            if (keyguardManager!= null) {
-                keyguardManager.requestDismissKeyguard(this, null);
-            }
-        }else {
-            final Window win = getWindow();
-            win.addFlags( WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                    | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                    | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                    | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-        }
+        final Window win = getWindow();
+        win.addFlags( WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         setContentView(R.layout.incomingview);
-        Log.d("TEST_WEWE","CALL incomingview");
 
         tips = findViewById(R.id.sessiontips);
         btnVideo = findViewById(R.id.answer_video);
         receiver = new PortMessageReceiver();
         IntentFilter filter = new IntentFilter();
+
         filter.addAction(PortSipService.REGISTER_CHANGE_ACTION);
         filter.addAction(PortSipService.CALL_CHANGE_ACTION);
         filter.addAction(PortSipService.PRESENCE_CHANGE_ACTION);
+
         registerReceiver(receiver, filter);
         receiver.broadcastReceiver =this;
         Intent intent = getIntent();
+
         mSessionid = intent.getLongExtra("incomingSession", PortSipErrorcode.INVALID_SESSION_ID);
         Session session = CallManager.Instance().findSessionBySessionID(mSessionid);
         if(mSessionid== PortSipErrorcode.INVALID_SESSION_ID||session ==null||session.state!= Session.CALL_STATE_FLAG.INCOMING){
             this.finish();
+            return;
         }
 
         application = (RocketChatApplication) getApplication();
@@ -101,7 +87,16 @@ public class IncomingActivity extends Activity implements PortMessageReceiver.Br
         findViewById(R.id.answer_audio).setOnClickListener(this);
         btnVideo.setOnClickListener(this);
 
+        mState = intent.getIntExtra("TRYING",0);
 
+        switch (mState){
+            case 0:
+                break;
+            case 1: findViewById(R.id.answer_audio).performClick();
+                break;
+            case 2: findViewById(R.id.hangup_call).performClick();
+                break;
+        }
     }
 
     @Override
@@ -157,48 +152,7 @@ public class IncomingActivity extends Activity implements PortMessageReceiver.Br
                     case CLOSED:
                         Session anOthersession = CallManager.Instance().findIncomingCall();
                         if(anOthersession==null) {
-                            if(notific==true) {
-                                final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-                                        getBaseContext(), CHANNEL_ID);
-                                Notification notification;
 
-
-                                //When Inbox Style is applied, user can expand the notification
-                                NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-
-
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    notification = mBuilder.setSmallIcon(R.drawable.ic_stat_name).setTicker("").setWhen(0)
-                                            .setCategory(Notification.CATEGORY_MESSAGE)
-                                            .setAutoCancel(true)
-                                            .setContentTitle("WeWe")
-                                            .setStyle(inboxStyle)
-                                            .setSmallIcon(R.drawable.ic_stat_name)
-                                            .setContentText("Пропущенный звонок").build();
-
-                                } else {
-                                    notification = mBuilder.setSmallIcon(R.drawable.ic_stat_name).setTicker("ff").setWhen(0).setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                                            .setCategory(Notification.CATEGORY_MESSAGE)
-                                            .setAutoCancel(true)
-                                            .setContentTitle("WeWe")
-                                            .setStyle(inboxStyle)
-                                            .setSmallIcon(R.drawable.ic_stat_name)
-                                            .setContentText("Пропущенный звонок").build();
-                                }
-
-
-                                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
-                                            CHANNEL_NAME,
-                                            NotificationManager.IMPORTANCE_LOW);
-                                    notificationManager.createNotificationChannel(channel);
-
-                                }
-                                notificationManager.notify(NOTIFICATION_ID, notification);
-                            }
-                            this.finish();
                         }else{
                             setVideoAnswerVisibility(anOthersession);
                             tips.setText(anOthersession.displayName);
@@ -213,15 +167,13 @@ public class IncomingActivity extends Activity implements PortMessageReceiver.Br
 
     @Override
     public void onClick(View view) {
-        notific=false;
         if(application.mEngine!=null){
-
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(PortSipService.PENDINGCALL_NOTIFICATION);
             Session currentLine = CallManager.Instance().findSessionBySessionID(mSessionid);
             switch (view.getId()){
                 case R.id.answer_audio:
                 case R.id.answer_video:
                     if (currentLine.state != Session.CALL_STATE_FLAG.INCOMING) {
-                        //    Toast.makeText(this,currentLine.lineName + "No incoming call on current line",Toast.LENGTH_SHORT);
                         return;
                     }
                     Ring.getInstance(this).stopRingTone();
@@ -237,7 +189,6 @@ public class IncomingActivity extends Activity implements PortMessageReceiver.Br
                     if (currentLine.state == Session.CALL_STATE_FLAG.INCOMING) {
                         application.mEngine.rejectCall(currentLine.sessionID, 486);
                         currentLine.Reset();
-                        // Toast.makeText(this,currentLine.lineName + ": Rejected call",Toast.LENGTH_SHORT);
                     }
                     break;
             }

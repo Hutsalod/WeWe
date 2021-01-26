@@ -159,8 +159,8 @@ class LoginFragment : AbstractServerConfigFragment(), LoginContract.View {
                     }
 
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                        Log.e("debug", "onFailure: ERROR > $t")
-                        Log.d("DEBUG_WEWE", "Start $t")
+                        Toast.makeText(activity, "Пожалуйста, подключитесь к Интернету", Toast.LENGTH_SHORT).show()
+                        Log.d("DEBUG_WEWE", "onFailure: ERROR > $t")
                         waiting.visibility = View.GONE
                     }
                 })
@@ -257,21 +257,21 @@ class LoginFragment : AbstractServerConfigFragment(), LoginContract.View {
                                     val privateKey: PrivateKey = kp.getPrivate()
                                     val privateKeyBytes = privateKey.encoded
                                     val privateKeyBytesBase64 = String(Base64.encode(privateKeyBytes, Base64.DEFAULT))
-                                    val ed = SipData!!.edit().putString("UF_SIP_NUMBER", UF_SIP_NUMBER)
+                                    SipData!!.edit().putString("UF_SIP_NUMBER", UF_SIP_NUMBER)
                                             .putString("UF_SIP_PASSWORD", UF_SIP_PASSWORD)
                                             .putString("INNER_GROUP", INNER_GROUP)
                                             .putString("CHAT_PUBLIC", publicKeyBytesBase64)
                                             .putString("CHAT_PRIVAT", privateKeyBytesBase64)
-                                    ed.commit()
+                                    .commit()
 
                                     setPrivatKey(token,publicKeyBytesBase64)
 
                                     if (switchServer.isChecked()) {
-                                        ed.putString("UF_ROCKET_SERVER", UF_ROCKET_SERVER)
+                                        SipData!!.edit().putString("UF_ROCKET_SERVER", UF_ROCKET_SERVER)
                                                 .putString("UF_SIP_SERVER", UF_SIP_SERVER)
                                                 .commit()
                                     } else {
-                                        ed.putString("UF_ROCKET_SERVER", "chat.weltwelle.com")
+                                        SipData!!.edit().putString("UF_ROCKET_SERVER", "chat.weltwelle.com")
                                                 .putString("UF_SIP_SERVER", "sip.weltwelle.com")
                                                 .commit()
                                     }
@@ -291,7 +291,7 @@ class LoginFragment : AbstractServerConfigFragment(), LoginContract.View {
                                         onLineIntent.putExtra(PortSipService.EXTRA_PUSHTOKEN, FirebaseInstanceId.getInstance().token)
                                         onLineIntent.action = PortSipService.ACTION_SIP_REGIEST
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                            activity!!.startService(onLineIntent)
+                                            activity!!.startForegroundService(onLineIntent)
                                         } else {
                                             activity!!.startService(onLineIntent)
                                         }

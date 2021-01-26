@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
 import chat.wewe.persistence.encrypt.Cryptor;
 import chat.wewe.android.BackgroundLooper;
 import chat.wewe.android.R;
@@ -308,7 +309,7 @@ public class RoomFragment extends AbstractChatRoomFragment implements
         };
 
 
-        getPrivatKey(getActivity().getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", ""),RocketChatCache.INSTANCE.getUserName());
+    //    getPrivatKey(getActivity().getSharedPreferences("SIP", MODE_PRIVATE).getString("TOKEN_WE", ""),RocketChatCache.INSTANCE.getUserName());
 
         setupToolbar();
         setupSidebar();
@@ -515,16 +516,16 @@ public class RoomFragment extends AbstractChatRoomFragment implements
         String action = intent.getAction();
         String type = intent.getType();
         if (Intent.ACTION_SEND.equals(action) && type != null) {
-            if (type.startsWith("image/*")) {
+
 
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
+                                dialog.dismiss();
                                 handleSendImage(intent);  // Handle multiple images being sent
                                 getActivity().getIntent().setAction(null);
-                                dialog.dismiss();
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -540,11 +541,11 @@ public class RoomFragment extends AbstractChatRoomFragment implements
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("Отправить фото или видео ?").setPositiveButton("Да", dialogClickListener)
+                builder.setMessage("Отправить файл " + RocketChatCache.INSTANCE.getUserName() + " ?").setPositiveButton("Да", dialogClickListener)
                         .setNegativeButton("Нет", dialogClickListener).show();
 
             }
-        }
+
     }
 
     void handleSendImage(Intent intent) {
@@ -574,7 +575,7 @@ public class RoomFragment extends AbstractChatRoomFragment implements
         if (!TextUtils.isEmpty(uplId)) {
             FileUploadProgressDialogFragment.create(hostname, roomId, uplId)
                     .show(getFragmentManager(), "FileUploadProgressDialogFragment");
-            Log.d("TEST_WEWE","TUPDATE1");
+
         } else {
 
         }
@@ -860,7 +861,6 @@ public class RoomFragment extends AbstractChatRoomFragment implements
     }
 
     public void openDialogUserss(Message message) {
-        Log.d("TEST_WEWE","USER"+hostname+ " "+roomId+ " "+userId);
         AddUsersDialogFragment di = new AddUsersDialogFragment().create(hostname,roomId,userId,1);
         di.setActionListener(new AddUsersDialogFragment.ActionListener() {
             @Override
@@ -991,4 +991,5 @@ public class RoomFragment extends AbstractChatRoomFragment implements
     public void loadMissedMessages() {
         presenter.loadMissedMessages();
     }
+
 }

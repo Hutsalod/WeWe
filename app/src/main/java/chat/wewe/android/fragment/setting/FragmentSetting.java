@@ -1,4 +1,4 @@
-package chat.wewe.android.fragment.sidebar;
+package chat.wewe.android.fragment.setting;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -45,8 +45,9 @@ import chat.wewe.android.api.BaseApiService;
 import chat.wewe.android.api.DeviceGet;
 import chat.wewe.android.api.MethodCallHelper;
 import chat.wewe.android.api.UtilsApi;
-import chat.wewe.android.api.UtilsApiChat;
 import chat.wewe.android.fragment.AbstractFragment;
+import chat.wewe.android.fragment.sidebar.SidebarMainContract;
+import chat.wewe.android.fragment.sidebar.SidebarMainPresenter;
 import chat.wewe.android.fragment.sidebar.dialog.EditPasswordDialogFragment;
 import chat.wewe.android.fragment.sidebar.dialog.EmailFragment;
 import chat.wewe.android.fragment.sidebar.dialog.LogDialogFragment;
@@ -80,19 +81,14 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
     private SharedPreferences SipData,Preferences;
     private  SwitchCompat switch1;
     private   TextView stan_user_name,statusConnetc;
-    private BaseApiService mApiServiceChat,mApiService;
+    private BaseApiService mApiService;
     private  final Integer REQUEST_GET_SINGLE_FILE = 51;
     private String device = "0";
     static private SidebarMainContract.Presenter presenter;
     private RoomListAdapter adapter;
-    private SearchView searchView;
-    private TextView loadMoreResultsText;
-    private List<RoomSidebar> roomSidebarList = Collections.emptyList();
-    private Disposable spotlightDisposable;
     private String hostname,userId;
     public  MethodCallHelper methodCallHelper;
     public ImageView stanUsers;
-    private boolean dialogSet = false;
     private static final String HOSTNAME = "hostname",USERID = "userId";
     public static int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 5469;
     @Override
@@ -158,7 +154,6 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
         methodCallHelper = new MethodCallHelper(getContext(), hostname);
         SipData = getActivity().getSharedPreferences("SIP", MODE_PRIVATE);
         Preferences = getActivity().getSharedPreferences("Setting", MODE_PRIVATE);
-        mApiServiceChat = UtilsApiChat.getAPIService();
         mApiService = UtilsApi.getAPIService();
 
 
@@ -236,8 +231,9 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
         });
 
         rootView.findViewById(R.id.supportConnect).setOnClickListener(view -> {
-            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                    "mailto","support@weltwelle.com", null));
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.setType("message/rfc822");
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"support@weltwelle.com"});
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Support on Android application");
             emailIntent.putExtra(Intent.EXTRA_TEXT, "Support");
             startActivity(Intent.createChooser(emailIntent, "Support"));
@@ -508,7 +504,7 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
             Intent offLineIntent = new Intent(getActivity(), PortSipService.class);
             offLineIntent.setAction(PortSipService.ACTION_SIP_UNREGIEST);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                getActivity().startService(offLineIntent);
+                getActivity().startForegroundService(offLineIntent);
             }else{
                 getActivity().startService(offLineIntent);
             }
@@ -527,36 +523,12 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
     }
 
     private void onRenderCurrentUser(User user) {
-        Log.d("QQRRXX","Test");
         if (user != null) {
             UserRenderer userRenderer = new UserRenderer(user);
             userRenderer.showAvatar(rootView.findViewById(R.id.current_user_avatar), hostname);
             userRenderer.showUsername(rootView.findViewById(R.id.current_user_name));
             userRenderer.showStatusColor(rootView.findViewById(R.id.current_user_status));
-            Log.d("QQRRXX","33");
 
-        }
-
-        if(RocketChatCache.INSTANCE.getSessionToken() != null) {
-            if (getActivity().getSharedPreferences("Sub", MODE_PRIVATE).getBoolean("Sub", false) == true || getActivity().getSharedPreferences("Sub", MODE_PRIVATE).getBoolean("SubApi", false) == true) {
-                if (dialogSet == false) {
-                    dialogSet = true;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        if (!Settings.canDrawOverlays(getActivity())) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                            builder.setMessage("Для нормального отображение звонков, нужно разрешить настройки!")
-                                    .setCancelable(false)
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            testPermission();
-                                        }
-                                    });
-                            builder.create().show();
-
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -599,20 +571,6 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
 
 
 
-
-    public void testPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            if (!Settings.canDrawOverlays(getActivity().getApplicationContext())) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                        Uri.parse("package:" + getActivity().getPackageName()));
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
-                }
-            }
-
-
-        }
-    }
 
     @Override
     public void noConnect() {

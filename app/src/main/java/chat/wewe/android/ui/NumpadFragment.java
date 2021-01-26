@@ -54,7 +54,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
-import static chat.wewe.android.activity.Intro.callSet;
 
 
 public class NumpadFragment extends BaseFragment implements AdapterView.OnItemSelectedListener, View.OnClickListener,
@@ -62,6 +61,7 @@ public class NumpadFragment extends BaseFragment implements AdapterView.OnItemSe
     private EditText etSipNum;
     private TextView mtips;
     private Spinner spline;
+    private boolean callSet;
 
     protected RoomContract.Presenter presenter;
     CheckBox cbSendVideo, cbRecvVideo, cbConference, cbSendSdp;
@@ -644,39 +644,5 @@ public class NumpadFragment extends BaseFragment implements AdapterView.OnItemSe
         }
     }
 
-    public  void postCallvoip(Context Context, String NAME){
-        SharedPreferences SipData;
-        BaseApiService mApiService = UtilsApi.getAPIService();
-        SipData = Context.getSharedPreferences("SIP", MODE_PRIVATE);
-        Log.d("TREWQ",""+ UUID.randomUUID().toString()+" "+NAME);
-        Map<String, Object> jsonParams = new ArrayMap<>();
-        jsonParams.put("GUID", UUID.randomUUID().toString());
-        jsonParams.put("LOGIN_TO", NAME);
-        mApiService.postCallvoip("KEY:"+SipData.getString("TOKENWE",""),jsonParams)
-                .enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()){
-                            try {
-                                JSONObject jsonRESULTS = new JSONObject(response.body().string());
-                                Log.d("TREWQ",""+jsonRESULTS+" "+jsonRESULTS.getJSONObject("result").getString("ERROR"));
-                                if(jsonRESULTS.getJSONObject("result").getString("SUCCESS").equals("false")) {
-                                    Toast toast = Toast.makeText(getActivity(), jsonRESULTS.getJSONObject("result").getString("ERROR"), Toast.LENGTH_LONG);
-                                    toast.setGravity(Gravity.CENTER, 0, 50);
-                                    toast.show();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    }
-                });
-    }
 }

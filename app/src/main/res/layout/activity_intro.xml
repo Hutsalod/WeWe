@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     android:background="#383547"
 
-    android:orientation="vertical"
-    tools:context=".activity.Intro">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,10 +21,10 @@
             android:layout_height="160dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="28dp"
-            app:srcCompat="@drawable/ic_logo_vector" />
+            android:src="@drawable/ic_logo_vector"
+            tools:ignore="VectorDrawableCompat" />
 
         <TextView
-            android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="34dp"
@@ -33,19 +32,6 @@
             android:textColor="#FFFFFF"
             android:textSize="24sp"
             android:visibility="visible" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:foreground="@drawable/ic_intro_bottom" />
     </LinearLayout>
 
 </LinearLayout>
