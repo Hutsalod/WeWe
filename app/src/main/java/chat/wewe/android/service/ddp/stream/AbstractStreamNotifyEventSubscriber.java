@@ -70,8 +70,6 @@ public abstract class AbstractStreamNotifyEventSubscriber extends AbstractDDPDoc
     if ("removed".equals(msg)) {
 
       pane.openPane();
-
-      Log.d("QQWEWE", "removed");
       realmHelper.executeTransaction(realm ->
           realm.where(getModelClass())
               .equalTo(getPrimaryKeyForModel(), target.getString(getPrimaryKeyForModel()))

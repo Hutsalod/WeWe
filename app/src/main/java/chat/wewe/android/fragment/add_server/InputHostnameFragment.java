@@ -65,7 +65,7 @@ public class InputHostnameFragment extends AbstractFragment implements InputHost
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter.bindView(this);
-        presenter.connectTo("http://chat.weltwelle.com");
+        presenter.connectTo("https://chat.weltwelle.com");
     }
 
     @Override

@@ -39,6 +39,7 @@ dependencies {
     implementation supportDependencies.designSupportLibrary
     implementation extraDependencies.rxAndroid
     implementation extraDependencies.optional
+    implementation 'org.bouncycastle:bcpkix-jdk15on:1.56'
     testImplementation "org.jetbrains.kotlin:kotlin-test:$rootProject.ext.kotlinVersion"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$rootProject.ext.kotlinVersion"
     testImplementation 'org.json:json:20170516'

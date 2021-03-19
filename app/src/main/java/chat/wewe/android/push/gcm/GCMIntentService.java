@@ -2,12 +2,16 @@ package chat.wewe.android.push.gcm;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
@@ -20,11 +24,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import chat.wewe.android.R;
 import chat.wewe.android.RocketChatApplication;
 import chat.wewe.android.fragment.setting.FragmentSetting;
 import chat.wewe.android.push.PushConstants;
 import chat.wewe.android.push.PushManager;
 import chat.wewe.android.service.PortSipService;
+
+import static android.app.Notification.VISIBILITY_PUBLIC;
 
 @SuppressLint("NewApi")
 public class GCMIntentService extends GcmListenerService implements PushConstants {
@@ -45,21 +52,20 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
 
     extras = normalizeExtras(applicationContext, extras);
 
-    if ("sip".equals(extras.getString("params")))
+
+   if(!RocketChatApplication.isActivityVisible() && !"sip".equals(extras.getString("params")))
+      PushManager.INSTANCE.handle(applicationContext, extras);
+
+    if (!"push".equals(extras.getString("collapse_key") ) && !"sip".equals(extras.getString("params"))) {
+      PushManager.INSTANCE.handle(applicationContext, extras);
+      setLogout(applicationContext);
+    }
+
+    if ("sip".equals(extras.getString("params"))) {
       startServiceSip();
-
-  if(!RocketChatApplication.isActivityVisible() && !"sip".equals(extras.getString("params")))
-      PushManager.INSTANCE.handle(applicationContext, extras);
-
-
-
-    if (!"push".equals(extras.getString("collapse_key") )&& !"sip".equals(extras.getString("params"))) {
-      PushManager.INSTANCE.handle(applicationContext, extras);
-      setLogout(applicationContext,true);
     }
 
   }
-
   /*
    * Change a values key in the extras bundle
    */
@@ -123,33 +129,6 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
     }
 
     return value;
-  }
-
-  private boolean isAppIsInBackground(Context context) {
-    boolean isInBackground = true;
-
-    ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
-      List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
-      for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
-        if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-          for (String activeProcess : processInfo.pkgList) {
-            if (activeProcess.equals(context.getPackageName())) {
-              isInBackground = false;
-            }
-          }
-        }
-      }
-    }
-    else
-    {
-      List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
-      ComponentName componentInfo = taskInfo.get(0).topActivity;
-      if (componentInfo.getPackageName().equals(context.getPackageName())) {
-        isInBackground = false;
-      }
-    }
-    return isInBackground;
   }
 
   /*
@@ -264,12 +243,13 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
     return (String) appName;
   }
 
-  public static void   setLogout(Context context,Boolean set) {
+  public static void   setLogout(Context context) {
     if(RocketChatApplication.isActivityVisible()) {
       FragmentSetting.setLogout();
       context.getSharedPreferences("SIP", Context.MODE_PRIVATE).edit().clear().commit();
       context.getSharedPreferences("pin", Context.MODE_PRIVATE).edit().clear().commit();
       context.getSharedPreferences("Setting", Context.MODE_PRIVATE).edit().clear().commit();
+      PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("regSip", false).commit();
     }
 
   }

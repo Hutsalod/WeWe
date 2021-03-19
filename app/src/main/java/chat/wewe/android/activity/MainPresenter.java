@@ -228,7 +228,7 @@ public class MainPresenter extends BasePresenter<MainContract.View>
                         connectivity -> {
                             if (connectivity.state == ServerConnectivity.STATE_CONNECTED) {
                                 //TODO: notify almost connected or something like that.
-//                                view.showConnectionOk();
+                               view.showConnectionOk();
                             } else if (connectivity.state == ServerConnectivity.STATE_DISCONNECTED) {
                                 if (connectivity.code == DDPClient.REASON_NETWORK_ERROR) {
                                     view.showConnectionError();

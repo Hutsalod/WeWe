@@ -76,8 +76,10 @@ public abstract class AbstractMessageViewHolder extends ModelViewHolder<PairedMe
       setSequential(true);
     }
 
-    if(pairedMessage.target.getUser().getName().equals("WeWe"))
+  if (pairedMessage.target.getUser().getName() != null ) {
+    if (pairedMessage.target.getUser().getName() == "WeWe")
       avatar.setVisibility(View.GONE);
+  }
   }
 
   private void setSequential(boolean sequential) {

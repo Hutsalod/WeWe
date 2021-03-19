@@ -52,8 +52,7 @@ public class IncomingActivity extends Activity implements PortMessageReceiver.Br
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        final Window win = getWindow();
-        win.addFlags( WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+        getWindow().addFlags( WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                 | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
@@ -69,7 +68,7 @@ public class IncomingActivity extends Activity implements PortMessageReceiver.Br
         filter.addAction(PortSipService.PRESENCE_CHANGE_ACTION);
 
         registerReceiver(receiver, filter);
-        receiver.broadcastReceiver =this;
+        receiver.broadcastReceiver = this;
         Intent intent = getIntent();
 
         mSessionid = intent.getLongExtra("incomingSession", PortSipErrorcode.INVALID_SESSION_ID);
@@ -95,6 +94,8 @@ public class IncomingActivity extends Activity implements PortMessageReceiver.Br
             case 1: findViewById(R.id.answer_audio).performClick();
                 break;
             case 2: findViewById(R.id.hangup_call).performClick();
+                break;
+            default:
                 break;
         }
     }
@@ -189,6 +190,8 @@ public class IncomingActivity extends Activity implements PortMessageReceiver.Br
                     if (currentLine.state == Session.CALL_STATE_FLAG.INCOMING) {
                         application.mEngine.rejectCall(currentLine.sessionID, 486);
                         currentLine.Reset();
+
+
                     }
                     break;
             }
@@ -197,6 +200,7 @@ public class IncomingActivity extends Activity implements PortMessageReceiver.Br
         Session anOthersession = CallManager.Instance().findIncomingCall();
         if(anOthersession==null) {
             this.finish();
+            stopServiceSip();
         }else{
             mSessionid = anOthersession.sessionID;
             setVideoAnswerVisibility(anOthersession);
@@ -225,5 +229,10 @@ public class IncomingActivity extends Activity implements PortMessageReceiver.Br
         }
 
         return super.dispatchKeyEvent(event);
+    }
+
+    public void stopServiceSip(){
+        startService(new Intent(this, PortSipService.class)
+                .setAction(PortSipService.ACTION_SIP_CLOSE));
     }
 }

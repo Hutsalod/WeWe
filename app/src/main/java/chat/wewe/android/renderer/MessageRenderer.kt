@@ -57,7 +57,8 @@ class MessageRenderer(val message: Message, val autoLoadImage: Boolean) {
      */
     fun showTimestampOrMessageState(textView: TextView) {
         when (message.syncState) {
-            SyncState.SYNCING -> textView.text = textView.context.getText(R.string.sending)
+           // SyncState.SYNCING -> textView.text = textView.context.getText(R.string.sending)
+            SyncState.SYNCING -> textView.text = ""
             SyncState.NOT_SYNCED -> textView.text = textView.context.getText(R.string.not_synced)
             SyncState.FAILED -> textView.text = textView.context.getText(R.string.failed_to_sync)
             else -> textView.text = DateTime.fromEpocMs(message.timestamp, DateTime.Format.TIME)

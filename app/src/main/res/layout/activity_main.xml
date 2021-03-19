@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"
-        android:visibility="invisible">
+        android:visibility="gone">
 
         <include
             layout="@layout/sidebar"
@@ -114,7 +114,6 @@
                 app:menu="@menu/menu">
 
             </android.support.design.widget.BottomNavigationView>
-
         </LinearLayout>
 
         <android.support.design.widget.CoordinatorLayout
@@ -140,8 +139,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clickable="true"
-                android:visibility="visible"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                android:visibility="visible"/>
         </android.support.design.widget.CoordinatorLayout>
 
 

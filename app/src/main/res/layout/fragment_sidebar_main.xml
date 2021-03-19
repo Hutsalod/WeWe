@@ -86,7 +86,7 @@
             android:layout_height="40dp" />
 
         <TextView
-            android:id="@+id/current_user_name"
+            android:id="@+id/user_name"
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

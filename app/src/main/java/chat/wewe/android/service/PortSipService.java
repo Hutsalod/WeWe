@@ -52,6 +52,7 @@ import chat.wewe.android.util.Session;
 public class PortSipService extends Service implements OnPortSIPEvent {
     public static final String ACTION_SIP_REGIEST = "PortSip.AndroidSample.Test.REGIEST";
     public static final String ACTION_SIP_UNREGIEST = "PortSip.AndroidSample.Test.UNREGIEST";
+    public static final String ACTION_SIP_CLOSE = "PortSip.AndroidSample.Test.CLOSE";
     public static final String ACTION_PUSH_MESSAGE = "PortSip.AndroidSample.Test.PushMessageIncoming";
     public static final String ACTION_PUSH_TOKEN = "PortSip.AndroidSample.Test.PushToken";
 
@@ -85,6 +86,7 @@ public class PortSipService extends Service implements OnPortSIPEvent {
     private PortSipSdk mEngine;
     private RocketChatApplication applicaton;
     private  static final int SERVICE_NOTIFICATION  = 31414;
+    private    int setClose  = 0;
     public   static final int PENDINGCALL_NOTIFICATION = SERVICE_NOTIFICATION+1;
     private String channelID = "PortSipService";
     private String callChannelID = "Call Channel";
@@ -136,6 +138,10 @@ public class PortSipService extends Service implements OnPortSIPEvent {
                 registerToServer();
             } else if (ACTION_SIP_UNREGIEST.equals(intent.getAction()) && CallManager.Instance().regist) {
                 unregisterToServer();
+            } else if (ACTION_SIP_CLOSE.equals(intent.getAction()) && CallManager.Instance().regist) {
+                stopForeground(true);
+                stopSelfResult(startId);
+                mNotificationManager.cancelAll();
             }else if (ACTION_PUSH_TOKEN.equals(intent.getAction())) {
                 pushToken = intent.getStringExtra(EXTRA_PUSHTOKEN);
 
@@ -148,11 +154,7 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
         }
 
-        mNotificationManager.cancelAll();
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-           mNotificationManager.deleteNotificationChannel(channelID);
-        }
-        mNotificationManager.cancel(SERVICE_NOTIFICATION);
+
         return result;
     }
 
@@ -171,11 +173,9 @@ public class PortSipService extends Service implements OnPortSIPEvent {
             mNotificationManager.deleteNotificationChannel(channelID);
             mNotificationManager.deleteNotificationChannel(callChannelID);
         }
-        mNotificationManager = null;
-        Log.d("WEWE_CALL"," onDestroy");
 
-        mEngine.removeUser();
-        mEngine.DeleteCallManager();
+     //   mEngine.removeUser();
+    //    mEngine.DeleteCallManager();
 
     }
 
@@ -261,13 +261,11 @@ public class PortSipService extends Service implements OnPortSIPEvent {
 
         result = mEngine.setLicenseKey("2ANDRB4xQ0ExNkJCMUM4OUU1ODY2QTg5MTZDMDNGNzIwNUU4Q0BFMjg2QzhEQjVDMjA3QUM0Q0VGNjlCQ0M5NEJBRDIyM0A5MDJBRkYyQzdBMThGNzhGNTg4M0I2RTUzRTA4RjhGRkBCMEVDNkZFNkQxQTI5NEQ0MDAyQzhBRTY0NTZGNUY1Rg");
         if (result == PortSipErrorcode.ECoreWrongLicenseKey) {
-            Log.d("TEST_WEWE","start");
             showTipMessage("The wrong license key was detected, please check with sales@portsip.com or support@portsip.com");
             return;
         }
         else if (result  == PortSipErrorcode.ECoreTrialVersionLicenseKey)
         {
-            Log.d("TEST_WEWE","stop");
             Log.w("Trial Version","This trial version SDK just allows short conversation, you can't hearing anything after 2-3 minutes, contact us: sales@portsip.com to buy official version.");
             showTipMessage("This Is Trial Version");
         }
@@ -443,6 +441,7 @@ public class PortSipService extends Service implements OnPortSIPEvent {
         mEngine.unRegisterServer();
         mEngine.DeleteCallManager();
         CallManager.Instance().regist = false;
+
     }
 
     //--------------------
@@ -574,10 +573,8 @@ public class PortSipService extends Service implements OnPortSIPEvent {
             broadIntent.putExtra(EXTRA_CALL_SEESIONID, sessionId);
             String description = session.lineName + " onInviteFailure";
             broadIntent.putExtra(EXTRA_CALL_DESCRIPTION, description);
-            Log.d("TEST_WEWE","onInviteFailure session");
             sendPortSipMessage(description, broadIntent);
         }
-        Log.d("TEST_WEWE","onInviteFailure ");
         Ring.getInstance(this).stopRingBackTone();
     }
 
@@ -648,9 +645,12 @@ public class PortSipService extends Service implements OnPortSIPEvent {
             sendPortSipMessage(description, broadIntent);
 
         }
-        unregisterToServer();
+
+        stopForeground(true);
+        mNotificationManager.cancelAll();
         Ring.getInstance(this).stopRingTone();
         mNotificationManager.cancel(PENDINGCALL_NOTIFICATION);
+
 
 
     }
@@ -707,7 +707,6 @@ public class PortSipService extends Service implements OnPortSIPEvent {
             sendPortSipMessage(description, broadIntent);
 
         }
-        Log.d("TEST_WEWE","onReferAccepted session");
         Ring.getInstance(this).stopRingTone();
     }
 
@@ -1005,7 +1004,13 @@ public class PortSipService extends Service implements OnPortSIPEvent {
             for (HashMap.Entry<String, String> entry : headers.entrySet()) {
                 applicaton.mEngine.addSipMessageHeader(-1, "INVITE", 1, entry.getKey(), entry.getValue());
             }
-            applicaton.mEngine.sendVideo(applicaton.mEngine.call("wewe_token", true, false), true);
+
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("regSip", false)==false) {
+                applicaton.mEngine.sendVideo(applicaton.mEngine.call("wewe_token", true, false), true);
+                stopForeground(true);
+                mNotificationManager.cancelAll();
+            }
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("regSip", true).commit();
         } else {//close
             if (mCpuLock != null) {
                 synchronized (mCpuLock) {

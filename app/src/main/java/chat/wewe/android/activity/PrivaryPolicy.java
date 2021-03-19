@@ -40,17 +40,6 @@ public class PrivaryPolicy extends AppCompatActivity {
         sPref = getSharedPreferences("Setting", MODE_PRIVATE);
         sPrefs = getSharedPreferences("pin", MODE_PRIVATE);
         code = sPrefs.getString("code", "");
-        if(sPref.getInt("privary", '0')=='1'){
-            if(code=="") {
-                finish();
-               startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
-
-            } else{
-                finish();
-           startActivity(new Intent(getApplicationContext(), PinCodeLong.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
-
-            }
-        }
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
@@ -74,7 +63,7 @@ public class PrivaryPolicy extends AppCompatActivity {
     public void privaryOK(View view) {
         sPref = getSharedPreferences("Setting", MODE_PRIVATE);
         SharedPreferences.Editor ed = sPref.edit();
-        ed.putInt("privary", '1');
+        ed.putBoolean("PrivaryPolicy", true);
         ed.commit();
         if (privary.isChecked()==true){
             if(code=="") {

@@ -3,6 +3,7 @@ package chat.wewe.android.widget.message;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -369,6 +370,15 @@ public class MessageFormLayout extends LinearLayout {
 
   public interface BlocingUsers {
     void onSubmitText();
+  }
+
+  public void setEncrypted(boolean encrypted) {
+
+
+    if(encrypted==true && keyboard_container != null)
+      keyboard_container.setBackgroundColor(Color.parseColor("#90bbbbbb"));
+    else
+      keyboard_container.setBackgroundColor(Color.parseColor("#ffffff"));
   }
 
   public void setBlocing(boolean enabled) {

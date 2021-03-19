@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.util.Log;
@@ -61,7 +62,7 @@ public class NumpadFragment extends BaseFragment implements AdapterView.OnItemSe
     private EditText etSipNum;
     private TextView mtips;
     private Spinner spline;
-    private boolean callSet;
+    private boolean callSet = true;
 
     protected RoomContract.Presenter presenter;
     CheckBox cbSendVideo, cbRecvVideo, cbConference, cbSendSdp;
@@ -71,8 +72,8 @@ public class NumpadFragment extends BaseFragment implements AdapterView.OnItemSe
     SharedPreferences SipData;
     private PortSIPVideoRenderer remoteRenderScreen = null;
     private PortSIPVideoRenderer localRenderScreen = null;
-    private String name;
-    private Boolean typeCall;
+    private String name = "";
+    private Boolean typeCall = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -121,8 +122,14 @@ public class NumpadFragment extends BaseFragment implements AdapterView.OnItemSe
         headers.put("loginTO",    name);
         headers.put("token",    FirebaseInstanceId.getInstance().getToken());
 
-      if(name!=null) {
-             // postCallvoip(getApplicationContext(), "NAME!!!");
+
+        ((MainActivity) getActivity()).startServiceSip();
+
+
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run() {
+            if(name!=null) {
               if (application.mEngine == null)
                   return;
               PortSipSdk portSipSdk = application.mEngine;
@@ -160,10 +167,12 @@ public class NumpadFragment extends BaseFragment implements AdapterView.OnItemSe
 
               currentLine.sessionID = sessionId;
               currentLine.state = Session.CALL_STATE_FLAG.TRYING;
-              currentLine.hasVideo = callSet;
+              currentLine.hasVideo = typeCall;
               showTips(currentLine.lineName + ": Calling...");
-      }
 
+      }
+        }
+    }, 4000);
     }
 
 

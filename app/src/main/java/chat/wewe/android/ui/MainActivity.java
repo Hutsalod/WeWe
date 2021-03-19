@@ -41,6 +41,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         receiver = new PortMessageReceiver();
 
         Intent intent = getIntent();
@@ -72,6 +73,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
         menuGroup = findViewById(R.id.tab_menu);
         menuGroup.setOnCheckedChangeListener(this);
+
+
         switchContent(R.id.numpad_fragment);
 
         new Handler().postDelayed(new Runnable(){
@@ -79,11 +82,14 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             public void run() {
                 switchContent(R.id.video_fragment);
             }
-        }, 0);
+        }, 100);
 
     }
 
-
+    public void stopServiceSip(){
+        startService(new Intent(this, PortSipService.class)
+                .setAction(PortSipService.ACTION_SIP_CLOSE));
+    }
 
     @Override
     protected void onResume() {
@@ -95,6 +101,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(receiver);
+        stopServiceSip();
     }
 
     @Override
@@ -133,6 +140,19 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 switchContent(R.id.setting_fragment);
                 break;
         }
+
+    }
+
+
+    public void startServiceSip(){
+            Intent onLineIntent = new Intent(this, PortSipService.class);
+            onLineIntent.setAction(PortSipService.ACTION_SIP_REGIEST);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(onLineIntent);
+            } else {
+                startService(onLineIntent);
+            }
 
     }
 

@@ -33,8 +33,8 @@ import java.util.List;
 import chat.wewe.android.BuildConfig;
 import chat.wewe.android.R;
 import chat.wewe.android.RocketChatCache;
-import chat.wewe.android.StatusConnect;
 import chat.wewe.android.activity.MainActivity;
+import chat.wewe.android.activity.StatusConnect;
 import chat.wewe.android.api.MethodCallHelper;
 import chat.wewe.android.fragment.AbstractFragment;
 import chat.wewe.android.fragment.sidebar.dialog.AddChannelDialogFragment;
@@ -69,6 +69,7 @@ public class SidebarMainFragment extends AbstractFragment implements SidebarMain
     private List<RoomSidebar> roomSidebarList = Collections.emptyList();
     private Disposable spotlightDisposable;
     private String hostname;
+    private String nameUsers = "1";
     public ImageView stanUsers;
     private static final String HOSTNAME = "hostname";
 
@@ -123,7 +124,7 @@ public class SidebarMainFragment extends AbstractFragment implements SidebarMain
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         presenter.bindView(this);
-        stanUsers = view.findViewById(R.id.stanUsers);
+
         return view;
     }
 
@@ -136,7 +137,6 @@ public class SidebarMainFragment extends AbstractFragment implements SidebarMain
     @Override
     public void onResume() {
         super.onResume();
-       // userStatus();
     }
 
     @Override
@@ -158,13 +158,12 @@ public class SidebarMainFragment extends AbstractFragment implements SidebarMain
         setupLogoutButton();
         setupVersionInfo();
         openDialog();
-        ((MainActivity) getActivity()).pane.openPane();
         searchView = rootView.findViewById(R.id.search);
+        stanUsers = rootView.findViewById(R.id.stanUsers);
         EditText searchEditText = (EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchEditText.setTextColor(Color.parseColor("#909092"));
         searchEditText.setHintTextColor(Color.parseColor("#909092"));
         searchEditText.setTextSize(14);
-
         adapter = new RoomListAdapter();
         adapter.setOnItemClickListener(new RoomListAdapter.OnItemClickListener() {
             @Override
@@ -172,14 +171,14 @@ public class SidebarMainFragment extends AbstractFragment implements SidebarMain
                 searchView.setQuery(null, false);
                 searchView.clearFocus();
                 presenter.onRoomSelected(roomSidebar);
-                if (((MainActivity) getActivity()).pane != null) {
-                    if (!((MainActivity) getActivity()).pane.isOpen()) {
-                        ((MainActivity) getActivity()).pane.openPane();
-                    } else {
-                        ((MainActivity) getActivity()).pane.closePane();
-                        ((MainActivity) getActivity()).bindView();
-                    }
+
+                if (nameUsers == roomSidebar.getRoomName()) {
+                    ((MainActivity) getActivity()).pane.closePane();
+                } else {
+                    nameUsers = roomSidebar.getRoomName();
                 }
+
+
             }
 
             @Override
@@ -321,29 +320,7 @@ public class SidebarMainFragment extends AbstractFragment implements SidebarMain
 
     private void updateRoomListMode() {
         final List<RoomListHeader> roomListHeaders = new ArrayList<>();
-
-
-        /*
-        roomListHeaders.add(new UnreadRoomListHeader(
-                getString(R.string.fragment_sidebar_main_unread_rooms_title)
-        ));
-
-        roomListHeaders.add(new FavoriteRoomListHeader(
-                getString(R.string.fragment_sidebar_main_favorite_title)
-        ));
-
-        roomListHeaders.add(new LivechatRoomListHeader(
-                getString(R.string.fragment_sidebar_main_livechat_title)
-        ));
-
-        */
-
-
         adapter.setRoomListHeaders(roomListHeaders);
-    }
-
-    public void test(){
-
     }
 
     @DebugLog
@@ -394,16 +371,19 @@ public class SidebarMainFragment extends AbstractFragment implements SidebarMain
 
     @Override
     public void noConnect() {
+        if(stanUsers!=null)
         stanUsers.setImageResource(R.drawable.s000);
     }
 
     @Override
     public void Connecting() {
+        if(stanUsers!=null)
         this.stanUsers.setImageResource(R.drawable.s112);
     }
 
     @Override
     public void okConnect() {
+        if(stanUsers!=null)
         this.stanUsers.setImageResource(R.drawable.s222);
     }
 }

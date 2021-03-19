@@ -29,6 +29,7 @@ import chat.wewe.android.api.UtilsApi
 import chat.wewe.android.fragment.sidebar.dialog.EmailDialogFragment
 import chat.wewe.android.layouthelper.oauth.OAuthProviderInfo
 import chat.wewe.android.log.RCLog
+import chat.wewe.android.manager.EncryptionManager
 import chat.wewe.android.service.PortSipService
 import chat.wewe.android.widget.WaitingView
 import chat.wewe.core.models.LoginServiceConfiguration
@@ -105,8 +106,6 @@ class LoginFragment : AbstractServerConfigFragment(), LoginContract.View {
         waitingView = rootView.findViewById(R.id.waiting)
 
         btnEmail.setOnClickListener { _ ->
-
-            Log.d("QQTT", "vvv "+FirebaseInstanceId.getInstance().token)
             loginRequest(FirebaseInstanceId.getInstance().token) }
         btnUserRegistration.setOnClickListener { _ ->
             UserRegistrationDialogFragment.create(hostname, txtUsername.text.toString(), txtPasswd.text.toString())
@@ -120,13 +119,13 @@ class LoginFragment : AbstractServerConfigFragment(), LoginContract.View {
     }
 
      fun loginRequest(token: String?) {
-         Log.d("DEBUG_WEWE", "Start")
          waiting.visibility = View.VISIBLE
+         Log.d("TEST_LOGIN", "start")
         mApiService!!.loginRequest(txtUsername.text.toString(), txtPasswd.text.toString(), idmodel, "GOOGLE", model +" "+ version, token, token)
                 .enqueue(object : Callback<ResponseBody> {
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
 
-                        Log.d("DEBUG_WEWE", "Start")
+                        Log.d("TEST_LOGIN", "onResponse")
                             try {
 
                                 val jsonRESULTS = JSONObject(response.body()!!.string())
@@ -232,6 +231,7 @@ class LoginFragment : AbstractServerConfigFragment(), LoginContract.View {
     }
 
     private fun getSettings(token: String) {
+        Log.d("TEST_LOGIN", "getSettings start")
         mApiService!!.getSettings(" KEY:$token")
                 .enqueue(object : Callback<ResponseBody> {
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -239,7 +239,7 @@ class LoginFragment : AbstractServerConfigFragment(), LoginContract.View {
                             try {
                                 val jsonRESULTS = JSONObject(response.body()!!.string())
                                 if (jsonRESULTS.getString("status") == "200") {
-
+                                    Log.d("TEST_LOGIN", "onResponse start")
                                     val UF_ROCKET_LOGIN = jsonRESULTS.getJSONObject("result").getString("UF_ROCKET_LOGIN")
                                     val UF_ROCKET_PASSWORD = jsonRESULTS.getJSONObject("result").getString("UF_ROCKET_PASSWORD")
                                     val UF_SIP_SERVER = jsonRESULTS.getJSONObject("result").getString("UF_SIP_SERVER")
@@ -248,7 +248,7 @@ class LoginFragment : AbstractServerConfigFragment(), LoginContract.View {
                                     val INNER_GROUP = jsonRESULTS.getJSONObject("result").getString("INNER_GROUP")
                                     val UF_ROCKET_SERVER = jsonRESULTS.getJSONObject("result").getString("UF_ROCKET_SERVER")
                                     presenter.login(UF_ROCKET_LOGIN, UF_ROCKET_PASSWORD)
-
+                                    Log.d("TEST_LOGIN", "presenter.login")
                                     val kp = Cryptor.getKeyPair()
                                     val publicKey: PublicKey = kp.getPublic()
                                     val publicKeyBytes = publicKey.encoded
@@ -257,11 +257,24 @@ class LoginFragment : AbstractServerConfigFragment(), LoginContract.View {
                                     val privateKey: PrivateKey = kp.getPrivate()
                                     val privateKeyBytes = privateKey.encoded
                                     val privateKeyBytesBase64 = String(Base64.encode(privateKeyBytes, Base64.DEFAULT))
+
+                                    val encService = EncryptionManager(context!!.applicationContext)
+
+                                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+
+                                        encService.createMasterKey()
+                                    }
+                                    val myPublicKey = encService.getMyPublicKey()
+                                    val myPrivateKey = encService.getMyPublicKey()
+
+                                    val myPublicKeyString = String(Base64.encode(myPublicKey?.encoded, Base64.DEFAULT))
+                                    val myPrivatKeyString = String(Base64.encode(myPrivateKey?.encoded, Base64.DEFAULT))
+
                                     SipData!!.edit().putString("UF_SIP_NUMBER", UF_SIP_NUMBER)
                                             .putString("UF_SIP_PASSWORD", UF_SIP_PASSWORD)
                                             .putString("INNER_GROUP", INNER_GROUP)
-                                            .putString("CHAT_PUBLIC", publicKeyBytesBase64)
-                                            .putString("CHAT_PRIVAT", privateKeyBytesBase64)
+                                            .putString("CHAT_PUBLIC", myPublicKeyString)
+                                            .putString("CHAT_PRIVAT", myPrivatKeyString)
                                     .commit()
 
                                     setPrivatKey(token,publicKeyBytesBase64)
@@ -291,7 +304,7 @@ class LoginFragment : AbstractServerConfigFragment(), LoginContract.View {
                                         onLineIntent.putExtra(PortSipService.EXTRA_PUSHTOKEN, FirebaseInstanceId.getInstance().token)
                                         onLineIntent.action = PortSipService.ACTION_SIP_REGIEST
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                            activity!!.startForegroundService(onLineIntent)
+                                            activity!!.startService(onLineIntent)
                                         } else {
                                             activity!!.startService(onLineIntent)
                                         }

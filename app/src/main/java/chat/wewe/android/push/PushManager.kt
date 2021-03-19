@@ -22,7 +22,6 @@ import android.text.Html
 import android.text.Spanned
 import android.util.Log
 import chat.wewe.android.BackgroundLooper
-import chat.wewe.android.BuildConfig
 import chat.wewe.android.R
 import chat.wewe.android.RocketChatCache
 import chat.wewe.android.activity.MainActivity
@@ -83,9 +82,6 @@ object PushManager {
         val lastPushMessage = PushMessage(title, message, image, ejson, count, notId, summaryText, style)
         Log.d("MESSAGE LOGS", "MESSAGE ")
         // We should use Timber here
-        if (BuildConfig.DEBUG) {
-            Log.d(PushMessage::class.java.simpleName, lastPushMessage.toString())
-        }
 
 
 
@@ -161,22 +157,24 @@ object PushManager {
         } else {
             notIdListForHostname.add(0, lastPushMessage)
         }
-        if (isAndroidVersionAtLeast(Build.VERSION_CODES.N)) {
-            val notification = createSingleNotificationForNougatAndAbove(context, lastPushMessage)
-            val groupNotification = createGroupNotificationForNougatAndAbove(context, lastPushMessage)
-            notification?.let {
-                manager.notify(notId, notification)
-            }
+            if (isAndroidVersionAtLeast(Build.VERSION_CODES.N)) {
+               val notification = createSingleNotificationForNougatAndAbove(context, lastPushMessage)
+               val groupNotification = createGroupNotificationForNougatAndAbove(context, lastPushMessage)
+               notification?.let {
+                   manager.notify(notId, notification)
+               }
 
-       /*     groupNotification?.let {
-                manager.notify(groupTuple.first, groupNotification)
-            }*/
-        } else {
+              groupNotification?.let {
+                   manager.notify(groupTuple.first, groupNotification)
+               }
+           } else {
             val notification = createSingleNotification(context, lastPushMessage)
             val pushMessageList = hostToPushMessageList.get(host)
 
             notification?.let {
                 NotificationManagerCompat.from(context).notify(notId, notification)
+
+
             }
 
             pushMessageList?.let {
@@ -186,7 +184,7 @@ object PushManager {
                         NotificationManagerCompat.from(context).notify(groupTuple.first, groupNotification)
                     }
                 }
-            }
+           }
         }
     }
 

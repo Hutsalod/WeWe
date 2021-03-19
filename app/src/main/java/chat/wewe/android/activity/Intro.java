@@ -26,10 +26,11 @@ public class Intro extends Activity {
 
                 RocketChatCache.INSTANCE.setSelectedRoomId(null);
                 setLocale(getSharedPreferences("SIP", MODE_PRIVATE).getString("LANG_APP", "ru"));
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                mNotificationManager.cancelAll();
 
-                    NotificationManager notifManager =  (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-                    notifManager.cancelAll();
-                    if(getSharedPreferences("Setting", MODE_PRIVATE).getInt("privary", '0')=='1'){
+                    if(getSharedPreferences("Setting", MODE_PRIVATE).getInt("privary", '0')=='1' ||
+                            getSharedPreferences("Setting", MODE_PRIVATE).getBoolean("PrivaryPolicy", false) == true){
 
                         startActivity(new Intent(Intro.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                         Intro.this.finish();

@@ -72,7 +72,7 @@ object RocketChatCache {
     }
 
     fun getSelectedServerHostname(): String? {
-        return getString(KEY_SELECTED_SERVER_HOSTNAME, null)
+        return getString(KEY_SELECTED_SERVER_HOSTNAME, "")
     }
 
     fun setSelectedRoomId(roomId: String?) {

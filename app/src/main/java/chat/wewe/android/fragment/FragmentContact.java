@@ -24,9 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chat.wewe.android.R;
-import chat.wewe.android.StatusConnect;
 import chat.wewe.android.activity.ContactAdapter;
 import chat.wewe.android.activity.ContactModel;
+import chat.wewe.android.activity.MainActivity;
+import chat.wewe.android.activity.StatusConnect;
 
 public class FragmentContact extends AbstractFragment implements StatusConnect {
 
@@ -152,6 +153,7 @@ public class FragmentContact extends AbstractFragment implements StatusConnect {
 
     @Override
     public void noConnect() {
+        if(stanUsers!=null)
        stanUsers.setImageResource(R.drawable.s000);
 
         Log.d("TWEWET","s000");
@@ -159,6 +161,7 @@ public class FragmentContact extends AbstractFragment implements StatusConnect {
 
     @Override
     public void Connecting() {
+        if(stanUsers!=null)
        this.stanUsers.setImageResource(R.drawable.s112);
 
         Log.d("TWEWET","s112");
@@ -166,6 +169,7 @@ public class FragmentContact extends AbstractFragment implements StatusConnect {
 
     @Override
     public void okConnect() {
+        if(stanUsers!=null)
         this.stanUsers.setImageResource(R.drawable.s222);
 
         Log.d("TWEWET","222");

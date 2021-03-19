@@ -45,7 +45,7 @@ import okhttp3.HttpUrl;
  */
 public class MethodCallHelper {
 
-    protected static final long TIMEOUT_MS = 25000;
+    protected static final long TIMEOUT_MS = 20000;
     protected static final Continuation<String, Task<JSONObject>> CONVERT_TO_JSON_OBJECT =
             task -> Task.forResult(new JSONObject(task.getResult()));
     protected static final Continuation<String, Task<JSONArray>> CONVERT_TO_JSON_ARRAY =
@@ -462,7 +462,17 @@ public class MethodCallHelper {
                     .put("msg", msg);
 
             if (editedAt == 0) {
-                return sendMessage(messageJson);
+                if (msg.indexOf("[k]")>=0){
+                    return sendEncryptedMessage(new JSONObject()
+                            .put("_id", messageId)
+                            .put("rid", roomId)
+                            .put("msg", msg.replace("[k]", "")), RocketChatCache.INSTANCE.getUserId());
+
+                }else {
+                    return sendMessage(messageJson);
+                }
+
+
             } else {
                 return updateMessage(messageJson);
             }
@@ -487,6 +497,11 @@ public class MethodCallHelper {
      */
     private Task<Void> sendMessage(final JSONObject messageJson) {
         return call("sendMessage", TIMEOUT_MS, () -> new JSONArray().put(messageJson))
+                .onSuccessTask(task -> Task.forResult(null));
+    }
+
+    private Task<Void> sendEncryptedMessage(final JSONObject messageJson, String id) {
+        return call("sendEncryptedMessage", TIMEOUT_MS, () -> new JSONArray().put(messageJson).put(id))
                 .onSuccessTask(task -> Task.forResult(null));
     }
 
@@ -794,7 +809,7 @@ public class MethodCallHelper {
     }
 
     //Вспомогательные методы
- /*   public Task<JSONObject> getLastMessageByRoomId(String roomId) {
+   public Task<JSONObject> getLastMessageByRoomId(String roomId) {
         try {
 
             JSONObject messageJson = new JSONObject()
@@ -804,7 +819,7 @@ public class MethodCallHelper {
         } catch (JSONException exception) {
             return Task.forError(exception);
         }
-    }*/
+    }
 
 
     public Task<JSONObject> AddMsgToTask(String rid, int numberId, String msgText, String uid) {
@@ -923,7 +938,7 @@ public class MethodCallHelper {
                 .onSuccessTask(task -> Task.forResult(null));
     }
 
-    public Task<JSONObject> getLastMessageByRoomId(final String messageJson) {
+    public Task<JSONObject> getLastMessageByRoomId(final JSONObject messageJson) {
         return call("getLastMessageByRoomId", TIMEOUT_MS, () -> new JSONArray().put(messageJson))
                 .onSuccessTask(CONVERT_TO_JSON_OBJECT);
     }

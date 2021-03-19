@@ -25,8 +25,8 @@ import java.util.ArrayList;
 
 import chat.wewe.android.R;
 import chat.wewe.android.RocketChatCache;
-import chat.wewe.android.StatusConnect;
 import chat.wewe.android.activity.MainActivity;
+import chat.wewe.android.activity.StatusConnect;
 import chat.wewe.android.fragment.AbstractFragment;
 
 import static android.content.Context.MODE_PRIVATE;

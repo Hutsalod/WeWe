@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import bolts.Task;
 import chat.wewe.android.R;
 import chat.wewe.android.RocketChatCache;
-import chat.wewe.android.StatusConnect;
 import chat.wewe.android.activity.AddTaskActivity;
+import chat.wewe.android.activity.StatusConnect;
 import chat.wewe.android.adapter.AdapterTask;
 import chat.wewe.android.adapter.AdapterTaskList;
 import chat.wewe.android.api.MethodCallHelper;
@@ -154,6 +154,15 @@ public class FragmentTask extends AbstractFragment implements StatusConnect {
 
     return  v;
   }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    showSpiner();
+    showTasks();
+  }
+
+
 
   public void filtr(){
     if(filtr_layaut.getVisibility()==VISIBLE) {

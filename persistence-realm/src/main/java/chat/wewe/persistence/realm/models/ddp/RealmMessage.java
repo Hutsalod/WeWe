@@ -1,5 +1,7 @@
 package chat.wewe.persistence.realm.models.ddp;
 
+import android.os.Build;
+import android.util.Base64;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -89,7 +91,6 @@ public class RealmMessage extends RealmObject {
           messageJson.remove("unread");
         messageJson.remove("info");
         messageJson.remove("emoji");
-        Log.d("DDD"," "+s+" "+messageJson.getString("msg")+" "+numbers);
       }
     }
     if (!messageJson.isNull("msg")) {
@@ -108,14 +109,46 @@ public class RealmMessage extends RealmObject {
         messageJson.remove("info");
         messageJson.remove("emoji");
       }
-//&& privatChat==true
-      if (messageJson.getString("msg").contains("\uD83D\uDD11 ") ) {
-        String str = messageJson.getString("msg");
-        str = str.replace("\uD83D\uDD11 ", "");
-        Log.d("TEST_CRYPT"," decryptRSAToString");
-        String msg = cryptor.decryptRSAToString(str,"MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEAnlTzILjZ0C1e2AtiURSVpsyVOZwK/AeVcUoRFscHKTUjlTVvq5ll5CWl4pNlDIqevgA/pQiZMwAprShlSdckUwIDAQABAkA3FiQ+2sGBgf+RGCjdP9WvYld64zUZKcRPVa8rZxSxO40luTpze/mOVFDB0D08iUPm8Dkkt66QvPCcdRR8M1RBAiEAzYX2IdvAzmd4mimbJz9ftRIC8KCY6gw3nPmzbtAX+MECIQDFN+FhN0jHyJi8DUxYREuS40yt6sF1/QpFPu0fu50uEwIhAMZ1OTtwrDmjiL20t3GqrIx4nAYnzgETUxBtvmqe3scBAiBAgCgsHWKmRIr/ZfIEJEH7Rm+7qb2gEyQaxZvT9w5PFQIgIms/KYDjFtpsubyE846ig5msctmf9J+pI9VpecIPqY4=");
-        messageJson.put("msg", ""+msg);
-      }
+
+      if (!messageJson.isNull("encrypted")){
+        if (messageJson.getBoolean("encrypted") ) {
+
+          String message = messageJson.getString("msg").replace("\uD83D\uDD11", "").replace("\uD83D\uDD12", "").replace(messageJson.getString("rid")+"device", "");
+
+          if (message.contains("##")) {
+            String[] numbers = message.split("#");
+            if (numbers[2].equals(Build.MODEL)){
+              messageJson.put("msg", cryptor.decryptRSAToString(numbers[3], cryptor.token()));
+            }
+            else if (cryptor.getEncrypt(messageJson.getString("rid")+"device").equals(numbers[2])){
+              messageJson.put("msg", cryptor.decryptRSAToString(numbers[3], cryptor.getEncrypt(messageJson.getString("rid"))));
+            }
+          }
+
+          if (messageJson.getString("msg").contains("\uD83D\uDD12")) {
+            if (message.contains("#")) {
+              String[] numbers = message.split("#");
+              if (numbers[1] != Build.MODEL && (System.currentTimeMillis())<messageJson.getLong("ts")+5000) {
+                Cryptor.setSendEncrypt(1);
+                cryptor.setEncrypt(messageJson.getString("rid")+"device", numbers[1]);
+                cryptor.setEncrypt(messageJson.getString("rid"), numbers[2]);
+              }
+            }
+           messageJson.put("msg", "\uD83D\uDD12 *ВХОД В ПРИВАТНЫЙ ЧАТ*");
+         }
+
+         else if (messageJson.getString("msg").contains("\uD83D\uDD13")) {
+            if (message.contains("#")) {
+              String[] numbers = message.split("#");
+              if ((System.currentTimeMillis())<messageJson.getLong("ts")+5000) {
+                Cryptor.setSendEncrypt(2);
+                cryptor.setEncrypt(messageJson.getString("rid")+"device", "");
+                cryptor.setEncrypt(messageJson.getString("rid"), "");
+              }
+            }
+            messageJson.put("msg", "\uD83D\uDD13 *ВЫХОД С ПРИВАТНОГО ЧАТ*");
+          }
+      }}
 
     }
 

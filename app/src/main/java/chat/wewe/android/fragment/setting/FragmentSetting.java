@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,10 +38,10 @@ import java.util.List;
 import chat.wewe.android.BuildConfig;
 import chat.wewe.android.R;
 import chat.wewe.android.RocketChatCache;
-import chat.wewe.android.StatusConnect;
 import chat.wewe.android.activity.Intro;
 import chat.wewe.android.activity.MainActivity;
 import chat.wewe.android.activity.PinCode;
+import chat.wewe.android.activity.StatusConnect;
 import chat.wewe.android.api.BaseApiService;
 import chat.wewe.android.api.DeviceGet;
 import chat.wewe.android.api.MethodCallHelper;
@@ -184,8 +185,7 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
     @Override
     public void onResume() {
         super.onResume();
-       // userStatus();
-
+       presenter.bindView(this);
     }
 
     @Override
@@ -201,12 +201,8 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
     }
 
     static public  void setLogout(){
-
-        Log.d("QQWEWE", "!33");
-
-
+        if(presenter != null)
                     presenter.prepareToLogOut();
-
     }
 
     private void setupUserStatusButtons() {
@@ -374,7 +370,6 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
                     switch (which){
                         case DialogInterface.BUTTON_POSITIVE:
                             methodCallHelper.hideAndEraseRooms(RocketChatCache.INSTANCE.getUserId());
-                            Log.d("jsonRESULTS","ttt"+userId);
                             closeUserActionContainer();
                             // Clear relative data and set new hostname if any.
                             presenter.prepareToLogOut();
@@ -501,13 +496,8 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
             getActivity().getSharedPreferences("SIP", Context.MODE_PRIVATE).edit().clear().commit();
             getActivity().getSharedPreferences("pin", Context.MODE_PRIVATE).edit().clear().commit();
             getActivity().getSharedPreferences("Setting", Context.MODE_PRIVATE).edit().clear().commit();
-            Intent offLineIntent = new Intent(getActivity(), PortSipService.class);
-            offLineIntent.setAction(PortSipService.ACTION_SIP_UNREGIEST);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                getActivity().startForegroundService(offLineIntent);
-            }else{
-                getActivity().startService(offLineIntent);
-            }
+            PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean("regSip", false).commit();
+
             closeUserActionContainer();
             // Clear relative data and set new hostname if any.
             presenter.prepareToLogOut();
@@ -574,20 +564,26 @@ public class FragmentSetting extends AbstractFragment implements SidebarMainCont
 
     @Override
     public void noConnect() {
-        stanUsers.setImageResource(R.drawable.s000);
-        statusConnetc.setText("Chat: Офлайн SIP: Офлайн");
+        if(stanUsers!=null) {
+            stanUsers.setImageResource(R.drawable.s000);
+            statusConnetc.setText("Chat: Офлайн SIP: Офлайн");
+        }
     }
 
     @Override
     public void Connecting() {
-        this.stanUsers.setImageResource(R.drawable.s112);
-        statusConnetc.setText("Chat: Онлайн SIP: Онлайн");
+        if(stanUsers!=null) {
+            this.stanUsers.setImageResource(R.drawable.s112);
+            statusConnetc.setText("Chat: Онлайн SIP: Онлайн");
+        }
     }
 
     @Override
     public void okConnect() {
-        this.stanUsers.setImageResource(R.drawable.s222);
-        statusConnetc.setText("Chat: Онлайн SIP: Онлайн");
+        if(stanUsers!=null) {
+            this.stanUsers.setImageResource(R.drawable.s222);
+            statusConnetc.setText("Chat: Онлайн SIP: Онлайн");
+        }
     }
 
 

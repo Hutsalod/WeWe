@@ -193,7 +193,7 @@ public class DDPClientImpl {
 
             addErrorCallback(disposables, task);
         } else {
-            task.trySetError(new DDPClientCallback.Closed(client));
+         //   task.trySetError(new DDPClientCallback.Closed(client));
         }
     }
 
