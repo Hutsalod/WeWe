@@ -43,8 +43,8 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 	private RocketChatApplication application;
 	private MainActivity activity;
 	private int t = 0,m;
-	public static int callSed = 0;
-	private boolean setNumber = true;
+	public  int callSed = 0;
+	private boolean setNumber = false;
 	private PortSIPVideoRenderer remoteRenderScreen = null;
 	private PortSIPVideoRenderer localRenderScreen = null;
 	private PortSIPVideoRenderer.ScalingType scalingType = PortSIPVideoRenderer.ScalingType.SCALE_ASPECT_BALANCED;// SCALE_ASPECT_FIT or SCALE_ASPECT_FILL;
@@ -119,18 +119,18 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
 
 		Handler handler = new Handler();
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						++t;
-						if(t>59){
-							t=0;
-							++m;
-						}
-						statucConnect.setText(""+m+":"+((t>=10)? "" : "0")+t);
-						handler.postDelayed(this, 1000);
-					}
-				});
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				++t;
+				if(t>59){
+					t=0;
+					++m;
+				}
+				statucConnect.setText(""+m+":"+((t>=10)? "" : "0")+t);
+				handler.postDelayed(this, 1000);
+			}
+		});
 
 		Session currentLine = CallManager.Instance().getCurrentSession();
 
@@ -200,9 +200,9 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 			case R.id.star:
 			case R.id.sharp: {
 				String numberString = ((Button) view).getText().toString();
-                Log.d("XSWQAZ",""+numberString);
+				Log.d("XSWQAZ",""+numberString);
 				char number = numberString.charAt(0);
-			//	etSipNum.append(numberString);
+				//	etSipNum.append(numberString);
 				if (CallManager.Instance().regist && currentLine.state == Session.CALL_STATE_FLAG.CONNECTED) {
 					if (number == '*') {
 						portSipLib.sendDtmf(currentLine.sessionID, PortSipEnumDefine.ENUM_DTMF_MOTHOD_RFC2833, 10,
@@ -224,10 +224,10 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 				application.mUseFrontCamera = !application.mUseFrontCamera;
 				SetCamera(portSipLib, application.mUseFrontCamera);
 				break;
-            case R.id.ic_number:
+			case R.id.ic_number:
 				SwitchPanel();
 
-                break;
+				break;
 			case R.id.ibscale:
 				if (scalingType == PortSIPVideoRenderer.ScalingType.SCALE_ASPECT_FIT)
 				{
@@ -291,7 +291,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 							false, false, false);
 					currentLine.bDenam = false;
 
-					} else {
+				} else {
 
 					ic_audio_call.setImageResource(R.drawable.ic_audio_call_off);
 					portSipLib.muteSession(currentLine.sessionID, true,
@@ -380,16 +380,10 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 			String status = intent.getStringExtra(PortSipService.EXTRA_CALL_DESCRIPTION);
 			Log.d("SIPCALL","sessionId "+status);
 			if(status.equals("1")) {
-					getActivity().finish();
-			}else if(status.indexOf("onInviteFailure")>=0) {
-				callSed=1;// methodCallHelper.usersMessage(false, "0", userId, roomId.replaceAll(userId, ""), roomId);
-			}else if(status.indexOf("OnInviteConnected")>=0) {
-				callSed=2;//  methodCallHelper.usersMessage(true, "0", userId, roomId.replaceAll(userId, ""), roomId);
+				getActivity().finish();
 			}
 
 			Session session = CallManager.Instance().findSessionBySessionID(sessionId);
-			Log.d("SIPCALL","sessionId "+session);
-			Log.d("XSWQAZ","session "+session);
 			if (session.state != null)
 			{
 				switch (session.state)
@@ -399,11 +393,15 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 					case TRYING:
 						break;
 					case CONNECTED:
+						t = 0;
+						m = 0;
+						setNumber = true;
+						break;
 					case FAILED:
 					case CLOSED:
-
+						if (setNumber == true)
+							getActivity().finish();
 						updateVideo(application.mEngine);
-						getActivity().finish();
 						break;
 
 				}
